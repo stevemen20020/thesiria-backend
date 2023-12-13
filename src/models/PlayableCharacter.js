@@ -40,9 +40,164 @@ class PlayableCharacter {
         let x
         console.log('PARAMS:',id, where, orderby, limit, offset)
         if ((isNaN(id) == false && id != null) || isNaN(this.id) == false && this.id != null)
-            x = await db.execute("SELECT pc.*, json_object('id', af.id, 'name', af.name, 'element_id', af.element_id, 'bonus', af.bonus) AS affinity, json_object('id', ra.id, 'race', ra.race, 'strength_bonus', ra.strength_bonus, 'dexterity_bonus', ra.dexterity_bonus, 'defense_bonus', ra.defense_bonus, 'aim_bonus', ra.aim_bonus, 'vision_bonus', ra.vision_bonus, 'speed_bonus', ra.speed_bonus, 'handcraft_bonus', ra.handcraft_bonus, 'agility_bonus', ra.agility_bonus, 'charisma_bonus', ra.charisma_bonus) AS race FROM playable_character pc LEFT JOIN races ra ON pc.id_race = ra.id LEFT JOIN affinity af ON pc.affinity_id = af.id WHERE pc.id = ? GROUP BY pc.id" + extraQuery, [this.id]);
+            x = await db.execute("SELECT pc.*," +
+                                "json_object('id', af.id,  " + 
+                                    "'name', af.name,  " + 
+                                    "'element_id', af.element_id,  " + 
+                                    "'bonus', af.bonus) AS affinity, " + 
+                                "json_object('id', ra.id,  " + 
+                                    "'race', ra.race,  " + 
+                                    "'strength_bonus', ra.strength_bonus,  " + 
+                                    "'dexterity_bonus', ra.dexterity_bonus,  " + 
+                                    "'defense_bonus', ra.defense_bonus,  " + 
+                                    "'aim_bonus', ra.aim_bonus,  " + 
+                                    "'vision_bonus', ra.vision_bonus,  " + 
+                                    "'speed_bonus', ra.speed_bonus,  " + 
+                                    "'handcraft_bonus', ra.handcraft_bonus,  " + 
+                                    "'agility_bonus', ra.agility_bonus,  " + 
+                                    "'charisma_bonus', ra.charisma_bonus) AS race,  " + 
+                                "json_object('id', ar.id,  " + 
+                                    "'name', ar.name,  " + 
+                                    "'element_id', ar.element_id,  " + 
+                                    "'defensive_points_lvl1', ar.defensive_points_lvl1,  " + 
+                                    "'defensive_points_lvl2', ar.defensive_points_lvl2,  " + 
+                                    "'defensive_points_lvl3', ar.defensive_points_lvl3,  " + 
+                                    "'defensive_points_lvl4', ar.defensive_points_lvl4,  " + 
+                                    "'defensive_points_lvl5', ar.defensive_points_lvl5,  " + 
+                                    "'upgrade_item_id', ar.upgrade_item_id,  " + 
+                                    "'upgrade_cost_lvl2', ar.upgrade_cost_lvl2,  " + 
+                                    "'upgrade_cost_lvl3', ar.upgrade_cost_lvl3,  " + 
+                                    "'upgrade_cost_lvl4', ar.upgrade_cost_lvl4,  " + 
+                                    "'upgrade_cost_lvl5', ar.upgrade_cost_lvl5,  " + 
+                                    "'rarity', ar.rarity,  " + 
+                                    "'location_id', ar.location_id,  " + 
+                                    "'skill_usage', ar.skill_usage,  " + 
+                                    "'dice_needed', ar.dice_needed,  " + 
+                                    "'found', ar.found,  " + 
+                                    "'price_sell', ar.price_sell,  " + 
+                                    "'price_buy', ar.price_buy,  " + 
+                                    "'description', ar.description) AS armor, " + 
+                                "json_object('id', wp.id,  " + 
+                                    "'name', wp.name,  " + 
+                                    "'element_id', wp.element_id,  " + 
+                                    "'damage_points_lvl1', wp.damage_points_lvl1,  " + 
+                                    "'damage_points_lvl2', wp.damage_points_lvl2,  " + 
+                                    "'damage_points_lvl3', wp.damage_points_lvl3,  " + 
+                                    "'damage_points_lvl4', wp.damage_points_lvl4,  " + 
+                                    "'damage_points_lvl5', wp.damage_points_lvl5,  " + 
+                                    "'upgrade_item_id', wp.upgrade_item_id,  " + 
+                                    "'upgrade_cost_lvl2', wp.upgrade_cost_lvl2,  " + 
+                                    "'upgrade_cost_lvl3', wp.upgrade_cost_lvl3,  " + 
+                                    "'upgrade_cost_lvl4', wp.upgrade_cost_lvl4,  " + 
+                                    "'upgrade_cost_lvl5', wp.upgrade_cost_lvl5,  " + 
+                                    "'rarity', wp.rarity,  " + 
+                                    "'durability', wp.durability,  " +
+                                    "'durability_max', wp.durability_max,  " +
+                                    "'chipping', wp.chipping,  " +
+                                    "'ammo', wp.ammo,  " +
+                                    "'weapon_type', wp.weapon_type,  " +
+                                    "'location_id', wp.location_id,  " + 
+                                    "'skill_usage', wp.skill_usage,  " + 
+                                    "'dice_needed', wp.dice_needed,  " + 
+                                    "'found', wp.found,  " + 
+                                    "'price_sell', wp.price_sell,  " + 
+                                    "'price_buy', wp.price_buy,  " + 
+                                    "'description', wp.description) AS weapon, " + 
+                                "json_object('id', df.id,  " + 
+                                "'name', df.name, " +
+                                "'bonus', df.bonus , " +
+                                "'skill_bonused', df.skill_bonused, " +
+                                "'description', df.description, " +
+                                "'awakening_description', df.awakening_description) AS devil_fruit " +
+                                "FROM playable_character pc " + 
+                                "LEFT JOIN races ra ON pc.id_race = ra.id " + 
+                                "LEFT JOIN armor ar ON pc.armor_id = ar.id " + 
+                                "LEFT JOIN weapon wp ON pc.weapon_id = wp.id " + 
+                                "LEFT JOIN devil_fruit df ON pc.devil_fruit_id = df.id " +
+                                "LEFT JOIN affinity af ON pc.affinity_id = af.id " + 
+                                 "WHERE pc.id = ? GROUP BY pc.id" + extraQuery, [this.id]);
         else
-            x = await db.execute("SELECT pc.*, json_object('id', af.id, 'name', af.name, 'element_id', af.element_id, 'bonus', af.bonus) AS affinity, json_object('id', ra.id, 'race', ra.race, 'strength_bonus', ra.strength_bonus, 'dexterity_bonus', ra.dexterity_bonus, 'defense_bonus', ra.defense_bonus, 'aim_bonus', ra.aim_bonus, 'vision_bonus', ra.vision_bonus, 'speed_bonus', ra.speed_bonus, 'handcraft_bonus', ra.handcraft_bonus, 'agility_bonus', ra.agility_bonus, 'charisma_bonus', ra.charisma_bonus) AS race FROM playable_character pc LEFT JOIN races ra ON pc.id_race = ra.id LEFT JOIN affinity af ON pc.affinity_id = af.id "  + (where ? whereQuery : "") + "GROUP BY pc.id" + extraQuery);
+            x = await db.execute("SELECT pc.*," +
+                                "json_object('id', af.id,  " + 
+                                    "'name', af.name,  " + 
+                                    "'element_id', af.element_id,  " + 
+                                    "'bonus', af.bonus) AS affinity, " + 
+                                "json_object('id', ra.id,  " + 
+                                    "'race', ra.race,  " + 
+                                    "'strength_bonus', ra.strength_bonus,  " + 
+                                    "'dexterity_bonus', ra.dexterity_bonus,  " + 
+                                    "'defense_bonus', ra.defense_bonus,  " + 
+                                    "'aim_bonus', ra.aim_bonus,  " + 
+                                    "'vision_bonus', ra.vision_bonus,  " + 
+                                    "'speed_bonus', ra.speed_bonus,  " + 
+                                    "'handcraft_bonus', ra.handcraft_bonus,  " + 
+                                    "'agility_bonus', ra.agility_bonus,  " + 
+                                    "'charisma_bonus', ra.charisma_bonus) AS race,  " + 
+                                "json_object('id', ar.id,  " + 
+                                    "'name', ar.name,  " + 
+                                    "'element_id', ar.element_id,  " + 
+                                    "'defensive_points_lvl1', ar.defensive_points_lvl1,  " + 
+                                    "'defensive_points_lvl2', ar.defensive_points_lvl2,  " + 
+                                    "'defensive_points_lvl3', ar.defensive_points_lvl3,  " + 
+                                    "'defensive_points_lvl4', ar.defensive_points_lvl4,  " + 
+                                    "'defensive_points_lvl5', ar.defensive_points_lvl5,  " + 
+                                    "'upgrade_item_id', ar.upgrade_item_id,  " + 
+                                    "'upgrade_cost_lvl2', ar.upgrade_cost_lvl2,  " + 
+                                    "'upgrade_cost_lvl3', ar.upgrade_cost_lvl3,  " + 
+                                    "'upgrade_cost_lvl4', ar.upgrade_cost_lvl4,  " + 
+                                    "'upgrade_cost_lvl5', ar.upgrade_cost_lvl5,  " + 
+                                    "'rarity', ar.rarity,  " + 
+                                    "'location_id', ar.location_id,  " + 
+                                    "'skill_usage', ar.skill_usage,  " + 
+                                    "'dice_needed', ar.dice_needed,  " + 
+                                    "'found', ar.found,  " + 
+                                    "'price_sell', ar.price_sell,  " + 
+                                    "'price_buy', ar.price_buy,  " + 
+                                    "'description', ar.description) AS armor, " + 
+                                "json_object('id', wp.id,  " + 
+                                    "'name', wp.name,  " + 
+                                    "'element_id', wp.element_id,  " + 
+                                    "'damage_points_lvl1', wp.damage_points_lvl1,  " + 
+                                    "'damage_points_lvl2', wp.damage_points_lvl2,  " + 
+                                    "'damage_points_lvl3', wp.damage_points_lvl3,  " + 
+                                    "'damage_points_lvl4', wp.damage_points_lvl4,  " + 
+                                    "'damage_points_lvl5', wp.damage_points_lvl5,  " + 
+                                    "'upgrade_item_id', wp.upgrade_item_id,  " + 
+                                    "'upgrade_cost_lvl2', wp.upgrade_cost_lvl2,  " + 
+                                    "'upgrade_cost_lvl3', wp.upgrade_cost_lvl3,  " + 
+                                    "'upgrade_cost_lvl4', wp.upgrade_cost_lvl4,  " + 
+                                    "'upgrade_cost_lvl5', wp.upgrade_cost_lvl5,  " + 
+                                    "'rarity', wp.rarity,  " + 
+                                    "'durability', wp.durability,  " +
+                                    "'durability_max', wp.durability_max,  " +
+                                    "'chipping', wp.chipping,  " +
+                                    "'ammo', wp.ammo,  " +
+                                    "'weapon_type', wp.weapon_type,  " +
+                                    "'location_id', wp.location_id,  " + 
+                                    "'skill_usage', wp.skill_usage,  " + 
+                                    "'dice_needed', wp.dice_needed,  " + 
+                                    "'found', wp.found,  " + 
+                                    "'price_sell', wp.price_sell,  " + 
+                                    "'price_buy', wp.price_buy,  " + 
+                                    "'description', wp.description) AS weapon, " + 
+                                "json_object('id', df.id,  " + 
+                                "'name', df.name, " +
+                                "'bonus', df.bonus , " +
+                                "'skill_bonused', df.skill_bonused, " +
+                                "'description', df.description, " +
+                                "'awakening_description', df.awakening_description) AS devil_fruit " +
+                                "FROM playable_character pc " + 
+                                "LEFT JOIN races ra ON pc.id_race = ra.id " + 
+                                "LEFT JOIN armor ar ON pc.armor_id = ar.id " + 
+                                "LEFT JOIN weapon wp ON pc.weapon_id = wp.id " + 
+                                "LEFT JOIN devil_fruit df ON pc.devil_fruit_id = df.id " +
+                                "LEFT JOIN affinity af ON pc.affinity_id = af.id "  + (where ? whereQuery : "") + "GROUP BY pc.id" + extraQuery);
+        
+        x[0].forEach((obj) => { 
+            if(obj.armor.id == null) obj.armor = JSON.parse(null) 
+            if(obj.weapon.id == null) obj.weapon = JSON.parse(null) 
+            if(obj.devil_fruit.id == null) obj.devil_fruit = JSON.parse(null) 
+        })
         return x;
     }
 

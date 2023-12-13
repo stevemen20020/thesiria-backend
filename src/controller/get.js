@@ -2,7 +2,6 @@ const { ModelFactory } = require("../classes/ModelFactory")
 
 const get = async (req, res) => {
   try {
-    console.log('REQ PARAMS:', req.query)
     let model = req.params.model || null
     let id = req.query.id || null
     let where = req.query.where || null
@@ -22,7 +21,6 @@ const get = async (req, res) => {
     const [rows, fields, message] = await obj.fetch(id, where, orderby, limit, offset)
 
 
-    console.log('ROWS', rows)
     if (rows == null || rows.length < 1)
       return res.status(200).send({ status: "OK", result: [], message: "Vacio", })
     else
