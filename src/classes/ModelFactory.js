@@ -6,6 +6,7 @@ const {Skill} = require ('../models/Skill.js')
 const {Tiles} = require ('../models/Tiles.js')
 const {Dungeon} = require ('../models/Dungeons.js')
 const {City} = require ('../models/City.js')
+const {Object} = require ('../models/Object.js')
 
 class ModelFactory {
     static create(model, payload) {
@@ -26,6 +27,8 @@ class ModelFactory {
                 return new Dungeon(payload)
             case 'city':
                 return new City(payload)
+            case 'object':
+                return new Object(payload)
             default:
                 return 0
         }
