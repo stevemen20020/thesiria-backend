@@ -66,13 +66,25 @@ class Object {
 
     async update() {
 		await db.query("start transaction")
-        let query = "UPDATE city SET "
+        let query = "UPDATE objects SET "
         if (this.name)
             query += "name = '" + this.name + "',"
-        if(this.alleigiance)
-            query += "alleigiance = '" + this.alleigiance + "',"
+        if(this.element_id)
+            query += "element_id = '" + this.element_id + "',"
+        if(this.rarity)
+            query += "rarity = '" + this.rarity + "',"
+        if(this.skill_usage_id)
+            query += "skill_usage_id = '" + this.skill_usage_id + "',"
+        if(this.dice_needed)
+            query += "dice_needed = '" + this.dice_needed + "',"
         if(this.location_id)
             query += "location_id = '" + this.location_id + "',"
+        if(this.description)
+            query += "description = '" + this.description + "',"
+        if(this.price_sell)
+            query += "price_sell = '" + this.price_sell + "',"
+        if(this.price_buy)
+            query += "price_buy = '" + this.price_buy + "',"
         if (query.charAt(query.length - 1) == ",")
             query = query.substring(0, query.length - 1);
         query += " WHERE id = " + this.id + ";"
@@ -84,7 +96,7 @@ class Object {
     }
 
     delete() {
-        return db.execute('delete from city where id = ?', [this.id])
+        return db.execute('delete from objects where id = ?', [this.id])
     }
 
     setId(id) {
