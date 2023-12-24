@@ -23,7 +23,7 @@ class Dungeon {
                 "'name', tl.name,  " + 
                 "'image', json_object('url', concat('" + process.env.IMAGES_TESTING + "tiles/', tl.image)), " +
                 "'city_id', tl.city_id,  " + 
-                "'dungeon_id', tl.dungeon_id) AS dungeon " + 
+                "'dungeon_id', tl.dungeon_id) AS location " + 
             "FROM dungeons dg " + 
             "LEFT JOIN tiles tl ON dg.location_id = tl.id " + 
             "WHERE dg.id = ? GROUP BY dg.id" + extraQuery, [this.id]);
@@ -33,7 +33,7 @@ class Dungeon {
                 "'name', tl.name,  " + 
                 "'image', json_object('url', concat('" + process.env.IMAGES_TESTING + "tiles/', tl.image)), " +
                 "'city_id', tl.city_id,  " + 
-                "'dungeon_id', tl.dungeon_id) AS dungeon " + 
+                "'dungeon_id', tl.dungeon_id) AS location " + 
             "FROM dungeons dg " + 
             "LEFT JOIN tiles tl ON dg.location_id = tl.id " + 
             (where ? whereQuery : "") + "GROUP BY dg.id" + extraQuery);
