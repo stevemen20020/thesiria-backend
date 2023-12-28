@@ -25,7 +25,7 @@ class Haki {
         else
             x = await db.execute("SELECT hk.*," +
             "json_object('id', su.id,  " + 
-                "'name', su.name) AS skill " + 
+                "'name', su.name) AS skill_usage " + 
             "FROM haki_types hk " + 
             "LEFT JOIN skill_usage su ON hk.skill_bonused = su.id " + 
             (where ? whereQuery : "") + "GROUP BY hk.id" + extraQuery);
@@ -41,13 +41,13 @@ class Haki {
 
     async update() {
 		await db.query("start transaction")
-        let query = "UPDATE city SET "
+        let query = "UPDATE haki_types SET "
         if (this.name)
             query += "name = '" + this.name + "',"
-        if(this.alleigiance)
-            query += "alleigiance = '" + this.alleigiance + "',"
-        if(this.location_id)
-            query += "location_id = '" + this.location_id + "',"
+        if(this.description)
+            query += "description = '" + this.description + "',"
+        if(this.skill_bonused)
+            query += "skill_bonused = '" + this.skill_bonused + "',"
         if (query.charAt(query.length - 1) == ",")
             query = query.substring(0, query.length - 1);
         query += " WHERE id = " + this.id + ";"
@@ -59,7 +59,7 @@ class Haki {
     }
 
     delete() {
-        return db.execute('delete from city where id = ?', [this.id])
+        return db.execute('delete from haki_types where id = ?', [this.id])
     }
 
     setId(id) {
