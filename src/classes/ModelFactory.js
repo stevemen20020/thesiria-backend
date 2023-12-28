@@ -3,6 +3,11 @@ const {Affinity} = require("../models/Affinity.js")
 const {Element} = require("../models/Element.js")
 const {Users} = require('../models/Users.js')
 const {Skill} = require ('../models/Skill.js')
+const {Tiles} = require ('../models/Tiles.js')
+const {Dungeon} = require ('../models/Dungeons.js')
+const {City} = require ('../models/City.js')
+const {Object} = require ('../models/Object.js')
+const {Weapon} = require('../models/Weapon.js')
 
 class ModelFactory {
     static create(model, payload) {
@@ -17,6 +22,16 @@ class ModelFactory {
                 return new Users(payload)
             case 'skill_usage':
                 return new Skill(payload)
+            case 'tiles':
+                return new Tiles(payload)
+            case 'dungeons':
+                return new Dungeon(payload)
+            case 'city':
+                return new City(payload)
+            case 'object':
+                return new Object(payload)
+            case 'weapon':
+                return new Weapon(payload)
             default:
                 return 0
         }
