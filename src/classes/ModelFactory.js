@@ -8,6 +8,7 @@ const {Dungeon} = require ('../models/Dungeons.js')
 const {City} = require ('../models/City.js')
 const {Object} = require ('../models/Object.js')
 const {Weapon} = require('../models/Weapon.js')
+const {Haki} = require('../models/Haki.js')
 
 class ModelFactory {
     static create(model, payload) {
@@ -32,6 +33,8 @@ class ModelFactory {
                 return new Object(payload)
             case 'weapon':
                 return new Weapon(payload)
+            case 'haki':
+                return new Haki(payload)
             default:
                 return 0
         }
