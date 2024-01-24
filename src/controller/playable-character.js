@@ -6,6 +6,7 @@ export const getAllCharacters = async (req, res) => {
     try{
         const allPlayableCharacters = await PlayableCharacter.findMany({
             include: {
+                users:true,
                 races:true,
                 affinity:true,
                 inventory_armor_playable_character_armor_idToinventory_armor:true,
@@ -27,6 +28,7 @@ export const getPlayableCharacterById = async (req, res) => {
         const playableCharacterId = parseInt(req.params.id)
         const uniquePlayableCharacter = await PlayableCharacter.findUnique({
             include: {
+                users:true,
                 races:true,
                 affinity:true,
                 inventory_armor_playable_character_armor_idToinventory_armor:true,
