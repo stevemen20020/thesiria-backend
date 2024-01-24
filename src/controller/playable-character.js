@@ -42,6 +42,8 @@ export const getPlayableCharacterById = async (req, res) => {
             }
         })
 
+        if(uniquePlayableCharacter === null) res.status(404).json({error:'User not found'})
+
         res.status(200).json({result:uniquePlayableCharacter})
     } catch (e) {
         console.log(e)
@@ -65,6 +67,19 @@ export const updatePlayableCharacter = async(req, res) => {
     try{
         const playableCharacterData = req.body
         const playableCharacterId = parseInt(req.params.id)
+
+        // Attempt to find the user first
+        const existingPlayableCharacter = await PlayableCharacter.findUnique({
+            where: {
+                id: playableCharacterId,
+            },
+        });
+
+        if (!existingPlayableCharacter) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Character not found" });
+        }
+
         const newPlayableCharacter = await PlayableCharacter.update({
             where:{
                 id:playableCharacterId
@@ -81,6 +96,19 @@ export const updatePlayableCharacter = async(req, res) => {
 export const deletePlayableCharacter = async(req, res) => {
     try{
         const playableCharacterId = parseInt(req.params.id)
+
+        // Attempt to find the user first
+        const existingPlayableCharacter = await PlayableCharacter.findUnique({
+            where: {
+                id: playableCharacterId,
+            },
+        });
+
+        if (!existingPlayableCharacter) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Character not found" });
+        }
+
         const newPlayableCharacter = await PlayableCharacter.delete({
             where:{
                 id:playableCharacterId
