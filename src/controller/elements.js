@@ -21,6 +21,8 @@ export const getElementById = async (req, res) => {
             }
         })
 
+        if(uniqueElement === null) res.status(404).json({error:'User not found'})
+
         res.status(200).json({result:uniqueElement})
     } catch (e) {
         console.log(e)
@@ -44,6 +46,19 @@ export const updateElement = async(req, res) => {
     try{
         const elementData = req.body
         const elementId = parseInt(req.params.id)
+
+        // Attempt to find the user first
+        const existingElement = await Elements.findUnique({
+            where: {
+                id: elementId,
+            },
+        });
+
+        if (!existingElement) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Element not found" });
+        }
+
         const editedElement = await Elements.update({
             where:{
                 id:elementId
@@ -60,6 +75,19 @@ export const updateElement = async(req, res) => {
 export const deleteElement = async(req, res) => {
     try{
         const elementId = parseInt(req.params.id)
+
+        // Attempt to find the user first
+        const existingElement = await Elements.findUnique({
+            where: {
+                id: elementId,
+            },
+        });
+
+        if (!existingElement) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Element not found" });
+        }
+    
         const deletedElement = await Elements.delete({
             where:{
                 id:elementId
