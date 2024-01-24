@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getAllCharacters, getPlayableCharacterById, insertPlayableCharacterById, updatePlayableCharacter, deletePlayableCharacter } from "../controller/playable-character.js";
+import { getAllCharacters, 
+    getPlayableCharacterById, 
+    insertPlayableCharacterById, 
+    updatePlayableCharacter, 
+    deletePlayableCharacter } from "../controller/playable-character.js";
 
 const characterRouter = Router()
 
