@@ -17,14 +17,17 @@ export const getAllAffinity = async (req, res) => {
 
 export const getAffinityById = async (req, res) => {
     try{
-        const elementId = parseInt(req.params.id)
-        const uniqueElement = await Affinity.findUnique({
+        const affinityId = parseInt(req.params.id)
+        const uniqueAffinity = await Affinity.findUnique({
             where:{
-                id:elementId
+                id:affinityId
+            },
+            include: {
+                elements:true
             }
         })
 
-        res.status(200).json({result:uniqueElement})
+        res.status(200).json({result:uniqueAffinity})
     } catch (e) {
         console.log(e)
     }
@@ -32,12 +35,12 @@ export const getAffinityById = async (req, res) => {
 
 export const insertAffinity = async(req, res) => {
     try{
-        const elementData = req.body
-        const newElement = await Affinity.create({
-            data:elementData
+        const affinityData = req.body
+        const newAffinity = await Affinity.create({
+            data:affinityData
         })
 
-        res.status(200).json({result:newElement})
+        res.status(200).json({result:newAffinity})
     } catch (e) {
         console.log(e)
     }
@@ -45,16 +48,16 @@ export const insertAffinity = async(req, res) => {
 
 export const updateAffinity = async(req, res) => {
     try{
-        const elementData = req.body
-        const elementId = parseInt(req.params.id)
-        const editedElement = await Affinity.update({
+        const affinityData = req.body
+        const affinityId = parseInt(req.params.id)
+        const editedAffinity = await Affinity.update({
             where:{
-                id:elementId
+                id:affinityId
             },
-            data:elementData
+            data:affinityData
         })
 
-        res.status(200).json({result:editedElement})
+        res.status(200).json({result:editedAffinity})
     } catch (e) {
         console.log(e)
     }
@@ -62,14 +65,14 @@ export const updateAffinity = async(req, res) => {
 
 export const deleteAffinity = async(req, res) => {
     try{
-        const elementId = parseInt(req.params.id)
-        const deletedElement = await Affinity.delete({
+        const affinityId = parseInt(req.params.id)
+        const deletedAffinity = await Affinity.delete({
             where:{
-                id:elementId
+                id:affinityId
             },
         })
 
-        res.status(200).json({result:deletedElement})
+        res.status(200).json({result:deletedAffinity})
     } catch (e) {
         console.log(e)
     }
