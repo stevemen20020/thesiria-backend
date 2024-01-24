@@ -27,6 +27,8 @@ export const getAffinityById = async (req, res) => {
             }
         })
 
+        if(uniqueAffinity === null) res.status(404).json({error:'Affinity not found'})
+
         res.status(200).json({result:uniqueAffinity})
     } catch (e) {
         console.log(e)
@@ -50,6 +52,19 @@ export const updateAffinity = async(req, res) => {
     try{
         const affinityData = req.body
         const affinityId = parseInt(req.params.id)
+
+        // Attempt to find the user first
+        const existingAffinity = await Affinity.findUnique({
+            where: {
+                id: affinityId,
+            },
+        });
+
+        if (!existingAffinity) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Affinity not found" });
+        }
+
         const editedAffinity = await Affinity.update({
             where:{
                 id:affinityId
@@ -66,6 +81,19 @@ export const updateAffinity = async(req, res) => {
 export const deleteAffinity = async(req, res) => {
     try{
         const affinityId = parseInt(req.params.id)
+
+        // Attempt to find the user first
+        const existingAffinity = await Affinity.findUnique({
+            where: {
+                id: affinityId,
+            },
+        });
+
+        if (!existingAffinity) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Affinity not found" });
+        }
+
         const deletedAffinity = await Affinity.delete({
             where:{
                 id:affinityId
