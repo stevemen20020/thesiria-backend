@@ -21,7 +21,7 @@ export const getElementById = async (req, res) => {
             }
         })
 
-        if(uniqueElement === null) res.status(404).json({error:'User not found'})
+        if(uniqueElement === null) res.status(404).json({error:'Element not found'})
 
         res.status(200).json({result:uniqueElement})
     } catch (e) {

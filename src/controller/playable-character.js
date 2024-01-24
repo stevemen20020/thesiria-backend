@@ -42,7 +42,7 @@ export const getPlayableCharacterById = async (req, res) => {
             }
         })
 
-        if(uniquePlayableCharacter === null) res.status(404).json({error:'User not found'})
+        if(uniquePlayableCharacter === null) res.status(404).json({error:'Character not found'})
 
         res.status(200).json({result:uniquePlayableCharacter})
     } catch (e) {
