@@ -7,11 +7,13 @@ import elementRouter from "./routes/elemenet.router.js";
 import affinityRouter from "./routes/affinity.router.js";
 import usersRouter from "./routes/users.router.js";
 import WeaponRouter from "./routes/weapon.router.js";
+import skillRouter from "./routes/skill_usage.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
 router.use('/affinity', affinityRouter)
 router.use('/user', usersRouter)
 router.use('/weapon', WeaponRouter)
+router.use('/skill_usage', skillRouter)
 
 export default router
