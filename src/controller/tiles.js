@@ -2,99 +2,108 @@ import { PrismaClient } from "@prisma/client"
 
 const Tiles = new PrismaClient().tiles
 
-export const getAllElements = async (req, res) => {
+export const getAllTiles = async (req, res) => {
     try{
-        const allElements = await Tiles.findMany()
-
-        res.status(200).json({result:allElements})
-    } catch (e) {
-        console.log(e)
-    }
-}
-
-export const getElementById = async (req, res) => {
-    try{
-        const elementId = parseInt(req.params.id)
-        const uniqueElement = await Tiles.findUnique({
-            where:{
-                id:elementId
+        const allTiles = await Tiles.findMany({
+            include:{
+                dungeons_dungeons_location_idTotiles:true,
+                city_city_location_idTotiles:true
             }
         })
 
-        if(uniqueElement === null) res.status(404).json({error:'Element not found'})
-
-        res.status(200).json({result:uniqueElement})
+        res.status(200).json({result:allTiles})
     } catch (e) {
         console.log(e)
     }
 }
 
-export const insertElement = async(req, res) => {
+export const getTileById = async (req, res) => {
     try{
-        const elementData = req.body
-        const newElement = await Tiles.create({
-            data:elementData
+        const tileId = parseInt(req.params.id)
+        const uniqueTile = await Tiles.findUnique({
+            where:{
+                id:tileId
+            },
+            include:{
+                dungeons_dungeons_location_idTotiles:true,
+                city_city_location_idTotiles:true
+            }
         })
 
-        res.status(200).json({result:newElement})
+        if(uniqueTile === null) res.status(404).json({error:'Tile not found'})
+
+        res.status(200).json({result:uniqueTile})
     } catch (e) {
         console.log(e)
     }
 }
 
-export const updateElement = async(req, res) => {
+export const insertTile = async(req, res) => {
     try{
-        const elementData = req.body
-        const elementId = parseInt(req.params.id)
+        const tileData = req.body
+        const newTile = await Tiles.create({
+            data:tileData
+        })
+
+        res.status(200).json({result:newTile})
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const updateTile = async(req, res) => {
+    try{
+        const tileData = req.body
+        const tileId = parseInt(req.params.id)
 
         // Attempt to find the user first
-        const existingElement = await Tiles.findUnique({
+        const existingTile = await Tiles.findUnique({
             where: {
-                id: elementId,
+                id: tileId,
             },
         });
 
-        if (!existingElement) {
+        if (!existingTile) {
             // If the user doesn't exist, return a 404 response
-            return res.status(404).json({ error: "Element not found" });
+            return res.status(404).json({ error: "Tile not found" });
         }
 
-        const editedElement = await Tiles.update({
+        const editedTile = await Tiles.update({
             where:{
-                id:elementId
+                id:tileId
             },
-            data:elementData
+            data:tileData
         })
 
-        res.status(200).json({result:editedElement})
+        res.status(200).json({result:editedTile})
     } catch (e) {
         console.log(e)
     }
 }
 
-export const deleteElement = async(req, res) => {
+export const deleteTile = async(req, res) => {
     try{
-        const elementId = parseInt(req.params.id)
+        const tileId = parseInt(req.params.id)
 
         // Attempt to find the user first
-        const existingElement = await Tiles.findUnique({
+        const existingTile = await Tiles.findUnique({
             where: {
-                id: elementId,
+                id: tileId,
             },
         });
 
-        if (!existingElement) {
+        if (!existingTile) {
             // If the user doesn't exist, return a 404 response
-            return res.status(404).json({ error: "Element not found" });
+            return res.status(404).json({ error: "Tile not found" });
         }
     
-        const deletedElement = await Tiles.delete({
+        const deletedTile = await Tiles.delete({
             where:{
-                id:elementId
+                id:tileId
             },
         })
 
-        res.status(200).json({result:deletedElement})
+        res.status(200).json({result:deletedTile})
     } catch (e) {
         console.log(e)
     }
