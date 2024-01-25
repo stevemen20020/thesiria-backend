@@ -10,6 +10,7 @@ import WeaponRouter from "./routes/weapon.router.js";
 import skillRouter from "./routes/skill_usage.router.js";
 import tileRouter from "./routes/tiles.router.js";
 import objectRouter from "./routes/objects.router.js";
+import inventoryWeaponRouter from "./routes/inventory_weapon.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -19,5 +20,6 @@ router.use('/weapon', WeaponRouter)
 router.use('/skill_usage', skillRouter)
 router.use('/tiles', tileRouter)
 router.use('/object', objectRouter)
+router.use('/inventory_weapon', inventoryWeaponRouter)
 
 export default router
