@@ -6,6 +6,7 @@ export const getAllCharacters = async (req, res) => {
     try{
         const allPlayableCharacters = await PlayableCharacter.findMany({
             include: {
+                affinity:true,
                 users:true,
                 races:true,
                 affinity:true,
