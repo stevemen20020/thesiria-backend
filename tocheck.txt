@@ -1,0 +1,4 @@
+Things to check for the database:
+
+element foreign key in armor & weapon
+add foreign key field for npc
