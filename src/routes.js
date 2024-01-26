@@ -12,6 +12,7 @@ import tileRouter from "./routes/tiles.router.js";
 import objectRouter from "./routes/objects.router.js";
 import armorRouter from "./routes/armor.router.js";
 import npcRouter from "./routes/npc.router.js";
+import attackRouter from "./routes/attack.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -23,5 +24,6 @@ router.use('/tiles', tileRouter)
 router.use('/object', objectRouter)
 router.use('/armor', armorRouter)
 router.use('/npc', npcRouter)
+router.use('/attack', attackRouter)
 
 export default router
