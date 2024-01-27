@@ -11,7 +11,11 @@ export const getAllCharacters = async (req, res) => {
                 races:true,
                 affinity:true,
                 inventory_armor_playable_character_armor_idToinventory_armor:true,
-                inventory_weapon_playable_character_weapon_idToinventory_weapon:true,
+                inventory_weapon_playable_character_weapon_idToinventory_weapon:{
+                    include:{
+                        weapon:true
+                    }
+                },
                 haki_types:true,
                 devil_fruit:true,
                 titanes:true
