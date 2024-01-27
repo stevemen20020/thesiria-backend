@@ -14,6 +14,7 @@ import inventoryWeaponRouter from "./routes/inventory_weapon.router.js";
 import armorRouter from "./routes/armor.router.js";
 import npcRouter from "./routes/npc.router.js";
 import attackRouter from "./routes/attack.router.js";
+import raceRouter from "./routes/races.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -27,5 +28,6 @@ router.use('/inventory_weapon', inventoryWeaponRouter)
 router.use('/armor', armorRouter)
 router.use('/npc', npcRouter)
 router.use('/attack', attackRouter)
+router.use('/races', raceRouter)
 
 export default router
