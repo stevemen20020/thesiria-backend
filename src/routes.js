@@ -19,6 +19,7 @@ import talismanRouter from "./routes/talisman.router.js";
 import cityRouter from "./routes/city.router.js";
 import devilFruitRouter from "./routes/devil_fruit.router.js";
 import dungeonRouter from "./routes/dungeon.router.js";
+import effectsRouter from "./routes/effects.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -37,5 +38,6 @@ router.use('/talisman', talismanRouter)
 router.use('/city', cityRouter)
 router.use('/devil_fruit', devilFruitRouter)
 router.use('/dungeon', dungeonRouter)
+router.use('/effects', effectsRouter)
 
 export default router
