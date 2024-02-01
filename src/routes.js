@@ -17,6 +17,7 @@ import attackRouter from "./routes/attack.router.js";
 import raceRouter from "./routes/races.router.js";
 import talismanRouter from "./routes/talisman.router.js";
 import cityRouter from "./routes/city.router.js";
+import devilFruitRouter from "./routes/devil_fruit.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -33,5 +34,6 @@ router.use('/attack', attackRouter)
 router.use('/races', raceRouter)
 router.use('/talisman', talismanRouter)
 router.use('/city', cityRouter)
+router.use('/devil_fruit', devilFruitRouter)
 
 export default router
