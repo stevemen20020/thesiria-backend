@@ -39,5 +39,6 @@ router.use('/city', cityRouter)
 router.use('/devil_fruit', devilFruitRouter)
 router.use('/dungeon', dungeonRouter)
 router.use('/effects', effectsRouter)
+router.use('/inventory', inventoryRouter)
 
 export default router
