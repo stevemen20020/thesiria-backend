@@ -10,6 +10,7 @@ import WeaponRouter from "./routes/weapon.router.js";
 import skillRouter from "./routes/skill_usage.router.js";
 import tileRouter from "./routes/tiles.router.js";
 import objectRouter from "./routes/objects.router.js";
+import inventoryMagicRouter from "./routes/inventory_magic.router.js";
 import inventoryWeaponRouter from "./routes/inventory_weapon.router.js";
 import armorRouter from "./routes/armor.router.js";
 import npcRouter from "./routes/npc.router.js";
@@ -30,6 +31,7 @@ router.use('/weapon', WeaponRouter)
 router.use('/skill_usage', skillRouter)
 router.use('/tiles', tileRouter)
 router.use('/object', objectRouter)
+router.use('/inventory_magic', inventoryMagicRouter)
 router.use('/inventory_weapon', inventoryWeaponRouter)
 router.use('/armor', armorRouter)
 router.use('/npc', npcRouter)
