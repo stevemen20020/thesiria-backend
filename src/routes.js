@@ -22,6 +22,7 @@ import devilFruitRouter from "./routes/devil_fruit.router.js";
 import dungeonRouter from "./routes/dungeon.router.js";
 import effectsRouter from "./routes/effects.router.js";
 import hakiRouter from "./routes/haki.router.js";
+import missionJournalRouter from "./routes/mission_journal.router.js";
 import missionsRouter from "./routes/missions.router.js";
 
 router.use('/playable_character', characterRouter)
@@ -44,6 +45,7 @@ router.use('/devil_fruit', devilFruitRouter)
 router.use('/dungeon', dungeonRouter)
 router.use('/effects', effectsRouter)
 router.use('/haki', hakiRouter)
+router.use('/mission_journal', missionJournalRouter)
 router.use('/missions', missionsRouter)
 
 export default router
