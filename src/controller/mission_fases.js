@@ -9,7 +9,7 @@ export const getMissionFases = async (req, res) => {
                 missions:true
             }
         })
-        res.status(200).json({result:allMissionsFases})
+        res.status(200).json({result:allMissionFases})
     } catch (e) {
         console.log(e)
     }
@@ -38,7 +38,7 @@ export const getMissionFasesById = async (req, res) => {
 export const insertMissionFases = async(req, res) => {
     try{
         const missionFasesData = req.body
-        const newMissionFases = await MissionFases.create({
+        const newMissionFases = await Mission_Fases.create({
             data:missionFasesData
         })
 

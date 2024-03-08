@@ -10,10 +10,10 @@ import {
 
 const missionFasesRouter = Router()
 
-missionFasesRouter.get('/', getAllmissionFases)
-missionFasesRouter.get('/:id', getmissionFasesById)
-missionFasesRouter.post('/', insertmissionFases)
-missionFasesRouter.put('/:id', updatemissionFases)
-missionFasesRouter.delete('/:id', deletemissionFases)
+missionFasesRouter.get('/', getMissionFases)
+missionFasesRouter.get('/:id', getMissionFasesById)
+missionFasesRouter.post('/', insertMissionFases)
+missionFasesRouter.put('/:id', updateMissionFases)
+missionFasesRouter.delete('/:id', deleteMissionFases)
 
 export default missionFasesRouter

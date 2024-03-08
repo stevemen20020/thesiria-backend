@@ -3,7 +3,7 @@ import {getMissionJournal,
         getMissionJournalById,
         insertMissionJournal,
         updateMissionJournal,
-        deleteMissionJournal} from "../controller/mission_journal"
+        deleteMissionJournal} from "../controller/mission_journal.js"
 
 const missionJournalRouter = Router()
 
