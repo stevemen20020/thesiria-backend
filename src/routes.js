@@ -21,6 +21,7 @@ import cityRouter from "./routes/city.router.js";
 import devilFruitRouter from "./routes/devil_fruit.router.js";
 import dungeonRouter from "./routes/dungeon.router.js";
 import effectsRouter from "./routes/effects.router.js";
+import loottablesRouter from "./routes/loottables.router.js";
 import hakiRouter from "./routes/haki.router.js";
 import mission_fasesRouter from "./routes/mission_fases.router.js";
 import missionJournalRouter from "./routes/mission_journal.router.js";
@@ -45,6 +46,7 @@ router.use('/city', cityRouter)
 router.use('/devil_fruit', devilFruitRouter)
 router.use('/dungeon', dungeonRouter)
 router.use('/effects', effectsRouter)
+router.use('/loottables', loottablesRouter)
 router.use('/haki', hakiRouter)
 router.use('/mission_fases', mission_fasesRouter)
 router.use('/mission_journal', missionJournalRouter)
