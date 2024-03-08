@@ -10,6 +10,7 @@ import WeaponRouter from "./routes/weapon.router.js";
 import skillRouter from "./routes/skill_usage.router.js";
 import tileRouter from "./routes/tiles.router.js";
 import objectRouter from "./routes/objects.router.js";
+import inventoryMagicRouter from "./routes/inventory_magic.router.js";
 import inventoryWeaponRouter from "./routes/inventory_weapon.router.js";
 import armorRouter from "./routes/armor.router.js";
 import npcRouter from "./routes/npc.router.js";
@@ -21,6 +22,10 @@ import devilFruitRouter from "./routes/devil_fruit.router.js";
 import dungeonRouter from "./routes/dungeon.router.js";
 import effectsRouter from "./routes/effects.router.js";
 import loottablesRouter from "./routes/loottables.router.js";
+import hakiRouter from "./routes/haki.router.js";
+import mission_fasesRouter from "./routes/mission_fases.router.js";
+import missionJournalRouter from "./routes/mission_journal.router.js";
+import missionsRouter from "./routes/missions.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -30,6 +35,7 @@ router.use('/weapon', WeaponRouter)
 router.use('/skill_usage', skillRouter)
 router.use('/tiles', tileRouter)
 router.use('/object', objectRouter)
+router.use('/inventory_magic', inventoryMagicRouter)
 router.use('/inventory_weapon', inventoryWeaponRouter)
 router.use('/armor', armorRouter)
 router.use('/npc', npcRouter)
@@ -41,5 +47,9 @@ router.use('/devil_fruit', devilFruitRouter)
 router.use('/dungeon', dungeonRouter)
 router.use('/effects', effectsRouter)
 router.use('/loottables', loottablesRouter)
+router.use('/haki', hakiRouter)
+router.use('/mission_fases', mission_fasesRouter)
+router.use('/mission_journal', missionJournalRouter)
+router.use('/missions', missionsRouter)
 
 export default router
