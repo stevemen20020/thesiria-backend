@@ -19,14 +19,14 @@ export const getAllCharactersJournal = async (req, res) => {
 
 export const getPlayableCharacterJournalById = async (req, res) => {
     try{
-        const playableCharacterId = parseInt(req.params.id)
+        const playableCharacterJournalId = parseInt(req.params.id)
         const uniquePlayableCharacterJournal = await PlayableCharacterJournal.findUnique({
             include: {
                 playable_character:true,
                 npc:true
             },
             where:{
-                id:playableCharacterId
+                id:playableCharacterJournalId
             }
         })
 
