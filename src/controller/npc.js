@@ -1,15 +1,13 @@
 import { PrismaClient } from "@prisma/client"
 
-const NPC = new PrismaClient().playable_character
+const NPC = new PrismaClient().npc
 
 export const getAllNPCs = async (req, res) => {
     try{
         const allNPCs = await NPC.findMany({
             include: {
-                //races:true,
+                races:true,
                 affinity:true,
-                inventory_armor_inventory_armor_id_userToplayable_character:true,
-                inventory_weapon_inventory_weapon_id_userToplayable_character:true,
                 haki_types:true,
                 devil_fruit:true,
                 titanes:true,

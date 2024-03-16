@@ -21,8 +21,15 @@ import cityRouter from "./routes/city.router.js";
 import devilFruitRouter from "./routes/devil_fruit.router.js";
 import dungeonRouter from "./routes/dungeon.router.js";
 import effectsRouter from "./routes/effects.router.js";
+import loottablesRouter from "./routes/loottables.router.js";
 import hakiRouter from "./routes/haki.router.js";
 import monsterRouter from "./routes/monster.router.js";
+import missionFasesRouter from "./routes/mission_fases.route.js";
+import missionJournalRouter from "./routes/mission_journal.router.js";
+import missionsRouter from "./routes/missions.router.js";
+import npcInventoryRouter from "./routes/npc_inventory.router.js";
+import spellBuffDebuffRouter from "./routes/spell_buff_debuff.router.js";
+import characterJournalRouter from "./routes/playable_character_journal.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -43,7 +50,14 @@ router.use('/city', cityRouter)
 router.use('/devil_fruit', devilFruitRouter)
 router.use('/dungeon', dungeonRouter)
 router.use('/effects', effectsRouter)
+router.use('/loottables', loottablesRouter)
 router.use('/haki', hakiRouter)
 router.use('/monster', monsterRouter)
+router.use('/mission_fases', missionFasesRouter)
+router.use('/mission_journal', missionJournalRouter)
+router.use('/missions', missionsRouter)
+router.use('/npc_inventory', npcInventoryRouter)
+router.use('/spell_buff_debuff', spellBuffDebuffRouter)
+router.use('/playable_character_journal', characterJournalRouter)
 
 export default router
