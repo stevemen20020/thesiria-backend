@@ -27,6 +27,7 @@ import missionFasesRouter from "./routes/mission_fases.route.js";
 import missionJournalRouter from "./routes/mission_journal.router.js";
 import missionsRouter from "./routes/missions.router.js";
 import spellBuffDebuffRouter from "./routes/spell_buff_debuff.router.js";
+import characterJournalRouter from "./routes/playable_character_journal.router.js";
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -53,5 +54,6 @@ router.use('/mission_fases', missionFasesRouter)
 router.use('/mission_journal', missionJournalRouter)
 router.use('/missions', missionsRouter)
 router.use('/spell_buff_debuff', spellBuffDebuffRouter)
+router.use('/playable_character_journal', characterJournalRouter)
 
 export default router
