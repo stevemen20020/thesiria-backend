@@ -27,8 +27,8 @@ import monsterRouter from "./routes/monster.router.js";
 import missionFasesRouter from "./routes/mission_fases.route.js";
 import missionJournalRouter from "./routes/mission_journal.router.js";
 import missionsRouter from "./routes/missions.router.js";
-import npcInventoryRouter from "./routes/npc_inventory.router.js";
-import spellBuffDebuffRouter from "./routes/spell_buff_debuff.router.js";
+import npcInventoryRouter from './routes/npc_inventory.route.js'
+import spellBuffDebuffRouter from './routes/spell_buff_debuff.router.js'
 import characterJournalRouter from "./routes/playable_character_journal.router.js";
 
 router.use('/playable_character', characterRouter)

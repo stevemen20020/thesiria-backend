@@ -5,12 +5,12 @@ import { getAllSpellBuffDebuff,
         updateSpellBuffDebuff,
         deleteSpellBuffDebuff } from "../controller/spell_buff_debuff.js";
 
-const devilSpellBuffDebuff = Router()
+const spellBuffDebuffRouter = Router()
 
-devilSpellBuffDebuff.get('/', getAllSpellBuffDebuff)
-devilSpellBuffDebuff.get('/:id', getSpellBuffDebuffById)
-devilSpellBuffDebuff.post('/', insertSpellBuffDebuff)
-devilSpellBuffDebuff.put('/:id', updateSpellBuffDebuff)
-devilSpellBuffDebuff.delete('/:id', deleteSpellBuffDebuff)
+spellBuffDebuffRouter.get('/', getAllSpellBuffDebuff)
+spellBuffDebuffRouter.get('/:id', getSpellBuffDebuffById)
+spellBuffDebuffRouter.post('/', insertSpellBuffDebuff)
+spellBuffDebuffRouter.put('/:id', updateSpellBuffDebuff)
+spellBuffDebuffRouter.delete('/:id', deleteSpellBuffDebuff)
 
 export default spellBuffDebuffRouter

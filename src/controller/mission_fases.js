@@ -80,7 +80,7 @@ export const updateMissionFases = async(req, res) => {
 
 export const deleteMissionFases = async(req, res) => {
     try{
-        const missionFasesnId = parseInt(req.params.id)
+        const missionFasesId = parseInt(req.params.id)
 
         // Attempt to find the user first
         const existingMissionFases = await Mission_Fases.findUnique({

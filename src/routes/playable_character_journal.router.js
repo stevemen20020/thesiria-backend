@@ -5,12 +5,12 @@ import { getAllCharactersJournal,
     updatePlayableCharacterJournal, 
     deletePlayableCharacterJournal } from "../controller/playable_character_journal.js";
 
-const characterRouterJournal = Router()
+const characterJornalRouter = Router()
 
-characterRouterJournal.get('/', getAllCharactersJournal)
-characterRouterJournal.get('/:id', getPlayableCharacterJournalById)
-characterRouterJournal.post('/', insertPlayableCharacterJournalById)
-characterRouterJournal.put('/:id', updatePlayableCharacterJournal)
-characterRouterJournal.delete('/:id', deletePlayableCharacterJournal)
+characterJornalRouter.get('/', getAllCharactersJournal)
+characterJornalRouter.get('/:id', getPlayableCharacterJournalById)
+characterJornalRouter.post('/', insertPlayableCharacterJournalById)
+characterJornalRouter.put('/:id', updatePlayableCharacterJournal)
+characterJornalRouter.delete('/:id', deletePlayableCharacterJournal)
 
 export default characterJornalRouter
