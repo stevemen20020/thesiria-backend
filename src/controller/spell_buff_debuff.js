@@ -105,7 +105,7 @@ export const deleteSpellBuffDebuff = async(req, res) => {
             },
         })
 
-        res.status(200).json({result:deletedDevilFruit})
+        res.status(200).json({result:deletedSpellBuffDebuff})
     } catch (e) {
         console.log(e)
     }
