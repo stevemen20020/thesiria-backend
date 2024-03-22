@@ -37,7 +37,16 @@ export const getMissionJournal = async (req, res) => {
         }
         const allMissionJournal = await Mission_Journal.findMany({
             include: {
-                missions:true,
+                missions:{
+                    include:{
+                        npc:true,
+                        mission_fases:{
+                            orderBy: {
+                                fase:'asc'
+                            }
+                        }
+                    }
+                },
                 playable_character:true
             }
         })
@@ -55,7 +64,16 @@ export const getMissionJournalById = async (req, res) => {
                 id:missionJournalId
             },
             include: {
-                missions:true,
+                missions:{
+                    include:{
+                        npc:true,
+                        mission_fases:{
+                            orderBy: {
+                                fase:'asc'
+                            }
+                        }
+                    }
+                },
                 playable_character:true
             }
         })
