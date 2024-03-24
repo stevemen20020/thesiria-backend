@@ -12,7 +12,7 @@ import tileRouter from "./routes/tiles.router.js";
 import objectRouter from "./routes/objects.router.js";
 import inventoryMagicRouter from "./routes/inventory_magic.router.js";
 import inventoryWeaponRouter from "./routes/inventory_weapon.router.js";
-import inventoryArmorRouter from "./routes/inventory_armor.router.js";
+import inventoryArmorRouter from "./routes/inventory_armor.router.js"
 import armorRouter from "./routes/armor.router.js";
 import npcRouter from "./routes/npc.router.js";
 import attackRouter from "./routes/attack.router.js";
@@ -29,6 +29,7 @@ import missionFasesRouter from "./routes/mission_fases.route.js";
 import missionJournalRouter from "./routes/mission_journal.router.js";
 import missionsRouter from "./routes/missions.router.js";
 import npcInventoryRouter from './routes/npc_inventory.route.js'
+import inventoryRouter from "./routes/inventory.router.js";
 import spellBuffDebuffRouter from './routes/spell_buff_debuff.router.js'
 import characterJournalRouter from "./routes/playable_character_journal.router.js";
 import spellsRouter from './routes/spells.router.js'
