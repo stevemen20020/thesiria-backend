@@ -2,3 +2,36 @@ Things to check for the database:
 
 element foreign key in armor & weapon
 add foreign key field for npc
+
+
+
+
+PORT = 3020
+URL = 'http://localhost'
+ACCESS_TOKEN_SECRET = 'asdf'
+URI = 'http://localhost:3020'
+HOST = 'localhost'
+VERSION = 'v1'
+
+#SQL
+SQL_PORT = 3306
+SQL_USER = 'root'
+SQL_PASS = ''
+DATABASE = 'thesiria2'
+
+#ENCRIPTION
+PUBLIC_KEY = '8Mtg/CCWubYzVCwAedusHFBmMuBFcCwC'
+IV = 'fiZf5aLX/Tz07QaJmTsqjg'
+
+#IMAGES
+IMAGES_PRODUCTION = ''
+IMAGES_TESTING = 'http://localhost:3020/public/'
+
+# This was inserted by `prisma init`:
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="mysql://root:@localhost:3306/thesiria2"
