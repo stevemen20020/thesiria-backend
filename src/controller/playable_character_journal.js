@@ -46,7 +46,20 @@ export const getPlayableCharacterJournalById = async (req, res) => {
         const uniquePlayableCharacterJournal = await PlayableCharacterJournal.findUnique({
             include: {
                 playable_character:true,
-                npc:true
+                npc:{
+                    include:{
+                        races:true,
+                        affinity:true,
+                        haki_types:true, 
+                        titanes: true,
+                        weapon: {
+                            include:{
+                                objects:true,
+                                elements:true
+                            }
+                        }
+                    }
+                }
             },
             where:{
                 id:playableCharacterJournalId

@@ -12,6 +12,7 @@ model affinity {
   name               String?              @db.VarChar(255)
   element_id         Int?
   bonus              Int?
+  color              String?              @db.VarChar(75)
   elements           elements?            @relation(fields: [element_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "affinity_ibfk_1")
   npc                npc[]
   playable_character playable_character[]
