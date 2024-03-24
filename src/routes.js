@@ -30,6 +30,7 @@ import missionsRouter from "./routes/missions.router.js";
 import npcInventoryRouter from './routes/npc_inventory.route.js'
 import spellBuffDebuffRouter from './routes/spell_buff_debuff.router.js'
 import characterJournalRouter from "./routes/playable_character_journal.router.js";
+import spellsRouter from './routes/spells.router.js'
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -60,5 +61,6 @@ router.use('/missions', missionsRouter)
 router.use('/npc_inventory', npcInventoryRouter)
 router.use('/spell_buff_debuff', spellBuffDebuffRouter)
 router.use('/playable_character_journal', characterJournalRouter)
+router.use('/spells', spellsRouter)
 
 export default router
