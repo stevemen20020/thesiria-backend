@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getMonsterById,
+const { Router } = require("express");
+const { getMonsterById,
         getAllMonster,
         insertMonster,
         updateMonster,
-        deleteMonster} from "../controller/monster.js";
+        deleteMonster} = require ("../controller/monster.js");
 
 const monsterRouter = Router()
 
@@ -13,4 +13,4 @@ monsterRouter.post('/', insertMonster)
 monsterRouter.put('/:id', updateMonster)
 monsterRouter.delete('/:id', deleteMonster)
 
-export default monsterRouter
+module.exports =  monsterRouter

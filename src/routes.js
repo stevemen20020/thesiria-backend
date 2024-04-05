@@ -1,38 +1,38 @@
-import { Router } from "express";
+const { Router } = require ( "express");
 
 const router = Router()
 
-import characterRouter from "./routes/playable-character.router.js";
-import elementRouter from "./routes/elemenet.router.js";
-import affinityRouter from "./routes/affinity.router.js";
-import usersRouter from "./routes/users.router.js";
-import WeaponRouter from "./routes/weapon.router.js";
-import skillRouter from "./routes/skill_usage.router.js";
-import tileRouter from "./routes/tiles.router.js";
-import objectRouter from "./routes/objects.router.js";
-import inventoryMagicRouter from "./routes/inventory_magic.router.js";
-import inventoryWeaponRouter from "./routes/inventory_weapon.router.js";
-import inventoryArmorRouter from "./routes/inventory_armor.router.js"
-import armorRouter from "./routes/armor.router.js";
-import npcRouter from "./routes/npc.router.js";
-import attackRouter from "./routes/attack.router.js";
-import raceRouter from "./routes/races.router.js";
-import talismanRouter from "./routes/talisman.router.js";
-import cityRouter from "./routes/city.router.js";
-import devilFruitRouter from "./routes/devil_fruit.router.js";
-import dungeonRouter from "./routes/dungeon.router.js";
-import effectsRouter from "./routes/effects.router.js";
-import loottablesRouter from "./routes/loottables.router.js";
-import hakiRouter from "./routes/haki.router.js";
-import monsterRouter from "./routes/monster.router.js";
-import missionFasesRouter from "./routes/mission_fases.route.js";
-import missionJournalRouter from "./routes/mission_journal.router.js";
-import missionsRouter from "./routes/missions.router.js";
-import npcInventoryRouter from './routes/npc_inventory.route.js'
-import inventoryRouter from "./routes/inventory.router.js";
-import spellBuffDebuffRouter from './routes/spell_buff_debuff.router.js'
-import characterJournalRouter from "./routes/playable_character_journal.router.js";
-import spellsRouter from './routes/spells.router.js'
+const characterRouter = require("./routes/playable-character.router.js");
+const elementRouter = require ( "./routes/elemenet.router.js");
+const affinityRouter = require ( "./routes/affinity.router.js");
+const usersRouter = require ( "./routes/users.router.js");
+const WeaponRouter = require ( "./routes/weapon.router.js");
+const skillRouter = require ( "./routes/skill_usage.router.js");
+const tileRouter = require ( "./routes/tiles.router.js");
+const objectRouter = require ( "./routes/objects.router.js");
+const inventoryMagicRouter = require ( "./routes/inventory_magic.router.js");
+const inventoryWeaponRouter = require ( "./routes/inventory_weapon.router.js");
+const inventoryArmorRouter = require ( "./routes/inventory_armor.router.js");
+const armorRouter = require ( "./routes/armor.router.js");
+const npcRouter = require ( "./routes/npc.router.js");
+const attackRouter = require ( "./routes/attack.router.js");
+const raceRouter = require ( "./routes/races.router.js");
+const talismanRouter = require ( "./routes/talisman.router.js");
+const cityRouter = require ( "./routes/city.router.js");
+const devilFruitRouter = require ( "./routes/devil_fruit.router.js");
+const dungeonRouter = require ( "./routes/dungeon.router.js");
+const effectsRouter = require ( "./routes/effects.router.js");
+const loottablesRouter = require ( "./routes/loottables.router.js");
+const hakiRouter = require ( "./routes/haki.router.js");
+const monsterRouter = require ( "./routes/monster.router.js");
+const missionFasesRouter = require ( "./routes/mission_fases.route.js");
+const missionJournalRouter = require ( "./routes/mission_journal.router.js");
+const missionsRouter = require ( "./routes/missions.router.js");
+const npcInventoryRouter = require ( './routes/npc_inventory.route.js');
+const inventoryRouter = require ( "./routes/inventory.router.js");
+const spellBuffDebuffRouter = require ( './routes/spell_buff_debuff.router.js');
+const characterJournalRouter = require ( "./routes/playable_character_journal.router.js");
+const spellsRouter = require ( './routes/spells.router.js');
 
 router.use('/playable_character', characterRouter)
 router.use('/element', elementRouter)
@@ -66,4 +66,4 @@ router.use('/spell_buff_debuff', spellBuffDebuffRouter)
 router.use('/playable_character_journal', characterJournalRouter)
 router.use('/spells', spellsRouter)
 
-export default router
+module.exports =  router

@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Tiles = new PrismaClient().tiles
 
-export const getAllTiles = async (req, res) => {
+const getAllTiles = async (req, res) => {
     try{
         const allTiles = await Tiles.findMany({
             include:{
@@ -17,7 +17,7 @@ export const getAllTiles = async (req, res) => {
     }
 }
 
-export const getTileById = async (req, res) => {
+const getTileById = async (req, res) => {
     try{
         const tileId = parseInt(req.params.id)
         const uniqueTile = await Tiles.findUnique({
@@ -38,7 +38,7 @@ export const getTileById = async (req, res) => {
     }
 }
 
-export const insertTile = async(req, res) => {
+const insertTile = async(req, res) => {
     try{
         const tileData = req.body
         const newTile = await Tiles.create({
@@ -51,7 +51,7 @@ export const insertTile = async(req, res) => {
     }
 }
 
-export const updateTile = async(req, res) => {
+const updateTile = async(req, res) => {
     try{
         const tileData = req.body
         const tileId = parseInt(req.params.id)
@@ -81,7 +81,7 @@ export const updateTile = async(req, res) => {
     }
 }
 
-export const deleteTile = async(req, res) => {
+const deleteTile = async(req, res) => {
     try{
         const tileId = parseInt(req.params.id)
 
@@ -107,4 +107,12 @@ export const deleteTile = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllTiles: getAllTiles,
+    getTileById: getTileById,
+    insertTile: insertTile,
+    updateTile: updateTile,
+    deleteTile: deleteTile
 }

@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const PlayableCharacter = new PrismaClient().playable_character
 
-export const getAllCharacters = async (req, res) => {
+const getAllCharacters = async (req, res) => {
     try{
         const allPlayableCharacters = await PlayableCharacter.findMany({
             include: {
@@ -28,7 +28,7 @@ export const getAllCharacters = async (req, res) => {
     }
 }
 
-export const getPlayableCharacterById = async (req, res) => {
+const getPlayableCharacterById = async (req, res) => {
     try{
         const playableCharacterId = parseInt(req.params.id)
         const uniquePlayableCharacter = await PlayableCharacter.findUnique({
@@ -55,7 +55,7 @@ export const getPlayableCharacterById = async (req, res) => {
     }
 }
 
-export const insertPlayableCharacterById = async(req, res) => {
+const insertPlayableCharacterById = async(req, res) => {
     try{
         const playableCharacterData = req.body
         const newPlayableCharacter = await PlayableCharacter.create({
@@ -68,7 +68,7 @@ export const insertPlayableCharacterById = async(req, res) => {
     }
 }
 
-export const updatePlayableCharacter = async(req, res) => {
+const updatePlayableCharacter = async(req, res) => {
     try{
         const playableCharacterData = req.body
         const playableCharacterId = parseInt(req.params.id)
@@ -98,7 +98,7 @@ export const updatePlayableCharacter = async(req, res) => {
     }
 }
 
-export const deletePlayableCharacter = async(req, res) => {
+const deletePlayableCharacter = async(req, res) => {
     try{
         const playableCharacterId = parseInt(req.params.id)
 
@@ -124,4 +124,12 @@ export const deletePlayableCharacter = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllCharacters: getAllCharacters,
+    getPlayableCharacterById: getPlayableCharacterById,
+    insertPlayableCharacterById: insertPlayableCharacterById,
+    updatePlayableCharacter: updatePlayableCharacter,
+    deletePlayableCharacter: deletePlayableCharacter
 }

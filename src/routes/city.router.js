@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllCities, 
+const { Router } = require("express");
+const { getAllCities, 
         getCityById, 
         insertCity,
         updateCity, 
-        deleteCity } from "../controller/city.js";
+        deleteCity } = require ("../controller/city.js");
 
 const cityRouter = Router()
 
@@ -13,4 +13,4 @@ cityRouter.post('/', insertCity)
 cityRouter.put('/:id', updateCity)
 cityRouter.delete('/:id', deleteCity)
 
-export default cityRouter
+module.exports =  cityRouter

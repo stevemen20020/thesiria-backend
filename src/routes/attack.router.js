@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllAttacks,
+const { Router } = require("express");
+const { getAllAttacks,
         getAttackById,
         insertAttack,
         updateAttack,
-        deleteAttack } from "../controller/attack.js";
+        deleteAttack } = require("../controller/attack.js");
 
 const attackRouter = Router()
 
@@ -13,4 +13,4 @@ attackRouter.post('/', insertAttack)
 attackRouter.put('/:id', updateAttack)
 attackRouter.delete('/:id', deleteAttack)
 
-export default attackRouter
+module.exports =  attackRouter

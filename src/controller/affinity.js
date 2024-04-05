@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Affinity = new PrismaClient().affinity
 
-export const getAllAffinity = async (req, res) => {
+const getAllAffinity = async (req, res) => {
     try{
         const allAffinity = await Affinity.findMany({
             include: {
@@ -15,7 +15,7 @@ export const getAllAffinity = async (req, res) => {
     }
 }
 
-export const getAffinityById = async (req, res) => {
+const getAffinityById = async (req, res) => {
     try{
         const affinityId = parseInt(req.params.id)
         const uniqueAffinity = await Affinity.findUnique({
@@ -35,7 +35,7 @@ export const getAffinityById = async (req, res) => {
     }
 }
 
-export const insertAffinity = async(req, res) => {
+const insertAffinity = async(req, res) => {
     try{
         const affinityData = req.body
         const newAffinity = await Affinity.create({
@@ -48,7 +48,7 @@ export const insertAffinity = async(req, res) => {
     }
 }
 
-export const updateAffinity = async(req, res) => {
+const updateAffinity = async(req, res) => {
     try{
         const affinityData = req.body
         const affinityId = parseInt(req.params.id)
@@ -78,7 +78,7 @@ export const updateAffinity = async(req, res) => {
     }
 }
 
-export const deleteAffinity = async(req, res) => {
+const deleteAffinity = async(req, res) => {
     try{
         const affinityId = parseInt(req.params.id)
 
@@ -104,4 +104,12 @@ export const deleteAffinity = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllAffinity: getAllAffinity,
+    getAffinityById: getAffinityById,
+    insertAffinity: insertAffinity,
+    updateAffinity: updateAffinity,
+    deleteAffinity: deleteAffinity
 }

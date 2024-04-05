@@ -1,9 +1,11 @@
-import { Router } from "express";
-import { getAllAffinity,
+const { Router } = require("express");
+const {
+        getAllAffinity,
         getAffinityById,
         insertAffinity,
         updateAffinity,
-        deleteAffinity } from "../controller/affinity.js";
+        deleteAffinity
+    } = require("../controller/affinity.js");
 
 const affinityRouter = Router()
 
@@ -13,4 +15,4 @@ affinityRouter.post('/', insertAffinity)
 affinityRouter.put('/:id', updateAffinity)
 affinityRouter.delete('/:id', deleteAffinity)
 
-export default affinityRouter
+module.exports =  affinityRouter

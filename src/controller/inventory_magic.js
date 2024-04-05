@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Inventory_Magic = new PrismaClient().inventory_magic
 
-export const getInventoryMagic = async (req, res) => {
+const getInventoryMagic = async (req, res) => {
     try{
         const allInventoryMagic = await Inventory_Magic.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getInventoryMagic = async (req, res) => {
     }
 }
 
-export const getInventoryMagicById = async (req, res) => {
+const getInventoryMagicById = async (req, res) => {
     try{
         const inventoryMagicId = parseInt(req.params.id)
         const uniqueInventoryMagic = await Inventory_Magic.findUnique({
@@ -37,7 +37,7 @@ export const getInventoryMagicById = async (req, res) => {
     }
 }
 
-export const insertInventoryMagic = async(req, res) => {
+const insertInventoryMagic = async(req, res) => {
     try{
         const inventoryMagicData = req.body
         const newInventoryMagic = await Inventory_Magic.create({
@@ -50,7 +50,7 @@ export const insertInventoryMagic = async(req, res) => {
     }
 }
 
-export const updateInventoryMagic = async(req, res) => {
+const updateInventoryMagic = async(req, res) => {
     try{
         const inventoryMagicData = req.body
         const inventoryMagicId = parseInt(req.params.id)
@@ -80,7 +80,7 @@ export const updateInventoryMagic = async(req, res) => {
     }
 }
 
-export const deleteInventoryMagic = async(req, res) => {
+const deleteInventoryMagic = async(req, res) => {
     try{
         const inventoryMagicId = parseInt(req.params.id)
 
@@ -106,4 +106,12 @@ export const deleteInventoryMagic = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getInventoryMagic: getInventoryMagic,
+    getInventoryMagicById: getInventoryMagicById,
+    insertInventoryMagic: insertInventoryMagic,
+    updateInventoryMagic: updateInventoryMagic,
+    deleteInventoryMagic: deleteInventoryMagic
 }

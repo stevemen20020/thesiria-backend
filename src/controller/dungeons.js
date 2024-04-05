@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Dungeon = new PrismaClient().dungeons
 
-export const getAllDungeons = async (req, res) => {
+const getAllDungeons = async (req, res) => {
     try{
         const allDungeons = await Dungeon.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getAllDungeons = async (req, res) => {
     }
 }
 
-export const getDungeonById = async (req, res) => {
+const getDungeonById = async (req, res) => {
     try{
         const dungeonId = parseInt(req.params.id)
         const uniqueDungeon = await Dungeon.findUnique({
@@ -36,7 +36,7 @@ export const getDungeonById = async (req, res) => {
     }
 }
 
-export const insertDungeon = async(req, res) => {
+const insertDungeon = async(req, res) => {
     try{
         const dungeonData = req.body
         const newDungeon = await Dungeon.create({
@@ -49,7 +49,7 @@ export const insertDungeon = async(req, res) => {
     }
 }
 
-export const updateDungeon = async(req, res) => {
+const updateDungeon = async(req, res) => {
     try{
         const dungeonData = req.body
         const dungeonId = parseInt(req.params.id)
@@ -79,7 +79,7 @@ export const updateDungeon = async(req, res) => {
     }
 }
 
-export const deleteDungeon = async(req, res) => {
+const deleteDungeon = async(req, res) => {
     try{
         const dungeonId = parseInt(req.params.id)
 
@@ -105,4 +105,12 @@ export const deleteDungeon = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllDungeons: getAllDungeons,
+    getDungeonById: getDungeonById,
+    insertDungeon: insertDungeon,
+    updateDungeon: updateDungeon,
+    deleteDungeon: deleteDungeon
 }

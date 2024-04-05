@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Users = new PrismaClient().users
 
-export const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
     try{
         const allUsers = await Users.findMany()
         res.status(200).json({result:allUsers})
@@ -11,7 +11,7 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
-export const getUniqueUser = async (req, res) => {
+const getUniqueUser = async (req, res) => {
     try{
         const userId = parseInt(req.params.id)
         const uniqueUser = await Users.findUnique({
@@ -28,7 +28,7 @@ export const getUniqueUser = async (req, res) => {
     }
 }
 
-export const insertUser = async(req, res) => {
+const insertUser = async(req, res) => {
     try{
         const userData = req.body
         const newUser = await Users.create({
@@ -41,7 +41,7 @@ export const insertUser = async(req, res) => {
     }
 }
 
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
     try {
         const userData = req.body;
         const userId = parseInt(req.params.id);
@@ -74,7 +74,7 @@ export const updateUser = async (req, res) => {
 };
 
 
-export const deleteUser = async(req, res) => {
+const deleteUser = async(req, res) => {
     try{
         const userId = parseInt(req.params.id)
 
@@ -100,4 +100,12 @@ export const deleteUser = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllUsers: getAllUsers,
+    getUniqueUser: getUniqueUser,
+    insertUser: insertUser,
+    updateUser: updateUser,
+    deleteUser: deleteUser
 }

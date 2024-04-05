@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllRaces,
+const { Router } = require("express");
+const { getAllRaces,
         getRaceById,
         insertRace,
         updateRace,
-        deleteRace } from "../controller/races.js";
+        deleteRace } = require ("../controller/races.js");
 
 const raceRouter = Router()
 
@@ -13,4 +13,4 @@ raceRouter.post('/', insertRace)
 raceRouter.put('/:id', updateRace)
 raceRouter.delete('/:id', deleteRace)
 
-export default raceRouter
+module.exports =  raceRouter

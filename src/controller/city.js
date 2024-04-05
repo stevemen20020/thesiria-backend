@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const City = new PrismaClient().city
 
-export const getAllCities = async (req, res) => {
+const getAllCities = async (req, res) => {
     try{
         const allCities = await City.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getAllCities = async (req, res) => {
     }
 }
 
-export const getCityById = async (req, res) => {
+const getCityById = async (req, res) => {
     try{
         const cityId = parseInt(req.params.id)
         const uniqueCity = await City.findUnique({
@@ -36,7 +36,7 @@ export const getCityById = async (req, res) => {
     }
 }
 
-export const insertCity = async(req, res) => {
+const insertCity = async(req, res) => {
     try{
         const cityData = req.body
         const newCity = await City.create({
@@ -49,7 +49,7 @@ export const insertCity = async(req, res) => {
     }
 }
 
-export const updateCity = async(req, res) => {
+const updateCity = async(req, res) => {
     try{
         const cityData = req.body
         const cityId = parseInt(req.params.id)
@@ -79,7 +79,7 @@ export const updateCity = async(req, res) => {
     }
 }
 
-export const deleteCity = async(req, res) => {
+const deleteCity = async(req, res) => {
     try{
         const cityId = parseInt(req.params.id)
 
@@ -105,4 +105,12 @@ export const deleteCity = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllCities: getAllCities,
+    getCityById: getCityById,
+    insertCity: insertCity,
+    updateCity: updateCity,
+    deleteCity: deleteCity
 }

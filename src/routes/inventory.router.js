@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getInventory,
+const { Router } = require("express");
+const { getInventory,
         getInventoryById,
         insertInventory,
         updateInventory,
-        deleteInventory } from "../controller/inventory.js";
+        deleteInventory } = require ("../controller/inventory.js");
 
 const inventoryRouter = Router()
 
@@ -13,4 +13,4 @@ inventoryRouter.post('/', insertInventory)
 inventoryRouter.put('/:id', updateInventory)
 inventoryRouter.delete('/:id', deleteInventory)
 
-export default inventoryRouter
+module.exports =  inventoryRouter

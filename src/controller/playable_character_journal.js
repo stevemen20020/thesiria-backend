@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const PlayableCharacterJournal = new PrismaClient().playable_character_journal
 
-export const getAllCharactersJournal = async (req, res) => {
+const getAllCharactersJournal = async (req, res) => {
     try{
         if('playable_character_id' in req.query) {
             const id_character = parseInt(req.query.playable_character_id)
@@ -16,7 +16,7 @@ export const getAllCharactersJournal = async (req, res) => {
             const journal = await PlayableCharacterJournal.findMany({
                 include:{
                     playable_character:true,
-                    npc:true
+                    PlayableCharacterJournal:true
                 },
                 where: {
                     playable_character_id: id_character
@@ -30,7 +30,7 @@ export const getAllCharactersJournal = async (req, res) => {
         const allPlayableCharactersJournal = await PlayableCharacterJournal.findMany({
             include: {
                 playable_character:true,
-                npc:true
+                PlayableCharacterJournal:true
             }
         })
 
@@ -40,13 +40,13 @@ export const getAllCharactersJournal = async (req, res) => {
     }
 }
 
-export const getPlayableCharacterJournalById = async (req, res) => {
+const getPlayableCharacterJournalById = async (req, res) => {
     try{
         const playableCharacterJournalId = parseInt(req.params.id)
         const uniquePlayableCharacterJournal = await PlayableCharacterJournal.findUnique({
             include: {
                 playable_character:true,
-                npc:{
+                PlayableCharacterJournal:{
                     include:{
                         races:true,
                         affinity:true,
@@ -74,7 +74,7 @@ export const getPlayableCharacterJournalById = async (req, res) => {
     }
 }
 
-export const insertPlayableCharacterJournalById = async(req, res) => {
+const insertPlayableCharacterJournalById = async(req, res) => {
     try{
         const playableCharacterJournalData = req.body
         const newPlayableCharacterJournal = await PlayableCharacterJournal.create({
@@ -87,7 +87,7 @@ export const insertPlayableCharacterJournalById = async(req, res) => {
     }
 }
 
-export const updatePlayableCharacterJournal = async(req, res) => {
+const updatePlayableCharacterJournal = async(req, res) => {
     try{
         const playableCharacterJournalData = req.body
         const playableCharacterJournalId = parseInt(req.params.id)
@@ -117,7 +117,7 @@ export const updatePlayableCharacterJournal = async(req, res) => {
     }
 }
 
-export const deletePlayableCharacterJournal = async(req, res) => {
+const deletePlayableCharacterJournal = async(req, res) => {
     try{
         const playableCharacterJournalId = parseInt(req.params.id)
 
@@ -143,4 +143,12 @@ export const deletePlayableCharacterJournal = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllCharactersJournal: getAllCharactersJournal,
+    getPlayableCharacterJournalById: getPlayableCharacterJournalById,
+    insertPlayableCharacterJournalById: insertPlayableCharacterJournalById,
+    updatePlayableCharacterJournal: updatePlayableCharacterJournal,
+    deletePlayableCharacterJournal: deletePlayableCharacterJournal
 }

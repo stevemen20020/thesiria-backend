@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllSpells,
+const { Router } = require("express");
+const { getAllSpells,
         getSpellsById,
         insertSpells,
         updateSpells,
-        deleteSpells } from "../controller/spells.js";
+        deleteSpells } = require ("../controller/spells.js");
 
 const spellsRouter = Router()
 
@@ -13,4 +13,4 @@ spellsRouter.post('/', insertSpells)
 spellsRouter.put('/:id', updateSpells)
 spellsRouter.delete('/:id', deleteSpells)
 
-export default spellsRouter
+module.exports =  spellsRouter

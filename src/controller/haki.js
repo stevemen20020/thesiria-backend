@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Hakis = new PrismaClient().haki_types
 
-export const getAllHakis = async (req, res) => {
+const getAllHakis = async (req, res) => {
     try{
         const allHakis = await Hakis.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getAllHakis = async (req, res) => {
     }
 }
 
-export const getHakiById = async (req, res) => {
+const getHakiById = async (req, res) => {
     try{
         const HakiId = parseInt(req.params.id)
         const uniqueHaki = await Hakis.findUnique({
@@ -36,7 +36,7 @@ export const getHakiById = async (req, res) => {
     }
 }
 
-export const insertHaki = async(req, res) => {
+const insertHaki = async(req, res) => {
     try{
         const HakiData = req.body
         const newHaki = await Hakis.create({
@@ -49,7 +49,7 @@ export const insertHaki = async(req, res) => {
     }
 }
 
-export const updateHaki = async(req, res) => {
+const updateHaki = async(req, res) => {
     try{
         const HakiData = req.body
         const HakiId = parseInt(req.params.id)
@@ -79,7 +79,7 @@ export const updateHaki = async(req, res) => {
     }
 }
 
-export const deleteHaki = async(req, res) => {
+const deleteHaki = async(req, res) => {
     try{
         const HakiId = parseInt(req.params.id)
 
@@ -105,4 +105,12 @@ export const deleteHaki = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllHakis: getAllHakis,
+    getHakiById: getHakiById,
+    insertHaki: insertHaki,
+    updateHaki: updateHaki,
+    deleteHaki: deleteHaki
 }

@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Npc_Inventory = new PrismaClient().npc_inventory
 
-export const getNpcInventory = async (req, res) => {
+const getNpcInventory = async (req, res) => {
     try{
         const allNpcInventory = await Npc_Inventory.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getNpcInventory = async (req, res) => {
     }
 }
 
-export const getNpcInventoryById = async (req, res) => {
+const getNpcInventoryById = async (req, res) => {
     try{
         const npcInventoryId = parseInt(req.params.id)
         const uniqueNpcInventory = await Npc_Inventory.findUnique({
@@ -37,7 +37,7 @@ export const getNpcInventoryById = async (req, res) => {
     }
 }
 
-export const insertNpcInventory = async(req, res) => {
+const insertNpcInventory = async(req, res) => {
     try{
         const npcInventoryData = req.body
         const newNpcInventory = await Npc_Inventory.create({
@@ -50,7 +50,7 @@ export const insertNpcInventory = async(req, res) => {
     }
 }
 
-export const updateNpcInventory = async(req, res) => {
+const updateNpcInventory = async(req, res) => {
     try{
         const npcInventoryData = req.body
         const npcInventoryId = parseInt(req.params.id)
@@ -80,7 +80,7 @@ export const updateNpcInventory = async(req, res) => {
     }
 }
 
-export const deleteNpcInventory = async(req, res) => {
+const deleteNpcInventory = async(req, res) => {
     try{
         const npcInventorylId = parseInt(req.params.id)
 
@@ -106,4 +106,12 @@ export const deleteNpcInventory = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getNpcInventory: getNpcInventory,
+    getNpcInventoryById: getNpcInventoryById,
+    insertNpcInventory: insertNpcInventory,
+    updateNpcInventory: updateNpcInventory,
+    deleteNpcInventory: deleteNpcInventory
 }

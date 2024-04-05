@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Loottables = new PrismaClient().loottables
 
-export const getLoottables = async (req, res) => {
+const getLoottables = async (req, res) => {
     try{
         const allLoottables = await Loottables.findMany({
             include: {
@@ -17,7 +17,7 @@ export const getLoottables = async (req, res) => {
     }
 }
 
-export const getLoottablesById = async (req, res) => {
+const getLoottablesById = async (req, res) => {
     try{
         const loottablesId = parseInt(req.params.id)
         const uniqueLoottables = await Loottables.findUnique({
@@ -39,7 +39,7 @@ export const getLoottablesById = async (req, res) => {
     }
 }
 
-export const insertLoottables = async(req, res) => {
+const insertLoottables = async(req, res) => {
     try{
         const loottablesData = req.body
         const newLoottables = await Loottables.create({
@@ -52,7 +52,7 @@ export const insertLoottables = async(req, res) => {
     }
 }
 
-export const updateLoottables = async(req, res) => {
+const updateLoottables = async(req, res) => {
     try{
         const loottablesData = req.body
         const loottablesId = parseInt(req.params.id)
@@ -82,7 +82,7 @@ export const updateLoottables = async(req, res) => {
     }
 }
 
-export const deleteLoottables = async(req, res) => {
+const deleteLoottables = async(req, res) => {
     try{
         const loottablesId = parseInt(req.params.id)
 
@@ -108,4 +108,12 @@ export const deleteLoottables = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getLoottables: getLoottables,
+    getLoottablesById: getLoottablesById,
+    insertLoottables: insertLoottables,
+    updateLoottables: updateLoottables,
+    deleteLoottables: deleteLoottables
 }

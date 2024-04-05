@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllHakis,
+const { Router } = require("express");
+const { getAllHakis,
         getHakiById,
         insertHaki,
         updateHaki,
-        deleteHaki } from "../controller/haki.js";
+        deleteHaki } = require ("../controller/haki.js");
 
 const hakiRouter = Router()
 
@@ -13,4 +13,4 @@ hakiRouter.post('/', insertHaki)
 hakiRouter.put('/:id', updateHaki)
 hakiRouter.delete('/:id', deleteHaki)
 
-export default hakiRouter
+module.exports =  hakiRouter

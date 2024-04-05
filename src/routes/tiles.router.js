@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllTiles,
+const { Router } = require("express");
+const { getAllTiles,
         getTileById,
         insertTile,
         updateTile,
-        deleteTile } from "../controller/tiles.js";
+        deleteTile } = require ("../controller/tiles.js");
 
 const tileRouter = Router()
 
@@ -13,4 +13,4 @@ tileRouter.post('/', insertTile)
 tileRouter.put('/:id', updateTile)
 tileRouter.delete('/:id', deleteTile)
 
-export default tileRouter
+module.exports =  tileRouter

@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Skill_Usage = new PrismaClient().skill_usage
 
-export const getAllSkills = async (req, res) => {
+const getAllSkills = async (req, res) => {
     try{
         const allSkills = await Skill_Usage.findMany()
 
@@ -12,7 +12,7 @@ export const getAllSkills = async (req, res) => {
     }
 }
 
-export const getSkillById = async (req, res) => {
+const getSkillById = async (req, res) => {
     try{
         const skillId = parseInt(req.params.id)
         const uniqueSkill = await Skill_Usage.findUnique({
@@ -29,7 +29,7 @@ export const getSkillById = async (req, res) => {
     }
 }
 
-export const insertSkill = async(req, res) => {
+const insertSkill = async(req, res) => {
     try{
         const skillData = req.body
         const newSkill = await Skill_Usage.create({
@@ -42,7 +42,7 @@ export const insertSkill = async(req, res) => {
     }
 }
 
-export const updateSkill = async(req, res) => {
+const updateSkill = async(req, res) => {
     try{
         const skillData = req.body
         const skillId = parseInt(req.params.id)
@@ -72,7 +72,7 @@ export const updateSkill = async(req, res) => {
     }
 }
 
-export const deleteSkill = async(req, res) => {
+const deleteSkill = async(req, res) => {
     try{
         const skillId = parseInt(req.params.id)
 
@@ -98,4 +98,12 @@ export const deleteSkill = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllSkills: getAllSkills,
+    getSkillById: getSkillById,
+    insertSkill: insertSkill,
+    updateSkill: updateSkill,
+    deleteSkill: deleteSkill
 }

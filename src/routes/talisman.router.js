@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllTalismanes,
+const { Router } = require("express");
+const { getAllTalismanes,
         getTalismanById,
         insertTalisman,
         updateTalisman,
-        deleteTalisman, } from "../controller/talismanes.js";
+        deleteTalisman, } = require ("../controller/talismanes.js");
 
 const talismanRouter = Router()
 
@@ -13,4 +13,4 @@ talismanRouter.post('/', insertTalisman)
 talismanRouter.put('/:id', updateTalisman)
 talismanRouter.delete('/:id', deleteTalisman)
 
-export default talismanRouter
+module.exports =  talismanRouter

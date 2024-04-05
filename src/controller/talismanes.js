@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Talismanes = new PrismaClient().talismanes
 
-export const getAllTalismanes = async (req, res) => {
+const getAllTalismanes = async (req, res) => {
     try{
         const allTalismanes = await Talismanes.findMany()
 
@@ -12,7 +12,7 @@ export const getAllTalismanes = async (req, res) => {
     }
 }
 
-export const getTalismanById = async (req, res) => {
+const getTalismanById = async (req, res) => {
     try{
         const talismanId = parseInt(req.params.id)
         const uniqueTalisman = await Talismanes.findUnique({
@@ -29,7 +29,7 @@ export const getTalismanById = async (req, res) => {
     }
 }
 
-export const insertTalisman = async(req, res) => {
+const insertTalisman = async(req, res) => {
     try{
         const talismanData = req.body
         const newTalisman = await Talismanes.create({
@@ -42,7 +42,7 @@ export const insertTalisman = async(req, res) => {
     }
 }
 
-export const updateTalisman = async(req, res) => {
+const updateTalisman = async(req, res) => {
     try{
         const talismanData = req.body
         const talismanId = parseInt(req.params.id)
@@ -72,7 +72,7 @@ export const updateTalisman = async(req, res) => {
     }
 }
 
-export const deleteTalisman = async(req, res) => {
+const deleteTalisman = async(req, res) => {
     try{
         const talismanId = parseInt(req.params.id)
 
@@ -98,4 +98,12 @@ export const deleteTalisman = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllTalismanes: getAllTalismanes,
+    getTalismanById: getTalismanById,
+    insertTalisman: insertTalisman,
+    updateTalisman: updateTalisman,
+    deleteTalisman: deleteTalisman
 }

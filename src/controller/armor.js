@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Armor = new PrismaClient().armor
 
-export const getAllArmors = async (req, res) => {
+const getAllArmors = async (req, res) => {
     try{
         const allArmors = await Armor.findMany({
             include: {
@@ -18,7 +18,7 @@ export const getAllArmors = async (req, res) => {
     }
 }
 
-export const getArmorById = async (req, res) => {
+const getArmorById = async (req, res) => {
     try{
         const armorId = parseInt(req.params.id)
         const uniqueArmor = await Armor.findUnique({
@@ -40,7 +40,7 @@ export const getArmorById = async (req, res) => {
     }
 }
 
-export const insertArmor = async(req, res) => {
+const insertArmor = async(req, res) => {
     try{
         const armorData = req.body
         const newArmor = await Armor.create({
@@ -53,7 +53,7 @@ export const insertArmor = async(req, res) => {
     }
 }
 
-export const updateArmor = async(req, res) => {
+const updateArmor = async(req, res) => {
     try{
         const armorData = req.body
         const armorId = parseInt(req.params.id)
@@ -83,7 +83,7 @@ export const updateArmor = async(req, res) => {
     }
 }
 
-export const deleteArmor = async(req, res) => {
+const deleteArmor = async(req, res) => {
     try{
         const armorId = parseInt(req.params.id)
 
@@ -109,4 +109,12 @@ export const deleteArmor = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllArmors: getAllArmors,
+    getArmorById: getArmorById,
+    insertArmor: insertArmor,
+    updateArmor: updateArmor,
+    deleteArmor: deleteArmor
 }

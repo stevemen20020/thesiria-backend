@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Monster = new PrismaClient().monster
 
-export const getAllMonster = async (req, res) => {
+const getAllMonster = async (req, res) => {
     try{
         const allMonster = await Monster.findMany({
             include: {
@@ -17,7 +17,7 @@ export const getAllMonster = async (req, res) => {
     }
 }
 
-export const getMonsterById = async (req, res) => {
+const getMonsterById = async (req, res) => {
     try{
         const MonsterId = parseInt(req.params.id)
         const uniqueMonster = await Monster.findUnique({
@@ -38,7 +38,7 @@ export const getMonsterById = async (req, res) => {
     }
 }
 
-export const insertMonster = async(req, res) => {
+const insertMonster = async(req, res) => {
     try{
         const MonsterData = req.body
         const newMonster = await Monster.create({
@@ -51,7 +51,7 @@ export const insertMonster = async(req, res) => {
     }
 }
 
-export const updateMonster = async(req, res) => {
+const updateMonster = async(req, res) => {
     try{
         const MonsterData = req.body
         const MonsterId = parseInt(req.params.id)
@@ -81,7 +81,7 @@ export const updateMonster = async(req, res) => {
     }
 }
 
-export const deleteMonster = async(req, res) => {
+const deleteMonster = async(req, res) => {
     try{
         const MonsterId = parseInt(req.params.id)
 
@@ -107,4 +107,12 @@ export const deleteMonster = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllMonster: getAllMonster,
+    getMonsterById: getMonsterById,
+    insertMonster: insertMonster,
+    updateMonster: updateMonster,
+    deleteMonster: deleteMonster
 }

@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllElements,
+const { Router } = require("express");
+const { getAllElements,
         getElementById,
         insertElement,
         updateElement,
-        deleteElement } from "../controller/elements.js";
+        deleteElement } = require ("../controller/elements.js");
 
 const elementRouter = Router()
 
@@ -13,4 +13,4 @@ elementRouter.post('/', insertElement)
 elementRouter.put('/:id', updateElement)
 elementRouter.delete('/:id', deleteElement)
 
-export default elementRouter
+module.exports =  elementRouter

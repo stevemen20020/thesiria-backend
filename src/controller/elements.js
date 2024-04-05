@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Elements = new PrismaClient().elements
 
-export const getAllElements = async (req, res) => {
+const getAllElements = async (req, res) => {
     try{
         const allElements = await Elements.findMany()
 
@@ -12,7 +12,7 @@ export const getAllElements = async (req, res) => {
     }
 }
 
-export const getElementById = async (req, res) => {
+const getElementById = async (req, res) => {
     try{
         const elementId = parseInt(req.params.id)
         const uniqueElement = await Elements.findUnique({
@@ -29,7 +29,7 @@ export const getElementById = async (req, res) => {
     }
 }
 
-export const insertElement = async(req, res) => {
+const insertElement = async(req, res) => {
     try{
         const elementData = req.body
         const newElement = await Elements.create({
@@ -42,7 +42,7 @@ export const insertElement = async(req, res) => {
     }
 }
 
-export const updateElement = async(req, res) => {
+const updateElement = async(req, res) => {
     try{
         const elementData = req.body
         const elementId = parseInt(req.params.id)
@@ -72,7 +72,7 @@ export const updateElement = async(req, res) => {
     }
 }
 
-export const deleteElement = async(req, res) => {
+const deleteElement = async(req, res) => {
     try{
         const elementId = parseInt(req.params.id)
 
@@ -98,4 +98,12 @@ export const deleteElement = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllElements: getAllElements,
+    getElementById: getElementById,
+    insertElement: insertElement,
+    updateElement: updateElement,
+    deleteElement: deleteElement
 }

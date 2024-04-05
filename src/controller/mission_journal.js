@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Mission_Journal = new PrismaClient().mission_journal
 
-export const getMissionJournal = async (req, res) => {
+const getMissionJournal = async (req, res) => {
     try{
         if('playable_character_id' in req.query) {
             const id_character = parseInt(req.query.playable_character_id)
@@ -56,7 +56,7 @@ export const getMissionJournal = async (req, res) => {
     }
 }
 
-export const getMissionJournalById = async (req, res) => {
+const getMissionJournalById = async (req, res) => {
     try{
         const missionJournalId = parseInt(req.params.id)
         const uniqueMissionJournal = await Mission_Journal.findUnique({
@@ -86,7 +86,7 @@ export const getMissionJournalById = async (req, res) => {
     }
 }
 
-export const insertMissionJournal = async(req, res) => {
+const insertMissionJournal = async(req, res) => {
     try{
         const missionJournalData = req.body
         const newMissionJournal = await Mission_Journal.create({
@@ -99,7 +99,7 @@ export const insertMissionJournal = async(req, res) => {
     }
 }
 
-export const updateMissionJournal = async(req, res) => {
+const updateMissionJournal = async(req, res) => {
     try{
         const missionJournalData = req.body
         const missionJournalId = parseInt(req.params.id)
@@ -129,7 +129,7 @@ export const updateMissionJournal = async(req, res) => {
     }
 }
 
-export const deleteMissionJournal = async(req, res) => {
+const deleteMissionJournal = async(req, res) => {
     try{
         const missionJournalId = parseInt(req.params.id)
 
@@ -155,4 +155,12 @@ export const deleteMissionJournal = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getMissionJournal: getMissionJournal,
+    getMissionJournalById: getMissionJournalById,
+    insertMissionJournal: insertMissionJournal,
+    updateMissionJournal: updateMissionJournal,
+    deleteMissionJournal: deleteMissionJournal
 }

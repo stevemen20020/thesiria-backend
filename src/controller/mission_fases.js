@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Mission_Fases = new PrismaClient().mission_fases
 
-export const getMissionFases = async (req, res) => {
+const getMissionFases = async (req, res) => {
     try{
         const allMissionFases = await Mission_Fases.findMany({
             include: {
@@ -15,7 +15,7 @@ export const getMissionFases = async (req, res) => {
     }
 }
 
-export const getMissionFasesById = async (req, res) => {
+const getMissionFasesById = async (req, res) => {
     try{
         const missionFasesId = parseInt(req.params.id)
         const uniqueMissionFases = await Mission_Fases.findUnique({
@@ -35,7 +35,7 @@ export const getMissionFasesById = async (req, res) => {
     }
 }
 
-export const insertMissionFases = async(req, res) => {
+const insertMissionFases = async(req, res) => {
     try{
         const missionFasesData = req.body
         const newMissionFases = await Mission_Fases.create({
@@ -48,7 +48,7 @@ export const insertMissionFases = async(req, res) => {
     }
 }
 
-export const updateMissionFases = async(req, res) => {
+const updateMissionFases = async(req, res) => {
     try{
         const missionFasesData = req.body
         const missionFasesId = parseInt(req.params.id)
@@ -78,7 +78,7 @@ export const updateMissionFases = async(req, res) => {
     }
 }
 
-export const deleteMissionFases = async(req, res) => {
+const deleteMissionFases = async(req, res) => {
     try{
         const missionFasesId = parseInt(req.params.id)
 
@@ -104,4 +104,12 @@ export const deleteMissionFases = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getMissionFases: getMissionFases,
+    getMissionFasesById: getMissionFasesById,
+    insertMissionFases: insertMissionFases,
+    updateMissionFases: updateMissionFases,
+    deleteMissionFases: deleteMissionFases
 }

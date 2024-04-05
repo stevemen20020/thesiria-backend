@@ -1,9 +1,9 @@
-import { Router } from "express";
-import {getMissionJournal,
+const { Router } = require("express");
+const { getMissionJournal,
         getMissionJournalById,
         insertMissionJournal,
         updateMissionJournal,
-        deleteMissionJournal} from "../controller/mission_journal.js"
+        deleteMissionJournal} = require ("../controller/mission_journal.js");
 
 const missionJournalRouter = Router()
 
@@ -13,4 +13,4 @@ missionJournalRouter.post('/', insertMissionJournal)
 missionJournalRouter.put('/:id', updateMissionJournal)
 missionJournalRouter.delete('/:id', deleteMissionJournal)
 
-export default missionJournalRouter
+module.exports =  missionJournalRouter

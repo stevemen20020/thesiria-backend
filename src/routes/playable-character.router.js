@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllCharacters, 
+const { Router } = require("express");
+const { getAllCharacters, 
     getPlayableCharacterById, 
     insertPlayableCharacterById, 
     updatePlayableCharacter, 
-    deletePlayableCharacter } from "../controller/playable-character.js";
+    deletePlayableCharacter } = require ("../controller/playable-character.js");
 
 const characterRouter = Router()
 
@@ -13,4 +13,4 @@ characterRouter.post('/', insertPlayableCharacterById)
 characterRouter.put('/:id', updatePlayableCharacter)
 characterRouter.delete('/:id', deletePlayableCharacter)
 
-export default characterRouter
+module.exports =  characterRouter

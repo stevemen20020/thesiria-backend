@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Spells = new PrismaClient().spells
 
-export const getAllSpells = async (req, res) => {
+const getAllSpells = async (req, res) => {
     try{
         const allSpells = await Spells.findMany({
             include: {
@@ -17,7 +17,7 @@ export const getAllSpells = async (req, res) => {
     }
 }
 
-export const getSpellsById = async (req, res) => {
+const getSpellsById = async (req, res) => {
     try{
         const spellsId = parseInt(req.params.id)
         const uniqueSpells = await Spells.findUnique({
@@ -40,7 +40,7 @@ export const getSpellsById = async (req, res) => {
     }
 }
 
-export const insertSpells = async(req, res) => {
+const insertSpells = async(req, res) => {
     try{
         const spellsData = req.body
         const newSpells = await Spells.create({
@@ -53,7 +53,7 @@ export const insertSpells = async(req, res) => {
     }
 }
 
-export const updateSpells = async(req, res) => {
+const updateSpells = async(req, res) => {
     try{
         const spells = req.body
         const spellsId = parseInt(req.params.id)
@@ -83,7 +83,7 @@ export const updateSpells = async(req, res) => {
     }
 }
 
-export const deleteSpells = async(req, res) => {
+const deleteSpells = async(req, res) => {
     try{
         const spellsId = parseInt(req.params.id)
 
@@ -109,4 +109,12 @@ export const deleteSpells = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllSpells: getAllSpells,
+    getSpellsById: getSpellsById,
+    insertSpells: insertSpells,
+    updateSpells: updateSpells,
+    deleteSpells: deleteSpells
 }

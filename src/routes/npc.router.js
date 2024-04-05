@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllNPCs,
+const { Router } = require("express");
+const { getAllNPCs,
         getNPCById,
         insertNPC,
         updateNPC,
-        deleteNPC } from "../controller/npc.js";
+        deleteNPC } = require ("../controller/npc.js");
 
 const npcRouter = Router()
 
@@ -13,4 +13,4 @@ npcRouter.post('/', insertNPC)
 npcRouter.put('/:id', updateNPC)
 npcRouter.delete('/:id', deleteNPC)
 
-export default npcRouter
+module.exports =  npcRouter

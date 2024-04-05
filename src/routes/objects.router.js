@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllObjects,
+const { Router } = require("express");
+const { getAllObjects,
         getObjectById,
         insertObject,
         updateObject,
-        deleteObject } from "../controller/objects.js";
+        deleteObject } = require ("../controller/objects.js");
 
 const objectRouter = Router()
 
@@ -13,4 +13,4 @@ objectRouter.post('/', insertObject)
 objectRouter.put('/:id', updateObject)
 objectRouter.delete('/:id', deleteObject)
 
-export default objectRouter
+module.exports =  objectRouter

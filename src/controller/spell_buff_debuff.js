@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const SpellBuffDebuff = new PrismaClient().spell_buff_debuff
 
-export const getAllSpellBuffDebuff = async (req, res) => {
+const getAllSpellBuffDebuff = async (req, res) => {
     try{
         const allSpellBuffDebuff = await SpellBuffDebuff.findMany({
             include: {
@@ -17,7 +17,7 @@ export const getAllSpellBuffDebuff = async (req, res) => {
     }
 }
 
-export const getSpellBuffDebuffById = async (req, res) => {
+const getSpellBuffDebuffById = async (req, res) => {
     try{
         const spellBuffDebuffId = parseInt(req.params.id)
         const uniqueSpellBuffDebuff = await SpellBuffDebuff.findUnique({
@@ -40,7 +40,7 @@ export const getSpellBuffDebuffById = async (req, res) => {
     }
 }
 
-export const insertSpellBuffDebuff = async(req, res) => {
+const insertSpellBuffDebuff = async(req, res) => {
     try{
         const spellBuffDebuffData = req.body
         const newSpellBuffDebuff = await SpellBuffDebuff.create({
@@ -53,7 +53,7 @@ export const insertSpellBuffDebuff = async(req, res) => {
     }
 }
 
-export const updateSpellBuffDebuff = async(req, res) => {
+const updateSpellBuffDebuff = async(req, res) => {
     try{
         const spellBuffDebuffData = req.body
         const spellBuffDebuffId = parseInt(req.params.id)
@@ -83,7 +83,7 @@ export const updateSpellBuffDebuff = async(req, res) => {
     }
 }
 
-export const deleteSpellBuffDebuff = async(req, res) => {
+const deleteSpellBuffDebuff = async(req, res) => {
     try{
         const spellBuffDebuffId = parseInt(req.params.id)
 
@@ -109,4 +109,12 @@ export const deleteSpellBuffDebuff = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllSpellBuffDebuff: getAllSpellBuffDebuff,
+    getSpellBuffDebuffById: getSpellBuffDebuffById,
+    insertSpellBuffDebuff: insertSpellBuffDebuff,
+    updateSpellBuffDebuff: updateSpellBuffDebuff,
+    deleteSpellBuffDebuff: deleteSpellBuffDebuff
 }

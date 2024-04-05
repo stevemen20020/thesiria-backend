@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Missions = new PrismaClient().missions
 
-export const getAllMissions = async (req, res) => {
+const getAllMissions = async (req, res) => {
     try{
         const allMissions = await Missions.findMany({
             include: {
@@ -15,7 +15,7 @@ export const getAllMissions = async (req, res) => {
     }
 }
 
-export const getMissionsById = async (req, res) => {
+const getMissionsById = async (req, res) => {
     try{
         const missionsId = parseInt(req.params.id)
         const uniqueMissions = await Missions.findUnique({
@@ -35,7 +35,7 @@ export const getMissionsById = async (req, res) => {
     }
 }
 
-export const insertMissions = async(req, res) => {
+const insertMissions = async(req, res) => {
     try{
         const missionsData = req.body
         const newMissions = await Missions.create({
@@ -48,7 +48,7 @@ export const insertMissions = async(req, res) => {
     }
 }
 
-export const updateMissions = async(req, res) => {
+const updateMissions = async(req, res) => {
     try{
         const missionsData = req.body
         const missionsId = parseInt(req.params.id)
@@ -78,7 +78,7 @@ export const updateMissions = async(req, res) => {
     }
 }
 
-export const deleteMissions = async(req, res) => {
+const deleteMissions = async(req, res) => {
     try{
         const missionsId = parseInt(req.params.id)
 
@@ -104,4 +104,12 @@ export const deleteMissions = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllMissions: getAllMissions,
+    getMissionsById: getMissionsById,
+    insertMissions: insertMissions,
+    updateMissions: updateMissions,
+    deleteMissions: deleteMissions
 }

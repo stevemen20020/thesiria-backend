@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const DevilFruit = new PrismaClient().devil_fruit
 
-export const getAllDevilFruits = async (req, res) => {
+const getAllDevilFruits = async (req, res) => {
     try{
         const allDevilFruits = await DevilFruit.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getAllDevilFruits = async (req, res) => {
     }
 }
 
-export const getDevilFruitById = async (req, res) => {
+const getDevilFruitById = async (req, res) => {
     try{
         const devilFruitId = parseInt(req.params.id)
         const uniqueDevilFruit = await DevilFruit.findUnique({
@@ -36,7 +36,7 @@ export const getDevilFruitById = async (req, res) => {
     }
 }
 
-export const insertDevilFruit = async(req, res) => {
+const insertDevilFruit = async(req, res) => {
     try{
         const devilFruitData = req.body
         const newDevilFruit = await DevilFruit.create({
@@ -49,7 +49,7 @@ export const insertDevilFruit = async(req, res) => {
     }
 }
 
-export const updateDevilFruit = async(req, res) => {
+const updateDevilFruit = async(req, res) => {
     try{
         const devilFruitData = req.body
         const devilFruitId = parseInt(req.params.id)
@@ -79,7 +79,7 @@ export const updateDevilFruit = async(req, res) => {
     }
 }
 
-export const deleteDevilFruit = async(req, res) => {
+const deleteDevilFruit = async(req, res) => {
     try{
         const devilFruitId = parseInt(req.params.id)
 
@@ -105,4 +105,12 @@ export const deleteDevilFruit = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllDevilFruits: getAllDevilFruits,
+    getDevilFruitById: getDevilFruitById,
+    insertDevilFruit: insertDevilFruit,
+    updateDevilFruit: updateDevilFruit,
+    deleteDevilFruit: deleteDevilFruit
 }

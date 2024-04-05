@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Weapon = new PrismaClient().weapon
 
-export const getAllWeapons = async (req, res) => {
+const getAllWeapons = async (req, res) => {
     try{
         const allWeapons = await Weapon.findMany({
             include: {
@@ -18,7 +18,7 @@ export const getAllWeapons = async (req, res) => {
     }
 }
 
-export const getWeaponById = async (req, res) => {
+const getWeaponById = async (req, res) => {
     try{
         const weaponId = parseInt(req.params.id)
         const uniqueWeapon = await Weapon.findUnique({
@@ -40,7 +40,7 @@ export const getWeaponById = async (req, res) => {
     }
 }
 
-export const insertWeapon = async(req, res) => {
+const insertWeapon = async(req, res) => {
     try{
         const weaponData = req.body
         const newWeapon = await Weapon.create({
@@ -53,7 +53,7 @@ export const insertWeapon = async(req, res) => {
     }
 }
 
-export const updateWeapon = async(req, res) => {
+const updateWeapon = async(req, res) => {
     try{
         const weaponData = req.body
         const weaponId = parseInt(req.params.id)
@@ -83,7 +83,7 @@ export const updateWeapon = async(req, res) => {
     }
 }
 
-export const deleteWeapon = async(req, res) => {
+const deleteWeapon = async(req, res) => {
     try{
         const weaponId = parseInt(req.params.id)
 
@@ -109,4 +109,12 @@ export const deleteWeapon = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllWeapons: getAllWeapons,
+    getWeaponById: getWeaponById,
+    insertWeapon: insertWeapon,
+    updateWeapon: updateWeapon,
+    deleteWeapon: deleteWeapon
 }

@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllSpellBuffDebuff,
+const { Router } = require("express");
+const { getAllSpellBuffDebuff,
         getSpellBuffDebuffById,
         insertSpellBuffDebuff,
         updateSpellBuffDebuff,
-        deleteSpellBuffDebuff } from "../controller/spell_buff_debuff.js";
+        deleteSpellBuffDebuff } = require ("../controller/spell_buff_debuff.js");
 
 const spellBuffDebuffRouter = Router()
 
@@ -13,4 +13,4 @@ spellBuffDebuffRouter.post('/', insertSpellBuffDebuff)
 spellBuffDebuffRouter.put('/:id', updateSpellBuffDebuff)
 spellBuffDebuffRouter.delete('/:id', deleteSpellBuffDebuff)
 
-export default spellBuffDebuffRouter
+module.exports =  spellBuffDebuffRouter

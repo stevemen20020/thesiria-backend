@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllEffects,
+const { Router } = require("express");
+const { getAllEffects,
          getEffectById,
          insertEffect,
          updateEffect,
-         deleteEffect } from "../controller/effects.js";
+         deleteEffect } = require ("../controller/effects.js");
 
 const effectsRouter = Router()
 
@@ -13,4 +13,4 @@ effectsRouter.post('/', insertEffect)
 effectsRouter.put('/:id', updateEffect)
 effectsRouter.delete('/:id', deleteEffect)
 
-export default effectsRouter
+module.exports =  effectsRouter

@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllDevilFruits,
+const { Router } = require("express");
+const { getAllDevilFruits,
         getDevilFruitById,
         insertDevilFruit,
         updateDevilFruit,
-        deleteDevilFruit } from "../controller/devil_fruit.js";
+        deleteDevilFruit } = require ("../controller/devil_fruit.js");
 
 const devilFruitRouter = Router()
 
@@ -13,4 +13,4 @@ devilFruitRouter.post('/', insertDevilFruit)
 devilFruitRouter.put('/:id', updateDevilFruit)
 devilFruitRouter.delete('/:id', deleteDevilFruit)
 
-export default devilFruitRouter
+module.exports =  devilFruitRouter

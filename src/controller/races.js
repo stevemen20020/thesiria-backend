@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Race = new PrismaClient().races
 
-export const getAllRaces = async (req, res) => {
+const getAllRaces = async (req, res) => {
     try{
         const allRaces = await Race.findMany()
 
@@ -12,7 +12,7 @@ export const getAllRaces = async (req, res) => {
     }
 }
 
-export const getRaceById = async (req, res) => {
+const getRaceById = async (req, res) => {
     try{
         const raceId = parseInt(req.params.id)
         const uniqueRace = await Race.findUnique({
@@ -29,7 +29,7 @@ export const getRaceById = async (req, res) => {
     }
 }
 
-export const insertRace = async(req, res) => {
+const insertRace = async(req, res) => {
     try{
         const raceData = req.body
         const newRace = await Race.create({
@@ -42,7 +42,7 @@ export const insertRace = async(req, res) => {
     }
 }
 
-export const updateRace = async(req, res) => {
+const updateRace = async(req, res) => {
     try{
         const raceData = req.body
         const raceId = parseInt(req.params.id)
@@ -72,7 +72,7 @@ export const updateRace = async(req, res) => {
     }
 }
 
-export const deleteRace = async(req, res) => {
+const deleteRace = async(req, res) => {
     try{
         const raceId = parseInt(req.params.id)
 
@@ -98,4 +98,12 @@ export const deleteRace = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllRaces: getAllRaces,
+    getRaceById: getRaceById,
+    insertRace: insertRace,
+    updateRace: updateRace,
+    deleteRace: deleteRace
 }

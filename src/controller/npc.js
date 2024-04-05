@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const NPC = new PrismaClient().npc
 
-export const getAllNPCs = async (req, res) => {
+const getAllNPCs = async (req, res) => {
     try{
         const allNPCs = await NPC.findMany({
             include: {
@@ -20,7 +20,7 @@ export const getAllNPCs = async (req, res) => {
     }
 }
 
-export const getNPCById = async (req, res) => {
+const getNPCById = async (req, res) => {
     try{
         const NPCId = parseInt(req.params.id)
         const uniqueNPC = await NPC.findUnique({
@@ -46,7 +46,7 @@ export const getNPCById = async (req, res) => {
     }
 }
 
-export const insertNPC = async(req, res) => {
+const insertNPC = async(req, res) => {
     try{
         const NPCData = req.body
         const newNPC = await NPC.create({
@@ -59,7 +59,7 @@ export const insertNPC = async(req, res) => {
     }
 }
 
-export const updateNPC = async(req, res) => {
+const updateNPC = async(req, res) => {
     try{
         const NPCData = req.body
         const NPCId = parseInt(req.params.id)
@@ -89,7 +89,7 @@ export const updateNPC = async(req, res) => {
     }
 }
 
-export const deleteNPC = async(req, res) => {
+const deleteNPC = async(req, res) => {
     try{
         const NPCId = parseInt(req.params.id)
 
@@ -115,4 +115,12 @@ export const deleteNPC = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllNPCs: getAllNPCs,
+    getNPCById: getNPCById,
+    insertNPC: insertNPC,
+    updateNPC: updateNPC,
+    deleteNPC: deleteNPC
 }

@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Inventory_Weapon = new PrismaClient().inventory_weapon
 
-export const getInventoryWeapon = async (req, res) => {
+const getInventoryWeapon = async (req, res) => {
     try{
         const allInventoryWeapon = await Inventory_Weapon.findMany({
             include: {
@@ -16,7 +16,7 @@ export const getInventoryWeapon = async (req, res) => {
     }
 }
 
-export const getInventoryWeaponById = async (req, res) => {
+const getInventoryWeaponById = async (req, res) => {
     try{
         const inventoryWeaponId = parseInt(req.params.id)
         const uniqueInventoryWeapon = await Inventory_Weapon.findUnique({
@@ -37,7 +37,7 @@ export const getInventoryWeaponById = async (req, res) => {
     }
 }
 
-export const insertInventoryWeapon = async(req, res) => {
+const insertInventoryWeapon = async(req, res) => {
     try{
         const inventoryWeaponData = req.body
         const newInventoryWeapon = await Inventory_Weapon.create({
@@ -50,7 +50,7 @@ export const insertInventoryWeapon = async(req, res) => {
     }
 }
 
-export const updateInventoryWeapon = async(req, res) => {
+const updateInventoryWeapon = async(req, res) => {
     try{
         const inventoryWeaponData = req.body
         const inventoryWeaponId = parseInt(req.params.id)
@@ -80,7 +80,7 @@ export const updateInventoryWeapon = async(req, res) => {
     }
 }
 
-export const deleteInventoryWeapon = async(req, res) => {
+const deleteInventoryWeapon = async(req, res) => {
     try{
         const inventoryWeaponId = parseInt(req.params.id)
 
@@ -106,4 +106,12 @@ export const deleteInventoryWeapon = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getInventoryWeapon: getInventoryWeapon,
+    getInventoryWeaponById: getInventoryWeaponById,
+    insertInventoryWeapon: insertInventoryWeapon,
+    updateInventoryWeapon: updateInventoryWeapon,
+    deleteInventoryWeapon: deleteInventoryWeapon
 }

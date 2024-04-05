@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getLoottables,
+const { Router } = require("express");
+const { getLoottables,
         getLoottablesById,
         insertLoottables,
         updateLoottables,
-        deleteLoottables } from "../controller/loottables.js";
+        deleteLoottables } = require ("../controller/loottables.js");
 
 const loottablesRouter = Router()
 
@@ -13,4 +13,4 @@ loottablesRouter.post('/', insertLoottables)
 loottablesRouter.put('/:id', updateLoottables)
 loottablesRouter.delete('/:id', deleteLoottables)
 
-export default loottablesRouter
+module.exports =  loottablesRouter

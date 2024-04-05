@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client"
+const { PrismaClient } = require("@prisma/client");
 
 const Effect = new PrismaClient().effects
 
-export const getAllEffects = async (req, res) => {
+const getAllEffects = async (req, res) => {
     try{
         const allEffects = await Effect.findMany()
 
@@ -12,7 +12,7 @@ export const getAllEffects = async (req, res) => {
     }
 }
 
-export const getEffectById = async (req, res) => {
+const getEffectById = async (req, res) => {
     try{
         const effectId = parseInt(req.params.id)
         const uniqueEffect = await Effect.findUnique({
@@ -29,7 +29,7 @@ export const getEffectById = async (req, res) => {
     }
 }
 
-export const insertEffect = async(req, res) => {
+const insertEffect = async(req, res) => {
     try{
         const effectData = req.body
         const newEffect = await Effect.create({
@@ -42,7 +42,7 @@ export const insertEffect = async(req, res) => {
     }
 }
 
-export const updateEffect = async(req, res) => {
+const updateEffect = async(req, res) => {
     try{
         const effectData = req.body
         const effectId = parseInt(req.params.id)
@@ -72,7 +72,7 @@ export const updateEffect = async(req, res) => {
     }
 }
 
-export const deleteEffect = async(req, res) => {
+const deleteEffect = async(req, res) => {
     try{
         const effectId = parseInt(req.params.id)
 
@@ -98,4 +98,12 @@ export const deleteEffect = async(req, res) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+module.exports ={
+    getAllEffects: getAllEffects,
+    getEffectById: getEffectById,
+    insertEffect: insertEffect,
+    updateEffect: updateEffect,
+    deleteEffect: deleteEffect
 }

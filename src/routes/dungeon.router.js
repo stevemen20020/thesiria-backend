@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllDungeons,
+const { Router } = require("express");
+const { getAllDungeons,
          getDungeonById,
          insertDungeon,
          updateDungeon,
-         deleteDungeon } from "../controller/dungeons.js";
+         deleteDungeon } = require ("../controller/dungeons.js");
 
 const dungeonRouter = Router()
 
@@ -13,4 +13,4 @@ dungeonRouter.post('/', insertDungeon)
 dungeonRouter.put('/:id', updateDungeon)
 dungeonRouter.delete('/:id', deleteDungeon)
 
-export default dungeonRouter
+module.exports =  dungeonRouter

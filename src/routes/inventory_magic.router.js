@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getInventoryMagic,
+const { Router } = require("express");
+const { getInventoryMagic,
         getInventoryMagicById,
         insertInventoryMagic,
         updateInventoryMagic,
-        deleteInventoryMagic } from "../controller/inventory_magic.js";
+        deleteInventoryMagic } = require ("../controller/inventory_magic.js");
 
 const inventoryMagicRouter = Router()
 
@@ -13,4 +13,4 @@ inventoryMagicRouter.post('/', insertInventoryMagic)
 inventoryMagicRouter.put('/:id', updateInventoryMagic)
 inventoryMagicRouter.delete('/:id', deleteInventoryMagic)
 
-export default inventoryMagicRouter
+module.exports =  inventoryMagicRouter

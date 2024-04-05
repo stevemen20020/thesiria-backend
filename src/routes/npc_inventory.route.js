@@ -1,9 +1,9 @@
-import { Router } from "express";
-import {getNpcInventory,
+const { Router } = require("express");
+const {getNpcInventory,
         getNpcInventoryById,
         insertNpcInventory,
         updateNpcInventory,
-        deleteNpcInventory} from "../controller/npc_inventory.js"
+        deleteNpcInventory} = require ("../controller/npc_inventory.js");
 
 const npcInventoryRouter = Router()
 
@@ -13,4 +13,4 @@ npcInventoryRouter.post('/', insertNpcInventory)
 npcInventoryRouter.put('/:id', updateNpcInventory)
 npcInventoryRouter.delete('/:id', deleteNpcInventory)
 
-export default npcInventoryRouter
+module.exports =  npcInventoryRouter

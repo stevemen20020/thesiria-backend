@@ -1,10 +1,10 @@
-import { Router } from "express";
-import {getAllMissions,
+const { Router } = require("express");
+const {getAllMissions,
         getMissionsById,
         insertMissions,
         updateMissions,
         deleteMissions
-        } from "../controller/missions.js";
+        } = require ("../controller/missions.js");
 
 const missionsRouter = Router()
 
@@ -14,4 +14,4 @@ missionsRouter.post('/', insertMissions)
 missionsRouter.put('/:id', updateMissions)
 missionsRouter.delete('/:id', deleteMissions)
 
-export default missionsRouter
+module.exports =  missionsRouter

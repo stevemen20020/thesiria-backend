@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getAllArmors,
+const { Router } = require("express");
+const { getAllArmors,
         getArmorById,
         insertArmor,
         updateArmor,
-        deleteArmor } from "../controller/armor.js";
+        deleteArmor } = require( "../controller/armor.js");
 
 const armorRouter = Router()
 
@@ -13,4 +13,4 @@ armorRouter.post('/', insertArmor)
 armorRouter.put('/:id', updateArmor)
 armorRouter.delete('/:id', deleteArmor)
 
-export default armorRouter
+module.exports =  armorRouter
