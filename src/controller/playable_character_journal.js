@@ -16,7 +16,7 @@ const getAllCharactersJournal = async (req, res) => {
             const journal = await PlayableCharacterJournal.findMany({
                 include:{
                     playable_character:true,
-                    PlayableCharacterJournal:true
+                    npc:true
                 },
                 where: {
                     playable_character_id: id_character
@@ -30,7 +30,7 @@ const getAllCharactersJournal = async (req, res) => {
         const allPlayableCharactersJournal = await PlayableCharacterJournal.findMany({
             include: {
                 playable_character:true,
-                PlayableCharacterJournal:true
+                npc:true
             }
         })
 
@@ -46,7 +46,7 @@ const getPlayableCharacterJournalById = async (req, res) => {
         const uniquePlayableCharacterJournal = await PlayableCharacterJournal.findUnique({
             include: {
                 playable_character:true,
-                PlayableCharacterJournal:{
+                npc:{
                     include:{
                         races:true,
                         affinity:true,
