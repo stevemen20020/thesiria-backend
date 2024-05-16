@@ -47,7 +47,14 @@ const getPlayableCharacterById = async (req, res) => {
                 },
                 inventory_weapon_playable_character_weapon_idToinventory_weapon:{
                     include:{
-                        weapon:true
+                        weapon:{
+                            include:{
+                                elements:true,
+                                skill_usage_weapon_skill_usageToskill_usage:true,
+                                tiles:true,
+                                objects:true
+                            }
+                        }
                     }
                 },
                 haki_types:true,
