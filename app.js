@@ -14,6 +14,7 @@ app.use('/public', express.static('./src/public'))
 app.use('/character-image', express.static('./src/public/characters'))
 app.use('/tile-image', express.static('./src/public'))
 app.use('/weapon-image', express.static('./src/public/weapons'))
+app.use('/armor-image', express.static('./src/public/armors'))
 app.use(cors({ origin: '*' ,methods: '*', allowedHeaders: ['*'], requestHeaders: ['*']}));
 app.use(`/rest/${process.env.VERSION}`, router)
 
