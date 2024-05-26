@@ -42,7 +42,14 @@ const getPlayableCharacterById = async (req, res) => {
                 affinity:true,
                 inventory_armor_playable_character_armor_idToinventory_armor:{
                     include:{
-                        armor:true
+                        armor:{
+                            include:{
+                                elements: true,
+                                skill_usage_armor_skill_usageToskill_usage: true,
+                                tiles: true,
+                                objects: true
+                            }
+                        }
                     }
                 },
                 inventory_weapon_playable_character_weapon_idToinventory_weapon:{
