@@ -3,12 +3,26 @@ const { PrismaClient } = require("@prisma/client");
 const Inventory = new PrismaClient().inventory
 
 const getInventory = async (req, res) => {
+    const id_playable_character = parseInt(req.query.id_playable_character)
+    const id_object = parseInt(req.query.id_object)
+
+    let where = {}
+
+    if(id_playable_character) {
+        where.id_playable_character = id_playable_character
+    }
+
+    if(id_object) {
+        where.id_object = id_object
+    }
+
     try{
         const allInventory = await Inventory.findMany({
             include: {
                 playable_character:true,
                 objects:true
-            }
+            },
+            where:where
         })
         res.status(200).json({result:allInventory})
     } catch (e) {
@@ -80,6 +94,32 @@ const updateInventory = async(req, res) => {
     }
 }
 
+const updateInventoryForPlayer = async(req, res) => {
+    try{
+        const quantity = parseInt(req.body.quantity)
+        const id_playable_character = parseInt(req.body.id_playable_character)
+        const id_object = parseInt(req.body.id_object)
+        const editedInventory = await Inventory.update({
+            data:{
+                quantity:quantity
+            },
+            where:{
+                id_playable_character:id_playable_character,
+                id_object:id_object
+            }
+        })
+
+        if (!editedInventory) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Inventory not found" });
+        }
+
+        res.status(200).json({result:editedInventory})
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 const deleteInventory = async(req, res) => {
     try{
         const inventoryId = parseInt(req.params.id)
@@ -113,5 +153,6 @@ module.exports ={
     getInventoryById: getInventoryById,
     insertInventory: insertInventory,
     updateInventory: updateInventory,
-    deleteInventory: deleteInventory
+    deleteInventory: deleteInventory,
+    updateInventoryForPlayer: updateInventoryForPlayer
 }
