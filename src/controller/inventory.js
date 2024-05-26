@@ -99,13 +99,25 @@ const updateInventoryForPlayer = async(req, res) => {
         const quantity = parseInt(req.body.quantity)
         const id_playable_character = parseInt(req.body.id_playable_character)
         const id_object = parseInt(req.body.id_object)
+        
+        const existingInventory = await Inventory.findFirst({
+            where:{
+                id_playable_character:id_playable_character,
+                id_object:id_object
+            }
+        })
+
+        if (!existingInventory) {
+            // If the user doesn't exist, return a 404 response
+            return res.status(404).json({ error: "Inventory not found" });
+        }
+
         const editedInventory = await Inventory.update({
             data:{
                 quantity:quantity
             },
-            where:{
-                id_playable_character:id_playable_character,
-                id_object:id_object
+            where: {
+                id: existingInventory.id
             }
         })
 
