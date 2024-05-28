@@ -9,7 +9,7 @@ const getInventoryArmor = async (req, res) => {
     let where = {}
 
     if(id_playable_character) {
-        where.id_playable_character = id_playable_character
+        where.id_user = id_playable_character
     }
 
     if(id_armor) {
