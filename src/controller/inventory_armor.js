@@ -3,12 +3,26 @@ const { PrismaClient } = require("@prisma/client");
 const Inventory_Armor = new PrismaClient().inventory_armor
 
 const getInventoryArmor = async (req, res) => {
+    const id_playable_character = parseInt(req.query.id_playable_character)
+    const id_armor = parseInt(req.query.id_armor)
+
+    let where = {}
+
+    if(id_playable_character) {
+        where.id_playable_character = id_playable_character
+    }
+
+    if(id_armor) {
+        where.id_armor = id_armor
+    }
+
     try{
         const allInventoryArmor = await Inventory_Armor.findMany({
             include: {
                 armor:true,
                 playable_character_inventory_armor_id_userToplayable_character:true
-            }
+            },
+            where:where
         })
         res.status(200).json({result:allInventoryArmor})
     } catch (e) {
