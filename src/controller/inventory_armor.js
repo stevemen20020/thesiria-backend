@@ -19,7 +19,14 @@ const getInventoryArmor = async (req, res) => {
     try{
         const allInventoryArmor = await Inventory_Armor.findMany({
             include: {
-                armor:true,
+                armor:{
+                    include:{
+                        elements: true,
+                        skill_usage_armor_skill_usageToskill_usage: true,
+                        tiles: true,
+                        objects: true
+                    }
+                },
                 playable_character_inventory_armor_id_userToplayable_character:true
             },
             where:where
@@ -38,7 +45,14 @@ const getInventoryArmorById = async (req, res) => {
                 id:inventoryArmorId
             },
             include: {
-                armor:true,
+                armor:{
+                    include:{
+                        elements: true,
+                        skill_usage_armor_skill_usageToskill_usage: true,
+                        tiles: true,
+                        objects: true
+                    }
+                },
                 playable_character_inventory_armor_id_userToplayable_character:true
             }
         })

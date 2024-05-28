@@ -19,7 +19,14 @@ const getInventoryWeapon = async (req, res) => {
     try{
         const allInventoryWeapon = await Inventory_Weapon.findMany({
             include: {
-                weapon:true,
+                weapon:{
+                    include:{
+                        elements:true,
+                        skill_usage_weapon_skill_usageToskill_usage:true,
+                        tiles:true,
+                        objects:true
+                    }
+                },
                 playable_character_inventory_weapon_id_userToplayable_character:true
             },
             where:where
@@ -38,7 +45,14 @@ const getInventoryWeaponById = async (req, res) => {
                 id:inventoryWeaponId
             },
             include: {
-                weapon:true,
+                weapon:{
+                    include:{
+                        elements:true,
+                        skill_usage_weapon_skill_usageToskill_usage:true,
+                        tiles:true,
+                        objects:true
+                    }
+                },
                 playable_character_inventory_weapon_id_userToplayable_character:true
             }
         })
