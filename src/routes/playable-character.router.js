@@ -3,7 +3,8 @@ const { getAllCharacters,
     getPlayableCharacterById, 
     insertPlayableCharacterById, 
     updatePlayableCharacter, 
-    deletePlayableCharacter } = require ("../controller/playable-character.js");
+    deletePlayableCharacter,
+    giftMoney } = require ("../controller/playable-character.js");
 
 const characterRouter = Router()
 
@@ -12,5 +13,6 @@ characterRouter.get('/:id', getPlayableCharacterById)
 characterRouter.post('/', insertPlayableCharacterById)
 characterRouter.put('/:id', updatePlayableCharacter)
 characterRouter.delete('/:id', deletePlayableCharacter)
+characterRouter.patch('/', giftMoney)
 
 module.exports =  characterRouter

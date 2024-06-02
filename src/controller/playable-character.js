@@ -152,10 +152,61 @@ const deletePlayableCharacter = async(req, res) => {
     }
 }
 
+const giftMoney = async(req, res) => {
+    try{
+        const {money, giftingPlayer, giftedPlayer} = req.body
+
+        // Attempt to find the user first
+        const existingGiftingCharacter = await PlayableCharacter.findUnique({
+            where: {
+                id: parseInt(giftingPlayer),
+            },
+        });
+
+        if (!existingGiftingCharacter) {
+            return res.status(404).json({ error: "Character gifting not found" });
+        }
+
+        const existingGiftedCharacter = await PlayableCharacter.findUnique({
+            where: {
+                id: parseInt(giftedPlayer),
+            },
+        });
+
+        if (!existingGiftedCharacter) {
+            return res.status(404).json({ error: "Character gifted not found" });
+        }
+
+        const lostMoney = existingGiftingCharacter.money - parseFloat(money)
+        const gainedMoney = existingGiftedCharacter.money + parseFloat(money)
+
+        await PlayableCharacter.update({
+            where:{
+                id:parseInt(giftingPlayer)
+            }, data: {
+                money: parseFloat(lostMoney)
+            }
+        })
+
+        await PlayableCharacter.update({
+            where:{
+                id:parseInt(giftedPlayer)
+            }, data: {
+                money: parseFloat(gainedMoney)
+            }
+        })
+
+        res.status(200).json({result:{lostMoney, gainedMoney}})
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports ={
     getAllCharacters: getAllCharacters,
     getPlayableCharacterById: getPlayableCharacterById,
     insertPlayableCharacterById: insertPlayableCharacterById,
     updatePlayableCharacter: updatePlayableCharacter,
-    deletePlayableCharacter: deletePlayableCharacter
+    deletePlayableCharacter: deletePlayableCharacter,
+    giftMoney: giftMoney
 }
