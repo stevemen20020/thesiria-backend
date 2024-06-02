@@ -13,6 +13,6 @@ characterRouter.get('/:id', getPlayableCharacterById)
 characterRouter.post('/', insertPlayableCharacterById)
 characterRouter.put('/:id', updatePlayableCharacter)
 characterRouter.delete('/:id', deletePlayableCharacter)
-characterRouter.patch('/', giftMoney)
+characterRouter.patch('/gift-money', giftMoney)
 
 module.exports =  characterRouter
