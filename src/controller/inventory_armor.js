@@ -139,6 +139,13 @@ const deleteInventoryArmor = async(req, res) => {
 const transferArmor = async (req, res) => {
     const { id_armor, id_player, id_receiving_player} = req.body
     try {
+        const oldArmor = await Inventory_Armor.findFirst({
+            where:{
+                id_user: parseInt(id_player),
+                id_armor: parseInt(id_weapon)
+            }
+        })
+
         await Inventory_Armor.deleteMany({
             where:{
                 id_user: parseInt(id_player),
@@ -149,7 +156,8 @@ const transferArmor = async (req, res) => {
         await Inventory_Armor.create({
             data: {
                 id_user: parseInt(id_receiving_player),
-                id_armor: parseInt(id_armor)
+                id_armor: parseInt(id_armor),
+                level: oldArmor.level
             }
         })
 
