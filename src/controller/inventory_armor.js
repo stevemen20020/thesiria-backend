@@ -136,10 +136,34 @@ const deleteInventoryArmor = async(req, res) => {
     }
 }
 
+const transferArmor = async (req, res) => {
+    const { id_armor, id_player, id_receiving_player} = req.body
+    try {
+        await Inventory_Armor.deleteMany({
+            where:{
+                id_user: parseInt(id_player),
+                id_armor: parseInt(id_armor)
+            }
+        })
+
+        await Inventory_Armor.create({
+            data: {
+                id_user: parseInt(id_receiving_player),
+                id_armor: parseInt(id_armor)
+            }
+        })
+
+        res.status(200).json({message:'Success'})
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports ={
     getInventoryArmor: getInventoryArmor,
     getInventoryArmorById: getInventoryArmorById,
     insertInventoryArmor: insertInventoryArmor,
     updateInventoryArmor: updateInventoryArmor,
-    deleteInventoryArmor: deleteInventoryArmor
+    deleteInventoryArmor: deleteInventoryArmor,
+    transferArmor: transferArmor
 }

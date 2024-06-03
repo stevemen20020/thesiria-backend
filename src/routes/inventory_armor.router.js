@@ -3,7 +3,8 @@ const { getInventoryArmor,
         getInventoryArmorById,
         insertInventoryArmor,
         updateInventoryArmor,
-        deleteInventoryArmor } = require ("../controller/inventory_armor.js");
+        deleteInventoryArmor,
+        transferArmor } = require ("../controller/inventory_armor.js");
 
 const inventoryArmorRouter = Router()
 
@@ -12,5 +13,6 @@ inventoryArmorRouter.get('/:id', getInventoryArmorById)
 inventoryArmorRouter.post('/', insertInventoryArmor)
 inventoryArmorRouter.put('/:id', updateInventoryArmor)
 inventoryArmorRouter.delete('/:id', deleteInventoryArmor)
+inventoryArmorRouter.patch('/transfer-armor', transferArmor)
 
 module.exports =  inventoryArmorRouter

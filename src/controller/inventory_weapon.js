@@ -136,10 +136,34 @@ const deleteInventoryWeapon = async(req, res) => {
     }
 }
 
+const transferWeapon = async (req, res) => {
+    const { id_weapon, id_player, id_receiving_player} = req.body
+    try {
+        await Inventory_Weapon.deleteMany({
+            where:{
+                id_user: parseInt(id_player),
+                id_weapon: parseInt(id_weapon)
+            }
+        })
+
+        await Inventory_Weapon.create({
+            data: {
+                id_user: parseInt(id_receiving_player),
+                id_weapon: parseInt(id_weapon)
+            }
+        })
+
+        res.status(200).json({message:'Success'})
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports ={
     getInventoryWeapon: getInventoryWeapon,
     getInventoryWeaponById: getInventoryWeaponById,
     insertInventoryWeapon: insertInventoryWeapon,
     updateInventoryWeapon: updateInventoryWeapon,
-    deleteInventoryWeapon: deleteInventoryWeapon
+    deleteInventoryWeapon: deleteInventoryWeapon,
+    transferWeapon: transferWeapon
 }
