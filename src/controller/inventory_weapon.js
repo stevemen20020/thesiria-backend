@@ -139,6 +139,13 @@ const deleteInventoryWeapon = async(req, res) => {
 const transferWeapon = async (req, res) => {
     const { id_weapon, id_player, id_receiving_player} = req.body
     try {
+        const oldWeapon = await Inventory_Weapon.findFirst({
+            where:{
+                id_user: parseInt(id_player),
+                id_weapon: parseInt(id_weapon)
+            }
+        })
+
         await Inventory_Weapon.deleteMany({
             where:{
                 id_user: parseInt(id_player),
@@ -149,7 +156,8 @@ const transferWeapon = async (req, res) => {
         await Inventory_Weapon.create({
             data: {
                 id_user: parseInt(id_receiving_player),
-                id_weapon: parseInt(id_weapon)
+                id_weapon: parseInt(id_weapon),
+                level: oldWeapon.level
             }
         })
 
