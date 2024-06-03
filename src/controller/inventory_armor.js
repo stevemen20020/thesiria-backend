@@ -142,7 +142,7 @@ const transferArmor = async (req, res) => {
         const oldArmor = await Inventory_Armor.findFirst({
             where:{
                 id_user: parseInt(id_player),
-                id_armor: parseInt(id_weapon)
+                id_armor: parseInt(id_armor)
             }
         })
 
