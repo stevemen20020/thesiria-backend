@@ -160,11 +160,70 @@ const deleteInventory = async(req, res) => {
     }
 }
 
+const giftInventory = async (req,res) => {
+    const { id_character, id_receiving_character, id_object, amount} = req.body
+    try{
+        const inventoryGiving = await Inventory.findFirst({
+            where: {
+                id_playable_character: parseInt(id_character),
+                id_object: parseInt(id_object)
+            }
+        })
+
+        const inventoryReceiving = await Inventory.findFirst({
+            where: {
+                id_playable_character: parseInt(id_receiving_character),
+                id_object: parseInt(id_object)
+            }
+        })
+
+        if(inventoryReceiving){
+            await Inventory.update({
+                data:{
+                    quantity: inventoryReceiving.quantity + amount
+                }, where: {
+                    id: parseInt(inventoryReceiving.id)
+                }
+            })
+
+            await Inventory.update({
+                data:{
+                    quantity: inventoryGiving.quantity - amount
+                }, where: {
+                    id: parseInt(inventoryGiving.id)
+                }
+            })
+
+            return res.status(200).json({message:'Success'})
+        } else {
+            await Inventory.update({
+                data:{
+                    quantity: inventoryGiving.quantity - amount
+                }, where: {
+                    id: parseInt(inventoryGiving.id)
+                }
+            })
+
+            await Inventory.create({
+                data:{
+                    id_object: parseInt(id_object),
+                    id_playable_character: parseInt(id_receiving_character),
+                    quantity: parseInt(amount)
+                }
+            })
+            return res.status(200).json({message:'Success'})
+        }
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports ={
     getInventory: getInventory,
     getInventoryById: getInventoryById,
     insertInventory: insertInventory,
     updateInventory: updateInventory,
     deleteInventory: deleteInventory,
-    updateInventoryForPlayer: updateInventoryForPlayer
+    updateInventoryForPlayer: updateInventoryForPlayer,
+    giftInventory: giftInventory
 }

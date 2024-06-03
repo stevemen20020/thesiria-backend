@@ -4,7 +4,8 @@ const { getInventory,
         insertInventory,
         updateInventory,
         deleteInventory, 
-        updateInventoryForPlayer} = require ("../controller/inventory.js");
+        updateInventoryForPlayer,
+        giftInventory} = require ("../controller/inventory.js");
 
 const inventoryRouter = Router()
 
@@ -13,6 +14,7 @@ inventoryRouter.get('/:id', getInventoryById)
 inventoryRouter.post('/', insertInventory)
 inventoryRouter.put('/:id', updateInventory)
 inventoryRouter.delete('/:id', deleteInventory)
-inventoryRouter.patch('/',updateInventoryForPlayer)
+inventoryRouter.patch('/', updateInventoryForPlayer)
+inventoryRouter.patch('/gift-inventory', giftInventory)
 
 module.exports =  inventoryRouter
