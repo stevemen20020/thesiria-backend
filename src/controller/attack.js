@@ -9,11 +9,11 @@ const getAllAttacks = async (req, res) => {
         let where = {}
 
         if(id_playable_character) {
-            where.id_playable_character = id_playable_character
+            where.id_playable_character = parseInt(id_playable_character)
         }
 
         if(id_npc) {
-            where.id_npc = id_npc
+            where.id_npc = praseInt(id_npc)
         }
 
         const allAttacks = await Attack.findMany({
