@@ -18,7 +18,27 @@ const getAllAttacks = async (req, res) => {
 
         const allAttacks = await Attack.findMany({
             include: {
-                playable_character:true,
+                playable_character:{
+                    include:{
+                        affinity:true,
+                        users:true,
+                        races:true,
+                        affinity:true,
+                        inventory_armor_playable_character_armor_idToinventory_armor:{
+                            include:{
+                                armor:true
+                            }
+                        },
+                        inventory_weapon_playable_character_weapon_idToinventory_weapon:{
+                            include:{
+                                weapon:true
+                            }
+                        },
+                        haki_types:true,
+                        devil_fruit:true,
+                        titanes:true
+                    }
+                },
                 npc:true,
                 skill_usage_attacks_skill_usageToskill_usage:true
             }, where
