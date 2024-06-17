@@ -4,12 +4,24 @@ const Attack = new PrismaClient().attacks
 
 const getAllAttacks = async (req, res) => {
     try{
+        const { id_playable_character, id_npc } = req.query
+        
+        let where = {}
+
+        if(id_playable_character) {
+            where.id_playable_character = id_playable_character
+        }
+
+        if(id_npc) {
+            where.id_npc = id_npc
+        }
+
         const allAttacks = await Attack.findMany({
             include: {
                 playable_character:true,
                 npc:true,
                 skill_usage_attacks_skill_usageToskill_usage:true
-            }
+            }, where
         })
 
         res.status(200).json({result:allAttacks})
