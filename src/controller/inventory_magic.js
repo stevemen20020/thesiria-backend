@@ -16,7 +16,7 @@ const getInventoryMagic = async (req, res) => {
             include: {
                 spells:true,
                 playable_character:true
-            }
+            }, where
         })
         res.status(200).json({result:allInventoryMagic})
     } catch (e) {
