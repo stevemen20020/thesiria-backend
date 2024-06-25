@@ -16,6 +16,8 @@ const getAllAttacks = async (req, res) => {
             where.id_npc = praseInt(id_npc)
         }
 
+        where.attack_points = {not:null}
+
         const allAttacks = await Attack.findMany({
             include: {
                 playable_character:{
