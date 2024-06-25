@@ -4,6 +4,14 @@ const Inventory_Magic = new PrismaClient().inventory_magic
 
 const getInventoryMagic = async (req, res) => {
     try{
+        const { id_playable_character } = req.query
+
+        let where = {}
+
+        if(id_playable_character) {
+            where.id_user = parseInt(id_playable_character)
+        }
+
         const allInventoryMagic = await Inventory_Magic.findMany({
             include: {
                 spells:true,
