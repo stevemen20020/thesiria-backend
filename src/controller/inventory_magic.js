@@ -6,8 +6,8 @@ const getInventoryMagic = async (req, res) => {
     try{
         const allInventoryMagic = await Inventory_Magic.findMany({
             include: {
-                magic:true,
-                playable_character_inventory_magic_id_userToplayable_character:true
+                spells:true,
+                playable_character:true
             }
         })
         res.status(200).json({result:allInventoryMagic})
