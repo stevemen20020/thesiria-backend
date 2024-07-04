@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require('dotenv');
 const router = require('./src/routes.js');
 const http = require('http');
+const { fight_engine } = require('./src/app/fight_engine.js')
 
 dotenv.config()
 const app = express();
@@ -18,6 +19,7 @@ app.use('/armor-image', express.static('./src/public/armors'))
 app.use(cors({ origin: '*' ,methods: '*', allowedHeaders: ['*'], requestHeaders: ['*']}));
 app.use(`/rest/${process.env.VERSION}`, router)
 
+fight_engine(server)
 server.listen(process.env.PORT, () => {
     console.log(`Server Started in: ${process.env.HOST}/${process.env.VERSION}`)
 })
