@@ -2,6 +2,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient()
 const { elemental_reaction } = require('./elemental_reactions')
 
+//CATEGORIES OF ATTACKS
+// 1.- FROM PLAYER TO NPC
+// 2.- FROM PLAYER TO MONSTER
+// 3.- FROM NPC TO PLAYER
+// 4.- FROM MONSTER TO PLAYER
+
 const fight_engine = (server) => {
   const { Server } = require("socket.io")
   const io = new Server(server, {
@@ -103,6 +109,11 @@ const fight_engine = (server) => {
             include: {
               objects: true
             }
+          },
+          attacks: {
+            include:{
+              skill_usage_attacks_skill_usageToskill_usage: true
+            }
           }
         }
       })
@@ -167,7 +178,13 @@ const fight_engine = (server) => {
       BATTLE.monsters = called_monsters
 
       TIMER_REPEATER = setInterval(() => {
-        execute_player_attacks()
+        execute_player_attacks_to_NPC() //EXECUTES THE ATTACKS FROM THE PLAYER TO NPC'S
+        execute_player_attacks_to_MONSTER() //EXECUTES THE ATTACKS FROM THE PLAYER TO MONSTERS
+
+        BATTLE.allied_attacks = []  //RESETS THE BATTLE ATTACKS
+
+        execute_npc_attacks() //EXECUTES THE ATTACKS FROM NPC'S TO PLAYERS
+
         io.emit('battle-round', { BATTLE });
       }, timer * 1000);
     });
@@ -179,10 +196,13 @@ const fight_engine = (server) => {
     })
   });
 
-  const execute_player_attacks = () => {
+  const execute_player_attacks_to_NPC = () => {
     let APPLIED_ELEMENT = 0
 
     BATTLE.allied_attacks.forEach(attack_id => {
+
+      if(attack_id.attack_type !== 1) return
+      
       let full_attack = {}
       let full_attack_index = -1
       let player_id = -1
@@ -293,8 +313,230 @@ const fight_engine = (server) => {
           }
         }
       }
-    })//
-    BATTLE.allied_attacks = []
+    })
+  }
+
+  const execute_player_attacks_to_MONSTER = () => {
+    let APPLIED_ELEMENT = 0
+
+    BATTLE.allied_attacks.forEach(attack_id => {
+
+      if(attack_id.attack_type !== 2) return
+      
+      let full_attack = {}
+      let full_attack_index = -1
+      let player_id = -1
+      for(const player of BATTLE.players) {
+        full_attack = player.attacks.find(attack => attack.id == attack_id.attack_id)
+        full_attack_index = player.attacks.findIndex(attack => attack.id == attack_id.attack_id)
+        player_id = player.id
+
+        if(full_attack_index !== -1) break
+      }
+      if(full_attack_index !== -1) {
+        const player_index = BATTLE.players.findIndex(player => player.id == player_id)
+        BATTLE.players[player_index].attacks[full_attack_index].uses --
+
+        let DICE_ROLL = attack_id.roll
+        switch(full_attack.skill_usage) {
+          case 1:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].strength)
+            break;
+          case 2:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].dexterity)
+            break;
+          case 3:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].defense)
+            break;
+          case 4:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].aim)
+            break;
+          case 5:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].vision)
+            break;
+          case 6:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].speed)
+            break;
+          case 7:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].handcraft)
+            break;
+          case 8:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].agility)
+            break;
+          case 9:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.players[player_index].charisma)
+            break;
+        }
+
+        let FORCE_MULTIPLIER = 1
+
+        if(APPLIED_ELEMENT !== 0){
+          FORCE_MULTIPLIER = elemental_reaction(APPLIED_ELEMENT, BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.element_id)
+          APPLIED_ELEMENT = 0
+        }
+        let enemy_speed_skill = 0
+
+        if(attack_id.objective_ids !== -1) {
+          const enemy = BATTLE.monsters.findIndex(enemy => enemy.id == attack_id.objective_ids)
+          enemy_speed_skill = BATTLE.monsters[enemy].agility
+        } else {
+          let total = 0
+          for(const enemy in BATTLE.monsters) {
+            total += enemy.agility
+          }
+
+          enemy_speed_skill = total /  BATTLE.monsters.length
+        }
+
+        const movement_skipped = skip_ability(enemy_speed_skill)
+        const CHIPPING = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.chipping
+
+        BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.chipping += CHIPPING
+
+        let WEAPON_DAMAGE = 0
+        switch( BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.level){
+          case 1:
+            WEAPON_DAMAGE = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.damage_points_lvl1
+            break;
+          case 2:
+            WEAPON_DAMAGE = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.damage_points_lvl2
+            break;
+          case 3:
+            WEAPON_DAMAGE = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.damage_points_lvl3
+            break;
+          case 4:
+            WEAPON_DAMAGE = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.damage_points_lvl4
+            break;
+          case 5:
+            WEAPON_DAMAGE = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.damage_points_lvl5
+            break;
+        }
+
+        const ATTACK_DAMAGE = full_attack.attack_points
+        //TIME TO CALCULATE DAMAGE OUTPUT
+        if(attack_id.objective_ids !== -1) {
+          const enemy = BATTLE.monsters.findIndex(enemy => enemy.id == attack_id.objective_ids)
+
+          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.monsters[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+
+          BATTLE.monsters[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+        } else {
+          let total = 0
+          for(const enemy in BATTLE.monsters) {
+            total += BATTLE.monsters[enemy].defense
+          }
+
+          const enemy_defense = total /  BATTLE.monsters.length
+          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          for(enemy in BATTLE.monsters){
+            BATTLE.monsters[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+          }
+        }
+      }
+    })
+  }
+
+  const execute_npc_attacks = () => {
+    let APPLIED_ELEMENT = 0
+
+    BATTLE.enemy_attacks.forEach(attack_id => {
+
+      if(attack_id.attack_type !== 1) return
+      
+      let full_attack = {}
+      let full_attack_index = -1
+      let npc_id = -1
+      for(const npc of BATTLE.npc_enemies) {
+        full_attack = npc.attacks.find(attack => attack.id == attack_id.attack_id)
+        full_attack_index = npc.attacks.findIndex(attack => attack.id == attack_id.attack_id)
+        npc_id = npc.id
+
+        if(full_attack_index !== -1) break
+      }
+      if(full_attack_index !== -1) {
+        const npc_index = BATTLE.npc_enemies.findIndex(player => player.id == npc_id)
+        BATTLE.npc_enemies[npc_index].attacks[full_attack_index].uses --
+
+        let DICE_ROLL = attack_id.roll
+        switch(full_attack.skill_usage) {
+          case 1:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].strength)
+            break;
+          case 2:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].dexterity)
+            break;
+          case 3:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].defense)
+            break;
+          case 4:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].aim)
+            break;
+          case 5:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].vision)
+            break;
+          case 6:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].speed)
+            break;
+          case 7:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].handcraft)
+            break;
+          case 8:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].agility)
+            break;
+          case 9:
+            DICE_ROLL = DICE_ROLL + diff_obtainer(BATTLE.npc_enemies[npc_index].charisma)
+            break;
+        }
+
+        let FORCE_MULTIPLIER = 1
+
+        if(APPLIED_ELEMENT !== 0){
+          FORCE_MULTIPLIER = elemental_reaction(APPLIED_ELEMENT, BATTLE.npc_enemies[npc_index].weapon.element_id)
+          APPLIED_ELEMENT = 0
+        }
+        let enemy_speed_skill = 0
+
+        if(attack_id.objective_ids !== -1) {
+          const enemy = BATTLE.players.findIndex(enemy => enemy.id == attack_id.objective_ids)
+          enemy_speed_skill = BATTLE.players[enemy].agility
+        } else {
+          let total = 0
+          for(const enemy in BATTLE.players) {
+            total += enemy.agility
+          }
+
+          enemy_speed_skill = total /  BATTLE.players.length
+        }
+
+        const movement_skipped = skip_ability(enemy_speed_skill)
+        //const CHIPPING = BATTLE.players[npc_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.chipping
+
+        //BATTLE.players[npc_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.chipping += CHIPPING
+
+        let WEAPON_DAMAGE = BATTLE.npc_enemies[npc_index].weapon.damage_points_lvl5
+
+        const ATTACK_DAMAGE = full_attack.attack_points
+        //TIME TO CALCULATE DAMAGE OUTPUT
+        if(attack_id.objective_ids !== -1) {
+          const enemy = BATTLE.players.findIndex(enemy => enemy.id == attack_id.objective_ids)
+
+          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(BATTLE.players[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+
+          BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+        } else {
+          let total = 0
+          for(const enemy in BATTLE.players) {
+            total += BATTLE.players[enemy].defense
+          }
+
+          const enemy_defense = total /  BATTLE.players.length
+          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          for(enemy in BATTLE.players){
+            BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+          }
+        }
+      }
+    })
   }
 
   const diff_obtainer = (skill) => {
