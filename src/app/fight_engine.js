@@ -10,6 +10,11 @@ const { elemental_reaction } = require('./elemental_reactions')
 // 1.- FROM NPC TO PLAYER
 // 2.- FROM MONSTER TO PLAYER
 
+
+//PRISMA NOTES THAT LOOK THE SAME
+// -inventory_weapon_playable_character_weapon_idToinventory_weapon // MEANING THE EQUIPED WEAPON
+// -inventory_armor_playable_character_armor_idToinventory_armor // MEANING THE EQUIPED ARMOR
+
 const fight_engine = (server) => {
   const { Server } = require("socket.io")
   const io = new Server(server, {
@@ -187,19 +192,38 @@ const fight_engine = (server) => {
 
         BATTLE.allied_attacks = []  //RESETS THE BATTLE ATTACKS
 
+        if(check_if_enemies_are_dead) { //CHECKS IF ALL NPC's AND MONSTERS ARE DEAD IN ORDER TO FINISH THE BATTLE IN A WINNING STATE
+          finish_battle()
+        }
+
         execute_NPC_attacks() //EXECUTES THE ATTACKS FROM NPC'S TO PLAYERS
         execute_MONSTER_attacks() //EXECUTES THE ATTACKS FROM MONSTERS TO PLAYERS
 
         BATTLE.enemy_attacks = []
 
+        if(check_if_players_are_dead) { //CHECKS IF ALL PLAYERS ARE DEAD OR HAVE FLED IN ORDER TO FINISH THE BATTLE IN A LOSSING STATE
+          finish_battle() //FINISHES THE BATTLE
+        }
+
         io.emit('battle-round', { BATTLE });
       }, timer * 1000);
     });
 
-
     socket.on('send-attack', async (body) => {
       const attack = JSON.parse(body)
       BATTLE.allied_attacks.push(attack)
+    })
+
+    socket.on('flee-battle', async (body) => {
+      const player_id = JSON.parse(body)
+      save_weapon(player_id)
+      save_player(player_id)
+    })
+
+    socket.on('weapon-swap', async(body) => {
+      const { player_id, new_weapon_id } = JSON.parse(body)
+      save_weapon(player_id)
+      swap_weapon(player_id, new_weapon_id)
     })
   });
 
@@ -300,6 +324,7 @@ const fight_engine = (server) => {
         }
 
         const ATTACK_DAMAGE = full_attack.attack_points
+        
         //TIME TO CALCULATE DAMAGE OUTPUT
         if(attack_id.objective_ids !== -1) {
           const enemy = BATTLE.npc_enemies.findIndex(enemy => enemy.id == attack_id.objective_ids)
@@ -806,6 +831,52 @@ const fight_engine = (server) => {
     })
   }
 
+  const check_if_players_are_dead = () => {
+    if(BATTLE.players.length === 0) {
+      return true
+    }
+
+    let dead = true
+    for(player in BATTLE.players) {
+      if(BATTLE.players(player).health > 0) dead = false
+    }
+
+    return dead
+  }
+
+  const check_if_enemies_are_dead = () => {
+    if(BATTLE.npc_enemies.length === 0 && BATTLE.monsters.lenght === 0) {
+      return true
+    }
+
+    let dead = true;
+
+    for (let i = 0; i < BATTLE.npc_enemies.length; i++) {
+      if (BATTLE.npc_enemies[i].health > 0) {
+        dead = false;
+        break;
+      }
+    }
+
+    for (let i = 0; i < BATTLE.monsters.length; i++) {
+      if (BATTLE.monsters[i].health > 0) {
+        dead = false;
+        break;
+      }
+    }
+
+    return dead;
+  }
+
+  const finish_battle = () => {
+    TIMER_REPEATER = null //STOPS BATTLE
+
+    for(player in BATTLE.players) {
+      save_weapon(BATTLE.players[player].id)
+      save_player(BATTLE.players[player].id)
+    }
+  }
+
   const diff_obtainer = (skill) => {
     if(skill === 20){
       return 5
@@ -836,6 +907,57 @@ const fight_engine = (server) => {
     const probability = (skill - 1) * (50 / 19);
     const random = Math.random() * 100;  
     return random < probability ? 0 : 1;
+  }
+
+  const save_weapon = async (player_id) => {
+    const player = BATTLE.players.find(player => parseInt(player.id) === parseInt(player_id))
+    
+    const weapon_data = {
+      durability: player.inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.durability
+    }
+
+    await prisma.weapon.update({
+      data: weapon_data,
+      where:{
+        id: player.inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.id
+      }
+    })
+  }
+
+  const save_player = async (player_id) => {
+    const player_index = BATTLE.players.findIndex(player => parseInt(player.id) === parseInt(player_id))
+    const player = BATTLE.players.find(player => parseInt(player.id) === parseInt(player_id))
+
+    const player_data = {
+      armor_id: player.armor_id,
+      weapon_id: player.weapon_id,
+      health: player.health,
+      dungeon_max_health: player.dungeon_max_health
+    }
+
+    await prisma.playable_character.update({
+      data: player_data,
+      where: {
+        id: parseInt(player_id)
+      }
+    })
+
+    BATTLE.players.splice(player_index, 1)
+  }
+
+  const swap_weapon = (player_id, new_weapon_id) => {
+    //inventory_weapon_inventory_weapon_id_userToplayable_character // ACCESS TO INVENTORY
+    const old_weapon_id = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.id
+
+    const player_index = BATTLE.players.findIndex(player => parseInt(player.id) === parseInt(player_id))
+    const weapon_index = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character.findIndex(weapon => parseInt(weapon.id_weapon) === parseInt(new_weapon_id))
+    const old_weapon_index = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character.findIndex (weapon => parseInt(weapon.id_weapon) === parseInt(old_weapon_id))
+
+    let temp =  BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon
+
+    BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[weapon_index]
+    BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[old_weapon_index] = temp
+
   }
 }
 
