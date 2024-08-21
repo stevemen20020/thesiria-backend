@@ -132,7 +132,12 @@ const fight_engine = (server) => {
           }
         }, include:{
           armor:true,
-          weapon:true
+          weapon:true,
+          loottables:{
+            include:{
+              objects:true
+            }
+          }
         }
       })
 
@@ -875,6 +880,18 @@ const fight_engine = (server) => {
       save_weapon(BATTLE.players[player].id)
       save_player(BATTLE.players[player].id)
     }
+
+    for (let i = 0; i < BATTLE.monsters.length; i++) {
+      const monster = BATTLE.monsters[i];
+      const player = BATTLE.players[i % BATTLE.players.length];
+      assign_lootTable_of_monster(monster.id, player.id);
+    }
+
+    for (let i = 0; i < BATTLE.monsters.length; i++) {
+      const monster = BATTLE.monsters[i];
+      const player = BATTLE.players[i % BATTLE.players.length];
+      assign_lootTable_of_monster(monster.id, player.id);
+    }
   }
 
   const diff_obtainer = (skill) => {
@@ -958,6 +975,74 @@ const fight_engine = (server) => {
     BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[weapon_index]
     BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[old_weapon_index] = temp
 
+  }
+
+  const assign_lootTable_of_monster = async(id_monster, id_player) => {
+    const monster = BATTLE.monsters.find(monster => parseInt(monster.id) === parseInt(id_monster))
+
+    const called_player = await prisma.playable_character.findFirst({
+      where:{
+        id:parseInt(id_player)
+      }, include:{
+        inventory:true
+      }
+    })
+
+    for(const loot in monster.loottables){
+      const object_index = called_player.inventory.find(object => object.id_object === parseInt(loot.id_object))
+
+      if(object_index) {
+        await prisma.inventory.update({
+          where:{
+            id: object_index.id
+          }, data:{
+            quantity: parseInt(object_index.quantity) + loot.amount
+          }
+        })
+      } else {
+        await prisma.inventory.create({
+          data:{
+            id_playable_character: parseInt(id_player),
+            id_object:parseInt(loot.id_object),
+            quantity: loot.amount
+          }
+        })
+      }
+    }
+  }
+
+  const assign_lootTable_of_enemy_npc = async(id_npc, id_player) => {
+    const npc = BATTLE.npc_enemies.find(npc => parseInt(npc.id) === parseInt(id_npc))
+
+    const called_player = await prisma.playable_character.findFirst({
+      where:{
+        id:parseInt(id_player)
+      }, include:{
+        inventory:true
+      }
+    })
+
+    for(const loot in npc.loottables){
+      const object_index = called_player.inventory.find(object => parseInt(object.id_object) === parseInt(loot.id_object))
+
+      if(object_index) {
+        await prisma.inventory.update({
+          where:{
+            id: object_index.id
+          }, data:{
+            quantity: parseInt(object_index.quantity) + loot.amount
+          }
+        })
+      } else {
+        await prisma.inventory.create({
+          data:{
+            id_playable_character: parseInt(id_player),
+            id_object:parseInt(loot.id_object),
+            quantity: loot.amount
+          }
+        })
+      }
+    }
   }
 }
 
