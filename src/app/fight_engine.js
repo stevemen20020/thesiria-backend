@@ -28,6 +28,7 @@ const fight_engine = (server) => {
     allied_attacks: [],
     enemy_attacks: [],
   }
+  
   let TIMER_REPEATER = null
 
   io.on("connection", (socket) => {
@@ -252,6 +253,7 @@ const fight_engine = (server) => {
       if(full_attack_index !== -1) {
         const player_index = BATTLE.players.findIndex(player => player.id == player_id)
         BATTLE.players[player_index].attacks[full_attack_index].uses --
+        BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.durability --
 
         let DICE_ROLL = attack_id.roll
         switch(full_attack.skill_usage) {
@@ -373,6 +375,7 @@ const fight_engine = (server) => {
       if(full_attack_index !== -1) {
         const player_index = BATTLE.players.findIndex(player => player.id == player_id)
         BATTLE.players[player_index].attacks[full_attack_index].uses --
+        BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.durability --
 
         let DICE_ROLL = attack_id.roll
         switch(full_attack.skill_usage) {
@@ -887,10 +890,15 @@ const fight_engine = (server) => {
       assign_lootTable_of_monster(monster.id, player.id);
     }
 
-    for (let i = 0; i < BATTLE.monsters.length; i++) {
-      const monster = BATTLE.monsters[i];
+    for (let i = 0; i < BATTLE.npc_enemies.length; i++) {
+      const npc = BATTLE.npc_enemies[i];
       const player = BATTLE.players[i % BATTLE.players.length];
-      assign_lootTable_of_monster(monster.id, player.id);
+      assign_lootTable_of_enemy_npc(npc.id, player.id);
+
+      const randomIndex = Math.floor(Math.random() * BATTLE.players.length);
+
+      give_enemy_weapons(BATTLE.npc_enemies[i].weapon_id, BATTLE.players[randomIndex].id)
+      give_enemy_armor(BATTLE.npc_enemies[i].armor_id, BATTLE.players[randomIndex].id)
     }
   }
 
@@ -958,6 +966,16 @@ const fight_engine = (server) => {
         id: parseInt(player_id)
       }
     })
+
+    for(let i = 0; i < player.attacks.length; i++) {
+      await prisma.attacks.update({
+        data:{
+          uses: player.attacks[i].uses
+        }, where :{
+          id: player.attacks[i].id
+        }
+      })
+    }
 
     BATTLE.players.splice(player_index, 1)
   }
@@ -1042,6 +1060,42 @@ const fight_engine = (server) => {
           }
         })
       }
+    }
+  }
+
+  const give_enemy_weapons = async(id_weapon, id_player) => {
+    const find_weapon = await prisma.inventory_weapon.findFirst({
+      where:{
+        id_weapon: parseInt(id_weapon)
+      }
+    })
+
+    if(!find_weapon){
+      await prisma.inventory_weapon.create({
+        data:{
+          id_user:parseInt(id_player),
+          id_weapon:parseInt(id_weapon),
+          level:1
+        }
+      })
+    }
+  }
+
+  const give_enemy_armor = async(id_armor, id_player) => {
+    const find_armor = await prisma.inventory_armor.findFirst({
+      where:{
+        id_armor: parseInt(id_armor)
+      }
+    })
+
+    if(!find_armor){
+      await prisma.inventory_armor.create({
+        data:{
+          id_user:parseInt(id_player),
+          id_armor:parseInt(id_armor),
+          level:1
+        }
+      })
     }
   }
 }
