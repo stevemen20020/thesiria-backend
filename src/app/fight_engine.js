@@ -208,7 +208,7 @@ const fight_engine = (server) => {
         BATTLE.enemy_attacks = []
 
         if(check_if_players_are_dead) { //CHECKS IF ALL PLAYERS ARE DEAD OR HAVE FLED IN ORDER TO FINISH THE BATTLE IN A LOSSING STATE
-          finish_battle() //FINISHES THE BATTLE
+          cancel_battle() //FINISHES THE BATTLE
         }
 
         io.emit('battle-round', { BATTLE });
@@ -230,6 +230,10 @@ const fight_engine = (server) => {
       const { player_id, new_weapon_id } = JSON.parse(body)
       save_weapon(player_id)
       swap_weapon(player_id, new_weapon_id)
+    })
+
+    socket.on('cancel-battle', async () => {
+      cancel_battle()
     })
   });
 
@@ -874,6 +878,15 @@ const fight_engine = (server) => {
     }
 
     return dead;
+  }
+
+  const cancel_battle = () => {
+    TIMER_REPEATER = null //STOPS BATTLE
+
+    for(player in BATTLE.players) {
+      save_weapon(BATTLE.players[player].id)
+      save_player(BATTLE.players[player].id)
+    }
   }
 
   const finish_battle = () => {
