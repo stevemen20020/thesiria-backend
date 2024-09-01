@@ -11,6 +11,12 @@ const getAllNPCs = async (req, res) => {
                 haki_types:true,
                 devil_fruit:true,
                 titanes:true,
+                weapon:{
+                    include:{
+                        elements:true,
+                        
+                    }
+                }
             }
         })
 

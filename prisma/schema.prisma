@@ -202,9 +202,11 @@ model loottables {
   id_object  Int?
   amount     Int?
   npc        npc?     @relation(fields: [id_npc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_1")
+  monster    monster? @relation(fields: [id_monster], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_3")
   objects    objects? @relation(fields: [id_object], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_2")
 
   @@index([id_npc], map: "id_npc")
+  @@index([id_monster], map: "id_monster")
   @@index([id_object], map: "id_object")
 }
 
@@ -257,6 +259,7 @@ model monster {
   weapon_id       Int?
   health          Int?
   max_health      Int?
+  loottables      loottables[]
   armor           armor?  @relation(fields: [armor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "monster_ibfk_1")
   weapon          weapon? @relation(fields: [weapon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "monster_ibfk_2")
 
