@@ -153,7 +153,7 @@ const fight_engine = (server) => {
         if (speeds.length === 0) return 0;  // Return 0 if no speeds are available
         const totalSpeed = speeds.reduce((sum, speed) => sum + speed, 0);
         return totalSpeed / speeds.length;
-      };
+      };//
 
       const playerAverageSpeed = calculateAverageSpeed(speeds_players);
       const enemyAverageSpeed = calculateAverageSpeed(enemy_speed);
@@ -344,6 +344,8 @@ const fight_engine = (server) => {
           const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.npc_enemies[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
 
           BATTLE.npc_enemies[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+
+          if(BATTLE.npc_enemies[enemy].health < 0) BATTLE.npc_enemies[enemy].health = 0
         } else {
           let total = 0
           for(const enemy in BATTLE.npc_enemies) {
@@ -354,6 +356,7 @@ const fight_engine = (server) => {
           const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
           for(enemy in BATTLE.npc_enemies){
             BATTLE.npc_enemies[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+            if(BATTLE.npc_enemies[enemy].health < 0) BATTLE.npc_enemies[enemy].health = 0
           }
         }
       }
