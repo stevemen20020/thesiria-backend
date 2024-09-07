@@ -220,6 +220,11 @@ const fight_engine = (server) => {
       BATTLE.allied_attacks.push(attack)
     })
 
+    socket.on('send-enemy-attack', async (body) => {
+      const attack = JSON.parse(body)
+      BATTLE.enemy_attacks.push(attack)
+    })
+
     socket.on('flee-battle', async (body) => {
       const player_id = JSON.parse(body)
       save_weapon(player_id)
