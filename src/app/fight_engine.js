@@ -69,11 +69,17 @@ const fight_engine = (server) => {
             }
           }, inventory_armor_playable_character_armor_idToinventory_armor: {
             include:{
-              armor:true
+              armor:{
+                include:{
+                  elements:true
+                }
             }
           }, inventory_weapon_playable_character_weapon_idToinventory_weapon: {
             include: {
-              weapon:true
+              weapon:{
+                include:{
+                  elements:true
+                }
             }
           }, inventory :{
             include:{
