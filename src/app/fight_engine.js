@@ -46,11 +46,19 @@ const fight_engine = (server) => {
           affinity:true,
           inventory_armor_inventory_armor_id_userToplayable_character:{
             include:{
-              armor:true
+              armor:{
+                include:{
+                  elements:true
+                }
+              }
             }
           }, inventory_weapon_inventory_weapon_id_userToplayable_character:{
             include:{
-              weapon:true
+              weapon:{
+                include:{
+                  elements:true
+                }
+              }
             }
           }, haki_types: true,
           devil_fruit:true,
