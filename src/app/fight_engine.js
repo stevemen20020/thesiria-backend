@@ -218,6 +218,7 @@ const fight_engine = (server) => {
     socket.on('send-attack', async (body) => {
       const attack = JSON.parse(body)
       BATTLE.allied_attacks.push(attack)
+      io.emit('battle-round', { BATTLE });
     })
 
     socket.on('send-enemy-attack', async (body) => {
@@ -229,12 +230,16 @@ const fight_engine = (server) => {
       const player_id = JSON.parse(body)
       save_weapon(player_id)
       save_player(player_id)
+
+      io.emit('battle-round', { BATTLE });
     })
 
     socket.on('weapon-swap', async(body) => {
       const { player_id, new_weapon_id } = JSON.parse(body)
       save_weapon(player_id)
       swap_weapon(player_id, new_weapon_id)
+
+      io.emit('battle-round', { BATTLE });
     })
 
     socket.on('cancel-battle', async () => {
@@ -346,7 +351,9 @@ const fight_engine = (server) => {
         if(attack_id.objective_ids !== -1) {
           const enemy = BATTLE.npc_enemies.findIndex(enemy => enemy.id == attack_id.objective_ids)
 
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.npc_enemies[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.npc_enemies[enemy].defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
 
           BATTLE.npc_enemies[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
 
@@ -358,7 +365,10 @@ const fight_engine = (server) => {
           }
 
           const enemy_defense = total /  BATTLE.npc_enemies.length
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) 
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
+
           for(enemy in BATTLE.npc_enemies){
             BATTLE.npc_enemies[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
             if(BATTLE.npc_enemies[enemy].health < 0) BATTLE.npc_enemies[enemy].health = 0
@@ -470,7 +480,9 @@ const fight_engine = (server) => {
         if(attack_id.objective_ids !== -1) {
           const enemy = BATTLE.monsters.findIndex(enemy => enemy.id == attack_id.objective_ids)
 
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.monsters[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.monsters[enemy].defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
 
           BATTLE.monsters[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
         } else {
@@ -480,7 +492,9 @@ const fight_engine = (server) => {
           }
 
           const enemy_defense = total /  BATTLE.monsters.length
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
           for(enemy in BATTLE.monsters){
             BATTLE.monsters[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
           }
@@ -573,7 +587,9 @@ const fight_engine = (server) => {
         if(attack_id.objective_ids !== -1) {
           const enemy = BATTLE.npc_enemies.findIndex(enemy => enemy.id == attack_id.objective_ids)
 
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.npc_enemies[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.npc_enemies[enemy].defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
 
           BATTLE.npc_enemies[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
         } else {
@@ -583,7 +599,9 @@ const fight_engine = (server) => {
           }
 
           const enemy_defense = total /  BATTLE.npc_enemies.length
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
           for(enemy in BATTLE.npc_enemies){
             BATTLE.npc_enemies[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
           }
@@ -676,7 +694,9 @@ const fight_engine = (server) => {
         if(attack_id.objective_ids !== -1) {
           const enemy = BATTLE.monsters.findIndex(enemy => enemy.id == attack_id.objective_ids)
 
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.monsters[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(BATTLE.monsters[enemy].defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
 
           BATTLE.monsters[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
         } else {
@@ -686,7 +706,9 @@ const fight_engine = (server) => {
           }
 
           const enemy_defense = total /  BATTLE.monsters.length
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/CHIPPING))+(enemy_defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
           for(enemy in BATTLE.monsters){
             BATTLE.monsters[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
           }
@@ -779,19 +801,27 @@ const fight_engine = (server) => {
         if(attack_id.objective_ids !== -1) {
           const enemy = BATTLE.players.findIndex(enemy => enemy.id == attack_id.objective_ids)
 
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(BATTLE.players[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(BATTLE.players[enemy].defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
 
           BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+
+          if( BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0)) < 0) BATTLE.players[enemy].health = 0
         } else {
           let total = 0
           for(const enemy in BATTLE.players) {
             total += BATTLE.players[enemy].defense
           }
-
+//
           const enemy_defense = total /  BATTLE.players.length
-          const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+          let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(enemy_defense/6) * FORCE_MULTIPLIER)
+
+          if(movement_skipped === 0) DAMAGE_OUTPUT = 0
+
           for(enemy in BATTLE.players){
             BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
+            if( BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0)) < 0) BATTLE.players[enemy].health = 0
           }
         }
       }
@@ -833,7 +863,9 @@ const fight_engine = (server) => {
       if(attack_id.objective_ids !== -1) {
         const enemy = BATTLE.players.findIndex(enemy => enemy.id == attack_id.objective_ids)
 
-        const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(BATTLE.players[enemy].defense/6) * FORCE_MULTIPLIER) / movement_skipped
+        let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(BATTLE.players[enemy].defense/6) * FORCE_MULTIPLIER)
+
+        if(movement_skipped === 0) DAMAGE_OUTPUT = 0
 
         BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
       } else {
@@ -843,7 +875,10 @@ const fight_engine = (server) => {
         }
 
         const enemy_defense = total /  BATTLE.players.length
-        const DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(enemy_defense/6) * FORCE_MULTIPLIER) / movement_skipped
+        let DAMAGE_OUTPUT = (( DICE_ROLL * ((ATTACK_DAMAGE + WEAPON_DAMAGE)/1))+(enemy_defense/6) * FORCE_MULTIPLIER)
+
+        if(movement_skipped === 0) DAMAGE_OUTPUT = 0
+        
         for(enemy in BATTLE.players){
           BATTLE.players[enemy].health -= parseFloat(DAMAGE_OUTPUT.toFixed(0))
         }
