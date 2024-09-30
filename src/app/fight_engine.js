@@ -218,6 +218,7 @@ const fight_engine = (server) => {
     socket.on('send-attack', async (body) => {
       const attack = JSON.parse(body)
       BATTLE.allied_attacks.push(attack)
+      io.emit('battle-round', { BATTLE });
     })
 
     socket.on('send-enemy-attack', async (body) => {
@@ -229,12 +230,16 @@ const fight_engine = (server) => {
       const player_id = JSON.parse(body)
       save_weapon(player_id)
       save_player(player_id)
+
+      io.emit('battle-round', { BATTLE });
     })
 
     socket.on('weapon-swap', async(body) => {
       const { player_id, new_weapon_id } = JSON.parse(body)
       save_weapon(player_id)
       swap_weapon(player_id, new_weapon_id)
+
+      io.emit('battle-round', { BATTLE });
     })
 
     socket.on('cancel-battle', async () => {
