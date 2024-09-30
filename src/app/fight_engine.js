@@ -73,6 +73,7 @@ const fight_engine = (server) => {
                 include:{
                   elements:true
                 }
+              }
             }
           }, inventory_weapon_playable_character_weapon_idToinventory_weapon: {
             include: {
@@ -80,6 +81,7 @@ const fight_engine = (server) => {
                 include:{
                   elements:true
                 }
+              }
             }
           }, inventory :{
             include:{
