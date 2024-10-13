@@ -1059,9 +1059,12 @@ const fight_engine = (server) => {
 
   const swap_weapon = (player_id, new_weapon_id) => {
     //inventory_weapon_inventory_weapon_id_userToplayable_character // ACCESS TO INVENTORY
-    const old_weapon_id = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.id
+    
 
     const player_index = BATTLE.players.findIndex(player => parseInt(player.id) === parseInt(player_id))
+//
+    const old_weapon_id = BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon.weapon.id
+    console.log('WEAPONS ',BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[1].id_weapon, new_weapon_id)
     const weapon_index = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character.findIndex(weapon => parseInt(weapon.id_weapon) === parseInt(new_weapon_id))
     const old_weapon_index = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character.findIndex (weapon => parseInt(weapon.id_weapon) === parseInt(old_weapon_id))
 
@@ -1070,6 +1073,8 @@ const fight_engine = (server) => {
     BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon = BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[weapon_index]
     BATTLE.players[player_index].inventory_weapon_inventory_weapon_id_userToplayable_character[old_weapon_index] = temp
 
+    console.log('WEAPON',JSON.stringify(BATTLE.players[player_index].inventory_weapon_playable_character_weapon_idToinventory_weapon))
+    console.log('INDEXES', player_index, old_weapon_id, weapon_index, old_weapon_index)
   }
 
   const assign_lootTable_of_monster = async(id_monster, id_player) => {
