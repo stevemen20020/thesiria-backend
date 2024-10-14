@@ -27,6 +27,7 @@ const fight_engine = (server) => {
   const BATTLE = {
     allied_attacks: [],
     enemy_attacks: [],
+    round:0
   }
   
   let TIMER_REPEATER = null
@@ -207,6 +208,8 @@ const fight_engine = (server) => {
       BATTLE.monsters = called_monsters
 
       TIMER_REPEATER = setInterval(() => {
+        BATTLE.round += 1
+
         execute_player_attacks_to_NPC() //EXECUTES THE ATTACKS FROM THE PLAYER TO NPC'S
         execute_player_attacks_to_MONSTER() //EXECUTES THE ATTACKS FROM THE PLAYER TO MONSTERS
         execute_allied_NPC_attacks_to_NPC() //EXECUTES THE ATTACKS FROM ALLIED NPC'S TO NPC'S
@@ -950,6 +953,8 @@ const fight_engine = (server) => {
       save_weapon(BATTLE.players[player].id)
       save_player(BATTLE.players[player].id)
     }
+
+    BATTLE.round = 0
   }
 
   const finish_battle = () => {
@@ -977,6 +982,8 @@ const fight_engine = (server) => {
       give_enemy_weapons(BATTLE.npc_enemies[i].weapon_id, BATTLE.players[randomIndex].id)
       give_enemy_armor(BATTLE.npc_enemies[i].armor_id, BATTLE.players[randomIndex].id)
     }
+
+    BATTLE.round = 0
   }
 
   const diff_obtainer = (skill) => {
