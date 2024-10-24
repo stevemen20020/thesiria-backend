@@ -40,7 +40,7 @@ const fight_engine = (server) => {
   io.on("connection", (socket) => {
 
     io.emit('battle-round', { BATTLE });
-    
+
     socket.on('start-battle', async (body) => {
       body = JSON.parse(body);
 
@@ -225,7 +225,8 @@ const fight_engine = (server) => {
         BATTLE.allied_attacks = []  //RESETS THE BATTLE ATTACKS
 
         if(check_if_enemies_are_dead()) { //CHECKS IF ALL NPC's AND MONSTERS ARE DEAD IN ORDER TO FINISH THE BATTLE IN A WINNING STATE
-          finish_battle()
+          const loots = finish_battle()
+          io.emit('battle-finish', {loots})
         }
 
         execute_NPC_attacks() //EXECUTES THE ATTACKS FROM NPC'S TO PLAYERS
@@ -964,33 +965,38 @@ const fight_engine = (server) => {
     BATTLE.round = 0
   }
 
-  const finish_battle = () => {
+  const finish_battle = async () => {
     TIMER_REPEATER = null //STOPS BATTLE
 
     for(player in BATTLE.players) {
-      console.log('finish battle')
-      save_weapon(BATTLE.players[player].id)
-      save_player(BATTLE.players[player].id)
+      await save_weapon(BATTLE.players[player].id)
+      await save_player(BATTLE.players[player].id)
     }
 
     for (let i = 0; i < BATTLE.monsters.length; i++) {
       const monster = BATTLE.monsters[i];
       const player = BATTLE.players[i % BATTLE.players.length];
-      assign_lootTable_of_monster(monster.id, player.id);
+      await assign_lootTable_of_monster(monster.id, player.id);
     }
+
+    const lootsShowable = []
 
     for (let i = 0; i < BATTLE.npc_enemies.length; i++) {
       const npc = BATTLE.npc_enemies[i];
       const player = BATTLE.players[i % BATTLE.players.length];
-      assign_lootTable_of_enemy_npc(npc.id, player.id);
+      await assign_lootTable_of_enemy_npc(npc.id, player.id);
 
       const randomIndex = Math.floor(Math.random() * BATTLE.players.length);
 
-      give_enemy_weapons(BATTLE.npc_enemies[i].weapon_id, BATTLE.players[randomIndex].id)
-      give_enemy_armor(BATTLE.npc_enemies[i].armor_id, BATTLE.players[randomIndex].id)
+      lootsShowable.push({weapon:BATTLE.npc_enemies[i].weapon_id, armor:BATTLE.npc_enemies[i].armor_id, player:BATTLE.players[randomIndex].id})
+
+      await give_enemy_weapons(BATTLE.npc_enemies[i].weapon_id, BATTLE.players[randomIndex].id)
+      await give_enemy_armor(BATTLE.npc_enemies[i].armor_id, BATTLE.players[randomIndex].id)
     }
 
     BATTLE.round = 0
+
+    return lootsShowable
   }
 
   const diff_obtainer = (skill) => {
