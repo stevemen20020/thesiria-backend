@@ -27,13 +27,20 @@ const fight_engine = (server) => {
   const BATTLE = {
     allied_attacks: [],
     enemy_attacks: [],
-    round:0
+    round:0,
+    timer:0,
+    players:[],
+    npc_enemies:[],
+    npc_allies:[],
+    monsters:[]
   }
   
   let TIMER_REPEATER = null
 
   io.on("connection", (socket) => {
 
+    io.emit('battle-round', { BATTLE });
+    
     socket.on('start-battle', async (body) => {
       body = JSON.parse(body);
 
