@@ -13,6 +13,7 @@ app.use(express.json())
 
 app.use('/public', express.static('./src/public'))
 app.use('/character-image', express.static('./src/public/characters'))
+app.use('/monster-image', express.static('./src/public/monsters'))
 app.use('/tile-image', express.static('./src/public'))
 app.use('/weapon-image', express.static('./src/public/weapons'))
 app.use('/armor-image', express.static('./src/public/armors'))
