@@ -214,7 +214,7 @@ const fight_engine = (server) => {
       BATTLE.npc_allies = called_npc_allies
       BATTLE.monsters = called_monsters
 
-      TIMER_REPEATER = setInterval(() => {
+      TIMER_REPEATER = setInterval(async () => {
         BATTLE.round += 1
 
         execute_player_attacks_to_NPC() //EXECUTES THE ATTACKS FROM THE PLAYER TO NPC'S
@@ -225,7 +225,7 @@ const fight_engine = (server) => {
         BATTLE.allied_attacks = []  //RESETS THE BATTLE ATTACKS
 
         if(check_if_enemies_are_dead()) { //CHECKS IF ALL NPC's AND MONSTERS ARE DEAD IN ORDER TO FINISH THE BATTLE IN A WINNING STATE
-          const loots = finish_battle()
+          const loots = await finish_battle()
           io.emit('battle-finish', {loots})
         }
 
@@ -270,7 +270,6 @@ const fight_engine = (server) => {
     })
 
     socket.on('cancel-battle', async () => {
-      console.log('cancel-battle')
       cancel_battle()
     })
   });
@@ -916,7 +915,6 @@ const fight_engine = (server) => {
 
   const check_if_players_are_dead = () => {
     if(BATTLE.players.length === 0) {
-      console.log('?????')
       return true
     }
 
@@ -925,7 +923,6 @@ const fight_engine = (server) => {
       if(BATTLE.players[player].health > 0) dead = false
     }
 
-    console.log(dead)
     return dead
   }
 
@@ -954,10 +951,10 @@ const fight_engine = (server) => {
   }
 
   const cancel_battle = () => {
+    clearInterval(TIMER_REPEATER);
     TIMER_REPEATER = null //STOPS BATTLE
 
     for(player in BATTLE.players) {
-      console.log('cancel battle')
       save_weapon(BATTLE.players[player].id)
       save_player(BATTLE.players[player].id)
     }
@@ -966,12 +963,8 @@ const fight_engine = (server) => {
   }
 
   const finish_battle = async () => {
+    clearInterval(TIMER_REPEATER);
     TIMER_REPEATER = null //STOPS BATTLE
-
-    for(player in BATTLE.players) {
-      await save_weapon(BATTLE.players[player].id)
-      await save_player(BATTLE.players[player].id)
-    }
 
     for (let i = 0; i < BATTLE.monsters.length; i++) {
       const monster = BATTLE.monsters[i];
@@ -995,6 +988,11 @@ const fight_engine = (server) => {
     }
 
     BATTLE.round = 0
+
+    for(player in BATTLE.players) {
+      await save_weapon(BATTLE.players[player].id)
+      await save_player(BATTLE.players[player].id)
+    }
 
     return lootsShowable
   }
