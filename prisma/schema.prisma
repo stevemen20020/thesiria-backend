@@ -9,11 +9,11 @@ datasource db {
 
 model affinity {
   id                 Int                  @id @unique(map: "id") @default(autoincrement())
-  name               String?              @db.VarChar(255)
-  element_id         Int?
-  bonus              Int?
-  color              String?              @db.VarChar(75)
-  elements           elements?            @relation(fields: [element_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "affinity_ibfk_1")
+  name               String               @db.VarChar(100)
+  element_id         Int
+  bonus              Int
+  color              String               @db.VarChar(10)
+  elements           elements             @relation(fields: [element_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "affinity_ibfk_1")
   npc                npc[]
   playable_character playable_character[]
 
@@ -22,33 +22,32 @@ model affinity {
 
 model armor {
   id                                         Int               @id @unique(map: "id") @default(autoincrement())
-  name                                       String?           @db.VarChar(255)
+  name                                       String            @db.VarChar(200)
   element_id                                 Int?
-  defensive_points_lvl1                      Int?
-  defensive_points_lvl2                      Int?
-  defensive_points_lvl3                      Int?
-  defensive_points_lvl4                      Int?
-  defensive_points_lvl5                      Int?
-  upgrade_item_id                            Int?
-  upgrade_cost_lvl2                          Int?
-  upgrade_cost_lvl3                          Int?
-  upgrade_cost_lvl4                          Int?
-  upgrade_cost_lvl5                          Int?
-  rarity                                     Int?
-  location_id                                Int?
+  defensive_points_lvl1                      Int
+  defensive_points_lvl2                      Int
+  defensive_points_lvl3                      Int
+  defensive_points_lvl4                      Int
+  defensive_points_lvl5                      Int
+  upgrade_item_id                            Int
+  upgrade_cost_lvl2                          Int
+  upgrade_cost_lvl3                          Int
+  upgrade_cost_lvl4                          Int
+  upgrade_cost_lvl5                          Int
+  rarity                                     Int
+  location_id                                Int
   skill_usage                                Int?
   dice_needed                                Int?
   found                                      Int?              @db.TinyInt
-  price_sell                                 Float?            @db.Float
-  price_buy                                  Float?            @db.Float
-  description                                String?           @db.Text
-  image                                      String?           @db.VarChar(255)
+  price_sell                                 Float             @db.Float
+  price_buy                                  Float             @db.Float
+  description                                String            @db.Text
+  image                                      String?           @db.VarChar(100)
   elements                                   elements?         @relation(fields: [element_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_1")
   skill_usage_armor_skill_usageToskill_usage skill_usage?      @relation("armor_skill_usageToskill_usage", fields: [skill_usage], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_2")
-  tiles                                      tiles?            @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_3")
-  objects                                    objects?          @relation(fields: [upgrade_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_4")
+  tiles                                      tiles             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_3")
+  objects                                    objects           @relation(fields: [upgrade_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_4")
   inventory_armor                            inventory_armor[]
-  monster                                    monster[]
   npc                                        npc[]
 
   @@index([element_id], map: "element_id")
@@ -61,16 +60,16 @@ model attacks {
   id                                           Int                 @id @unique(map: "id") @default(autoincrement())
   id_playable_character                        Int?
   id_npc                                       Int?
-  skill_usage                                  Int?
-  name                                         String?             @db.VarChar(255)
-  weapon_type                                  Int?
-  attack_type                                  Int?
-  attack_points                                Int?
-  favorite                                     Int?                @db.TinyInt
-  uses                                         Int?
-  max_uses                                     Int?
+  skill_usage                                  Int
+  name                                         String              @db.VarChar(300)
+  weapon_type                                  Int
+  attack_type                                  Int
+  attack_points                                Int
+  favorite                                     Int                 @db.TinyInt
+  uses                                         Int
+  max_uses                                     Int
   playable_character                           playable_character? @relation(fields: [id_playable_character], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attacks_ibfk_1")
-  skill_usage_attacks_skill_usageToskill_usage skill_usage?        @relation("attacks_skill_usageToskill_usage", fields: [skill_usage], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attacks_ibfk_2")
+  skill_usage_attacks_skill_usageToskill_usage skill_usage         @relation("attacks_skill_usageToskill_usage", fields: [skill_usage], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attacks_ibfk_2")
   npc                                          npc?                @relation(fields: [id_npc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "attacks_ibfk_3")
 
   @@index([id_npc], map: "id_npc")
@@ -80,10 +79,10 @@ model attacks {
 
 model city {
   id                            Int     @id @unique(map: "id") @default(autoincrement())
-  name                          String? @db.VarChar(255)
-  alleigiance                   String? @db.VarChar(255)
-  location_id                   Int?
-  tiles_city_location_idTotiles tiles?  @relation("city_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "city_ibfk_1")
+  name                          String  @db.VarChar(50)
+  alleigiance                   String  @db.VarChar(255)
+  location_id                   Int
+  tiles_city_location_idTotiles tiles   @relation("city_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "city_ibfk_1")
   tiles_tiles_city_idTocity     tiles[] @relation("tiles_city_idTocity")
 
   @@index([location_id], map: "location_id")
@@ -91,12 +90,12 @@ model city {
 
 model devil_fruit {
   id                    Int                  @id @unique(map: "id") @default(autoincrement())
-  name                  String?              @db.VarChar(255)
-  bonus                 Int?
-  skill_bonused         Int?
-  description           String?              @db.Text
-  awakening_description String?              @db.Text
-  skill_usage           skill_usage?         @relation(fields: [skill_bonused], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "devil_fruit_ibfk_1")
+  name                  String               @db.VarChar(100)
+  bonus                 Int
+  skill_bonused         Int
+  description           String               @db.Text
+  awakening_description String               @db.Text
+  skill_usage           skill_usage          @relation(fields: [skill_bonused], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "devil_fruit_ibfk_1")
   npc                   npc[]
   playable_character    playable_character[]
 
@@ -105,9 +104,9 @@ model devil_fruit {
 
 model dungeons {
   id                                Int     @id @unique(map: "id") @default(autoincrement())
-  name                              String? @db.VarChar(255)
-  description                       String? @db.Text
-  difficulty                        Int?
+  name                              String  @db.VarChar(100)
+  description                       String  @db.Text
+  difficulty                        Int
   location_id                       Int?
   tiles_dungeons_location_idTotiles tiles?  @relation("dungeons_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "dungeons_ibfk_1")
   tiles_tiles_dungeon_idTodungeons  tiles[] @relation("tiles_dungeon_idTodungeons")
@@ -116,16 +115,16 @@ model dungeons {
 }
 
 model effects {
-  id          Int      @id @unique(map: "id") @default(autoincrement())
-  name        String?  @db.VarChar(255)
-  description String?  @db.Text
-  duration    Int?
-  spells      spells[]
+  id                 Int      @id @unique(map: "id") @default(autoincrement())
+  name               String   @db.VarChar(50)
+  description        String   @db.Text
+  duration_in_rounds Int
+  spells             spells[]
 }
 
 model elements {
   id       Int        @id @unique(map: "id") @default(autoincrement())
-  name     String?    @db.VarChar(255)
+  name     String     @db.VarChar(50)
   affinity affinity[]
   armor    armor[]
   objects  objects[]
@@ -134,10 +133,10 @@ model elements {
 
 model haki_types {
   id                 Int                  @id @unique(map: "id") @default(autoincrement())
-  name               String?              @db.VarChar(255)
-  description        String?              @db.Text
-  skill_bonused      Int?
-  skill_usage        skill_usage?         @relation(fields: [skill_bonused], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "haki_types_ibfk_1")
+  name               String               @db.VarChar(100)
+  description        String               @db.Text
+  skill_bonused      Int
+  skill_usage        skill_usage          @relation(fields: [skill_bonused], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "haki_types_ibfk_1")
   npc                npc[]
   playable_character playable_character[]
 
@@ -158,11 +157,11 @@ model inventory {
 
 model inventory_armor {
   id                                                              Int                  @id @unique(map: "id") @default(autoincrement())
-  id_user                                                         Int?
-  id_armor                                                        Int?
-  level                                                           Int?
-  playable_character_inventory_armor_id_userToplayable_character  playable_character?  @relation("inventory_armor_id_userToplayable_character", fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_armor_ibfk_1")
-  armor                                                           armor?               @relation(fields: [id_armor], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_armor_ibfk_2")
+  id_user                                                         Int
+  id_armor                                                        Int
+  level                                                           Int
+  playable_character_inventory_armor_id_userToplayable_character  playable_character   @relation("inventory_armor_id_userToplayable_character", fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_armor_ibfk_1")
+  armor                                                           armor                @relation(fields: [id_armor], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_armor_ibfk_2")
   playable_character_playable_character_armor_idToinventory_armor playable_character[] @relation("playable_character_armor_idToinventory_armor")
 
   @@index([id_armor], map: "id_armor")
@@ -184,11 +183,11 @@ model inventory_magic {
 
 model inventory_weapon {
   id                                                                Int                  @id @unique(map: "id") @default(autoincrement())
-  id_user                                                           Int?
-  id_weapon                                                         Int?
-  level                                                             Int?
-  playable_character_inventory_weapon_id_userToplayable_character   playable_character?  @relation("inventory_weapon_id_userToplayable_character", fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_weapon_ibfk_1")
-  weapon                                                            weapon?              @relation(fields: [id_weapon], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_weapon_ibfk_2")
+  id_user                                                           Int
+  id_weapon                                                         Int
+  level                                                             Int
+  playable_character_inventory_weapon_id_userToplayable_character   playable_character   @relation("inventory_weapon_id_userToplayable_character", fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_weapon_ibfk_1")
+  weapon                                                            weapon               @relation(fields: [id_weapon], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inventory_weapon_ibfk_2")
   playable_character_playable_character_weapon_idToinventory_weapon playable_character[] @relation("playable_character_weapon_idToinventory_weapon")
 
   @@index([id_user], map: "id_user")
@@ -196,38 +195,36 @@ model inventory_weapon {
 }
 
 model loottables {
-  id         Int      @id @unique(map: "id") @default(autoincrement())
+  id         Int     @id @unique(map: "id") @default(autoincrement())
   id_npc     Int?
   id_monster Int?
-  id_object  Int?
-  amount     Int?
-  npc        npc?     @relation(fields: [id_npc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_1")
-  monster    monster? @relation(fields: [id_monster], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_3")
-  objects    objects? @relation(fields: [id_object], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_2")
+  id_object  Int
+  amount     Int
+  npc        npc?    @relation(fields: [id_npc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_1")
+  objects    objects @relation(fields: [id_object], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "loottables_ibfk_2")
 
   @@index([id_npc], map: "id_npc")
-  @@index([id_monster], map: "id_monster")
   @@index([id_object], map: "id_object")
 }
 
 model mission_fases {
-  id          Int       @id @unique(map: "id") @default(autoincrement())
-  id_mission  Int?
-  description String?   @db.Text
-  fase        Int?
-  active      Int?      @db.TinyInt
-  missions    missions? @relation(fields: [id_mission], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_fases_ibfk_1")
+  id          Int      @id @unique(map: "id") @default(autoincrement())
+  id_mission  Int
+  description String   @db.Text
+  fase        Int
+  active      Int      @db.TinyInt
+  missions    missions @relation(fields: [id_mission], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_fases_ibfk_1")
 
   @@index([id_mission], map: "id_mission")
 }
 
 model mission_journal {
-  id                    Int                 @id @unique(map: "id") @default(autoincrement())
-  playable_character_id Int?
-  mission_id            Int?
-  completed             Int?                @db.TinyInt
-  playable_character    playable_character? @relation(fields: [playable_character_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_journal_ibfk_1")
-  missions              missions?           @relation(fields: [mission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_journal_ibfk_2")
+  id                    Int                @id @unique(map: "id") @default(autoincrement())
+  playable_character_id Int
+  mission_id            Int
+  completed             Int                @db.TinyInt
+  playable_character    playable_character @relation(fields: [playable_character_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_journal_ibfk_1")
+  missions              missions           @relation(fields: [mission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_journal_ibfk_2")
 
   @@index([mission_id], map: "mission_id")
   @@index([playable_character_id], map: "playable_character_id")
@@ -236,8 +233,8 @@ model mission_journal {
 model missions {
   id              Int               @id @unique(map: "id") @default(autoincrement())
   giver_npc_id    Int?
-  name            String?           @db.VarChar(255)
-  description     String?           @db.Text
+  name            String            @db.VarChar(200)
+  description     String            @db.Text
   mission_fases   mission_fases[]
   mission_journal mission_journal[]
   npc             npc?              @relation(fields: [giver_npc_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "missions_ibfk_1")
@@ -246,62 +243,54 @@ model missions {
 }
 
 model monster {
-  id              Int     @id @unique(map: "id") @default(autoincrement())
-  name            String? @db.VarChar(255)
-  strength        Int?
-  dexterity       Int?
-  defense         Int?
-  aim             Int?
-  speed           Int?
-  agility         Int?
-  image_reference String? @db.VarChar(255)
-  armor_id        Int?
-  weapon_id       Int?
-  health          Int?
-  max_health      Int?
-  loottables      loottables[]
-  armor           armor?  @relation(fields: [armor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "monster_ibfk_1")
-  weapon          weapon? @relation(fields: [weapon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "monster_ibfk_2")
-
-  @@index([armor_id], map: "armor_id")
-  @@index([weapon_id], map: "weapon_id")
+  id              Int    @id @unique(map: "id") @default(autoincrement())
+  name            String @db.VarChar(100)
+  strength        Int
+  dexterity       Int
+  defense         Int
+  aim             Int
+  speed           Int
+  agility         Int
+  image_reference String @db.VarChar(255)
+  health          Int
+  max_health      Int
 }
 
 model npc {
   id                         Int                          @id @unique(map: "id") @default(autoincrement())
-  name                       String?                      @db.VarChar(255)
-  biography                  String?                      @db.Text
-  id_race                    Int?
-  strength                   Int?
-  dexterity                  Int?
-  defense                    Int?
-  aim                        Int?
-  vision                     Int?
-  speed                      Int?
-  handcraft                  Int?
-  agility                    Int?
-  charisma                   Int?
-  affinity_id                Int?
-  chronicler_status          Int?                         @db.TinyInt
-  image_reference            String?                      @db.VarChar(255)
+  name                       String                       @db.VarChar(100)
+  biography                  String                       @db.Text
+  id_race                    Int
+  strength                   Int
+  dexterity                  Int
+  defense                    Int
+  aim                        Int
+  vision                     Int
+  speed                      Int
+  handcraft                  Int
+  agility                    Int
+  charisma                   Int
+  wisdom                     Int
+  affinity_id                Int
+  chronicler_status          Int                          @db.TinyInt
+  image_reference            String                       @db.VarChar(100)
+  boss_image_reference       String?                      @db.VarChar(100)
   armor_id                   Int?
   weapon_id                  Int?
   haki_level                 Int?
   haki_type                  Int?
   devil_fruit_id             Int?
-  health                     Int?
-  max_health                 Int?
-  titan                      Int?
+  health                     Int
+  max_health                 Int
   attacks                    attacks[]
   loottables                 loottables[]
   missions                   missions[]
-  races                      races?                       @relation(fields: [id_race], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_1")
-  affinity                   affinity?                    @relation(fields: [affinity_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_2")
+  races                      races                        @relation(fields: [id_race], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_1")
+  affinity                   affinity                     @relation(fields: [affinity_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_2")
   armor                      armor?                       @relation(fields: [armor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_3")
   weapon                     weapon?                      @relation(fields: [weapon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_4")
   haki_types                 haki_types?                  @relation(fields: [haki_type], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_5")
   devil_fruit                devil_fruit?                 @relation(fields: [devil_fruit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_6")
-  titanes                    titanes?                     @relation(fields: [titan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_ibfk_7")
   npc_inventory              npc_inventory[]
   playable_character_journal playable_character_journal[]
 
@@ -310,17 +299,16 @@ model npc {
   @@index([devil_fruit_id], map: "devil_fruit_id")
   @@index([haki_type], map: "haki_type")
   @@index([id_race], map: "id_race")
-  @@index([titan], map: "titan")
   @@index([weapon_id], map: "weapon_id")
 }
 
 model npc_inventory {
-  id        Int      @id @unique(map: "id") @default(autoincrement())
-  id_npc    Int?
-  id_object Int?
-  quantity  Int?
-  objects   objects? @relation(fields: [id_object], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_inventory_ibfk_1")
-  npc       npc?     @relation(fields: [id_npc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_inventory_ibfk_2")
+  id        Int     @id @unique(map: "id") @default(autoincrement())
+  id_npc    Int
+  id_object Int
+  quantity  Int
+  objects   objects @relation(fields: [id_object], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_inventory_ibfk_1")
+  npc       npc     @relation(fields: [id_npc], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "npc_inventory_ibfk_2")
 
   @@index([id_npc], map: "id_npc")
   @@index([id_object], map: "id_object")
@@ -328,15 +316,15 @@ model npc_inventory {
 
 model objects {
   id             Int             @id @unique(map: "id") @default(autoincrement())
-  name           String?         @db.VarChar(255)
+  name           String          @db.VarChar(100)
   element_id     Int?
-  rarity         Int?
+  rarity         Int
   skill_usage_id Int?
   dice_needed    Int?
   location_id    Int?
-  description    String?         @db.Text
-  price_sell     Float?          @db.Float
-  price_buy      Float?          @db.Float
+  description    String          @db.Text
+  price_sell     Float           @db.Float
+  price_buy      Float           @db.Float
   armor          armor[]
   inventory      inventory[]
   loottables     loottables[]
@@ -354,22 +342,28 @@ model objects {
 
 model playable_character {
   id                                                              Int                          @id @unique(map: "id") @default(autoincrement())
-  user_id                                                         Int?
-  name                                                            String?                      @db.VarChar(255)
+  user_id                                                         Int
+  name                                                            String                       @db.VarChar(100)
   biography                                                       String?                      @db.Text
-  id_race                                                         Int?
-  strength                                                        Int?
-  dexterity                                                       Int?
-  defense                                                         Int?
-  aim                                                             Int?
-  vision                                                          Int?
-  speed                                                           Int?
-  handcraft                                                       Int?
-  agility                                                         Int?
-  charisma                                                        Int?
-  affinity_id                                                     Int?
-  chronicler_status                                               Int?                         @db.TinyInt
-  image_reference                                                 String?                      @db.VarChar(255)
+  id_race                                                         Int
+  positive_characteristic_1                                       String?                      @db.Text
+  positive_characteristic_2                                       String?                      @db.Text
+  positive_characteristic_3                                       String?                      @db.Text
+  negative_characteristic_1                                       String?                      @db.Text
+  negative_characteristic_2                                       String?                      @db.Text
+  strength                                                        Int
+  dexterity                                                       Int
+  defense                                                         Int
+  aim                                                             Int
+  vision                                                          Int
+  speed                                                           Int
+  handcraft                                                       Int
+  agility                                                         Int
+  charisma                                                        Int
+  wisdom                                                          Int
+  affinity_id                                                     Int
+  chronicler_status                                               Int                          @db.TinyInt
+  image_reference                                                 String?                      @db.VarChar(100)
   armor_id                                                        Int?
   weapon_id                                                       Int?
   haki_level                                                      Int?
@@ -379,22 +373,20 @@ model playable_character {
   money                                                           Float?                       @db.Float
   health                                                          Float?                       @db.Float
   max_health                                                      Int?
-  dungeon_max_health                                              Int?
-  titan                                                           Int?
+  active_max_health                                               Int?
   attacks                                                         attacks[]
   inventory                                                       inventory[]
   inventory_armor_inventory_armor_id_userToplayable_character     inventory_armor[]            @relation("inventory_armor_id_userToplayable_character")
   inventory_magic                                                 inventory_magic[]
   inventory_weapon_inventory_weapon_id_userToplayable_character   inventory_weapon[]           @relation("inventory_weapon_id_userToplayable_character")
   mission_journal                                                 mission_journal[]
-  users                                                           users?                       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_1")
-  races                                                           races?                       @relation(fields: [id_race], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_2")
-  affinity                                                        affinity?                    @relation(fields: [affinity_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_3")
+  users                                                           users                        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_1")
+  races                                                           races                        @relation(fields: [id_race], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_2")
+  affinity                                                        affinity                     @relation(fields: [affinity_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_3")
   inventory_armor_playable_character_armor_idToinventory_armor    inventory_armor?             @relation("playable_character_armor_idToinventory_armor", fields: [armor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_4")
   inventory_weapon_playable_character_weapon_idToinventory_weapon inventory_weapon?            @relation("playable_character_weapon_idToinventory_weapon", fields: [weapon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_5")
   haki_types                                                      haki_types?                  @relation(fields: [haki_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_6")
   devil_fruit                                                     devil_fruit?                 @relation(fields: [devil_fruit_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_7")
-  titanes                                                         titanes?                     @relation(fields: [titan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_ibfk_8")
   playable_character_journal                                      playable_character_journal[]
 
   @@index([affinity_id], map: "affinity_id")
@@ -402,18 +394,17 @@ model playable_character {
   @@index([devil_fruit_id], map: "devil_fruit_id")
   @@index([haki_type_id], map: "haki_type_id")
   @@index([id_race], map: "id_race")
-  @@index([titan], map: "titan")
   @@index([user_id], map: "user_id")
   @@index([weapon_id], map: "weapon_id")
 }
 
 model playable_character_journal {
-  id                    Int                 @id @unique(map: "id") @default(autoincrement())
-  playable_character_id Int?
-  npc_id                Int?
-  relationship          Int?
-  playable_character    playable_character? @relation(fields: [playable_character_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_journal_ibfk_1")
-  npc                   npc?                @relation(fields: [npc_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_journal_ibfk_2")
+  id                    Int                @id @unique(map: "id") @default(autoincrement())
+  playable_character_id Int
+  npc_id                Int
+  relationship          Int
+  playable_character    playable_character @relation(fields: [playable_character_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_journal_ibfk_1")
+  npc                   npc                @relation(fields: [npc_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "playable_character_journal_ibfk_2")
 
   @@index([npc_id], map: "npc_id")
   @@index([playable_character_id], map: "playable_character_id")
@@ -421,89 +412,75 @@ model playable_character_journal {
 
 model races {
   id                 Int                  @id @unique(map: "id") @default(autoincrement())
-  race               String?              @db.VarChar(255)
-  strength_bonus     Int?
-  dexterity_bonus    Int?
-  defense_bonus      Int?
-  aim_bonus          Int?
-  vision_bonus       Int?
-  speed_bonus        Int?
-  handcraft_bonus    Int?
-  agility_bonus      Int?
-  charisma_bonus     Int?
+  race               String               @db.VarChar(100)
+  strength_bonus     Int
+  dexterity_bonus    Int
+  defense_bonus      Int
+  aim_bonus          Int
+  vision_bonus       Int
+  speed_bonus        Int
+  handcraft_bonus    Int
+  agility_bonus      Int
+  charisma_bonus     Int
   npc                npc[]
   playable_character playable_character[]
 }
 
 model skill_usage {
-  id                                       Int                 @id @unique(map: "id") @default(autoincrement())
-  name                                     String?             @db.VarChar(255)
-  armor_armor_skill_usageToskill_usage     armor[]             @relation("armor_skill_usageToskill_usage")
-  attacks_attacks_skill_usageToskill_usage attacks[]           @relation("attacks_skill_usageToskill_usage")
+  id                                       Int           @id @unique(map: "id") @default(autoincrement())
+  name                                     String        @db.VarChar(50)
+  armor_armor_skill_usageToskill_usage     armor[]       @relation("armor_skill_usageToskill_usage")
+  attacks_attacks_skill_usageToskill_usage attacks[]     @relation("attacks_skill_usageToskill_usage")
   devil_fruit                              devil_fruit[]
   haki_types                               haki_types[]
   objects                                  objects[]
-  spell_buff_debuff                        spell_buff_debuff[]
-  titanes                                  titanes[]
-  weapon_weapon_skill_usageToskill_usage   weapon[]            @relation("weapon_skill_usageToskill_usage")
-}
-
-model spell_buff_debuff {
-  id            Int          @id @unique(map: "id") @default(autoincrement())
-  id_spell      Int?
-  id_skill      Int?
-  ammount_lvl_1 Int?
-  ammount_lvl_2 Int?
-  ammount_lvl_3 Int?
-  ammount_lvl_4 Int?
-  ammount_lvl_5 Int?
-  spells        spells?      @relation(fields: [id_spell], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spell_buff_debuff_ibfk_1")
-  skill_usage   skill_usage? @relation(fields: [id_skill], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spell_buff_debuff_ibfk_2")
-
-  @@index([id_skill], map: "id_skill")
-  @@index([id_spell], map: "id_spell")
+  spells_spells_skill_usageToskill_usage   spells[]      @relation("spells_skill_usageToskill_usage")
+  weapon_weapon_skill_usageToskill_usage   weapon[]      @relation("weapon_skill_usageToskill_usage")
 }
 
 model spells {
-  id                  Int                 @id @unique(map: "id") @default(autoincrement())
-  name                String              @unique(map: "name") @db.VarChar(255)
-  description         String?             @db.Text
-  id_element          Int?
-  max_uses            Int?
-  is_group            Int?                @db.TinyInt
-  upgrade_item_id     Int?
-  upgrade_cost_lvl2   Int?
-  upgrade_cost_lvl3   Int?
-  upgrade_cost_lvl4   Int?
-  upgrade_cost_lvl5   Int?
-  health_points_lvl_1 Int?
-  health_points_lvl_2 Int?
-  health_points_lvl_3 Int?
-  health_points_lvl_4 Int?
-  health_points_lvl_5 Int?
-  effect              Int?
-  inventory_magic     inventory_magic[]
-  spell_buff_debuff   spell_buff_debuff[]
-  objects             objects?            @relation(fields: [upgrade_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_1")
-  effects             effects?            @relation(fields: [effect], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_2")
+  id                                          Int               @id @unique(map: "id") @default(autoincrement())
+  name                                        String            @unique(map: "name") @db.VarChar(200)
+  description                                 String            @db.Text
+  id_element                                  Int
+  max_uses                                    Int
+  is_group                                    Int               @db.TinyInt
+  upgrade_item_id                             Int
+  upgrade_cost_lvl2                           Int
+  upgrade_cost_lvl3                           Int
+  upgrade_cost_lvl4                           Int
+  upgrade_cost_lvl5                           Int
+  hit_points_lvl_1                            Int
+  hit_points_lvl_2                            Int
+  hit_points_lvl_3                            Int
+  hit_points_lvl_4                            Int
+  hit_points_lvl_5                            Int
+  spell_type                                  spells_spell_type
+  skill_usage                                 Int?
+  effect                                      Int?
+  inventory_magic                             inventory_magic[]
+  objects                                     objects           @relation(fields: [upgrade_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_1")
+  effects                                     effects?          @relation(fields: [effect], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_2")
+  skill_usage_spells_skill_usageToskill_usage skill_usage?      @relation("spells_skill_usageToskill_usage", fields: [skill_usage], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_3")
 
   @@index([effect], map: "effect")
   @@index([upgrade_item_id], map: "upgrade_item_id")
+  @@index([skill_usage], map: "skill_usage")
 }
 
 model talismanes {
-  id          Int     @id @unique(map: "id") @default(autoincrement())
-  name        String? @db.VarChar(255)
-  description String? @db.Text
-  type        Int?
+  id          Int    @id @unique(map: "id") @default(autoincrement())
+  name        String @db.VarChar(100)
+  description String @db.Text
+  type        Int
   cooldown    Int?
-  discovered  Int?    @db.TinyInt
+  discovered  Int    @db.TinyInt
 }
 
 model tiles {
   id                                   Int        @id @unique(map: "id") @default(autoincrement())
-  name                                 String?    @db.VarChar(255)
-  image                                String?    @db.VarChar(255)
+  name                                 String     @db.VarChar(10)
+  image                                String     @db.VarChar(100)
   dungeon_id                           Int?
   city_id                              Int?
   armor                                armor[]
@@ -518,67 +495,61 @@ model tiles {
   @@index([dungeon_id], map: "dungeon_id")
 }
 
-model titanes {
-  id                 Int                  @id @unique(map: "id") @default(autoincrement())
-  nombre             String?              @db.VarChar(255)
-  id_buffed_stat     Int?
-  buff               Int?
-  description        String?              @db.Text
-  npc                npc[]
-  playable_character playable_character[]
-  skill_usage        skill_usage?         @relation(fields: [id_buffed_stat], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "titanes_ibfk_1")
-
-  @@index([id_buffed_stat], map: "id_buffed_stat")
-}
-
 model users {
   id                 Int                  @id @unique(map: "id") @default(autoincrement())
-  username           String?              @db.VarChar(255)
-  name               String?              @db.VarChar(255)
-  last_name          String?              @db.VarChar(255)
-  email              String?              @db.VarChar(255)
-  password           String?              @db.VarChar(255)
+  username           String               @db.VarChar(100)
+  name               String?              @db.VarChar(100)
+  last_name          String               @db.VarChar(100)
+  email              String               @db.VarChar(100)
+  password           String               @db.VarChar(100)
   playable_character playable_character[]
 }
 
 model weapon {
   id                                          Int                @id @unique(map: "id") @default(autoincrement())
-  name                                        String?            @db.VarChar(255)
+  name                                        String             @db.VarChar(200)
   element_id                                  Int?
-  damage_points_lvl1                          Int?
-  damage_points_lvl2                          Int?
-  damage_points_lvl3                          Int?
-  damage_points_lvl4                          Int?
-  damage_points_lvl5                          Int?
-  upgrade_item_id                             Int?
-  upgrade_cost_lvl2                           Int?
-  upgrade_cost_lvl3                           Int?
-  upgrade_cost_lvl4                           Int?
-  upgrade_cost_lvl5                           Int?
-  rarity                                      Int?
-  durability                                  Int?
-  durability_max                              Int?
+  damage_points_lvl1                          Int
+  damage_points_lvl2                          Int
+  damage_points_lvl3                          Int
+  damage_points_lvl4                          Int
+  damage_points_lvl5                          Int
+  upgrade_item_id                             Int
+  upgrade_cost_lvl2                           Int
+  upgrade_cost_lvl3                           Int
+  upgrade_cost_lvl4                           Int
+  upgrade_cost_lvl5                           Int
+  rarity                                      Int
+  durability                                  Int
+  durability_max                              Int
   chipping                                    Float?             @db.Float
   ammo                                        Int?
-  weapon_type                                 Int?
+  weapon_type                                 Int
   location_id                                 Int?
   skill_usage                                 Int?
   dice_needed                                 Int?
   found                                       Int?               @db.TinyInt
-  price_sell                                  Float?             @db.Float
-  price_buy                                   Float?             @db.Float
-  description                                 String?            @db.Text
-  image                                       String?            @db.VarChar(255)
+  price_sell                                  Float              @db.Float
+  price_buy                                   Float              @db.Float
+  description                                 String             @db.Text
+  image                                       String?            @db.VarChar(100)
   inventory_weapon                            inventory_weapon[]
-  monster                                     monster[]
   npc                                         npc[]
   elements                                    elements?          @relation(fields: [element_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapon_ibfk_1")
   skill_usage_weapon_skill_usageToskill_usage skill_usage?       @relation("weapon_skill_usageToskill_usage", fields: [skill_usage], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapon_ibfk_2")
   tiles                                       tiles?             @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapon_ibfk_3")
-  objects                                     objects?           @relation(fields: [upgrade_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapon_ibfk_4")
+  objects                                     objects            @relation(fields: [upgrade_item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapon_ibfk_4")
 
   @@index([element_id], map: "element_id")
   @@index([location_id], map: "location_id")
   @@index([skill_usage], map: "skill_usage")
   @@index([upgrade_item_id], map: "upgrade_item_id")
+}
+
+enum spells_spell_type {
+  HEALTH
+  DAMAGE
+  EFFECT
+  BUFF
+  DEBUFF
 }
