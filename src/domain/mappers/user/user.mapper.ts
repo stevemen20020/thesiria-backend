@@ -1,17 +1,18 @@
 // infrastructure/mappers/user.mapper.ts
 
-import { users } from "@prisma/client";
+import { users, Prisma } from "@prisma/client";
 import { UserEntity } from "../../entities/user/user.entity";
 
 export class UserMapper {
-  static prismaToEntity(user: users): UserEntity {
+  static prismaToEntity(user: Prisma.usersGetPayload<{include:{playable_character:true}}>): UserEntity {
     const userMapped: UserEntity = {
       id: user.id.toString(),
       userName: user.username,
       name: user.name,
       lastName: user.last_name,
       email: user.email,
-      password: user.password, // ⚠️ Solo si vas a usarla internamente. No devuelvas esto en responses
+
+      // playableCharacter: user.playable_character ? user.playable_character : undefined
     };
 
     return userMapped
