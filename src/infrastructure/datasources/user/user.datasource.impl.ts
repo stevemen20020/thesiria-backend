@@ -2,7 +2,6 @@ import { UserDatasource } from '../../../domain/datasources/user/user.datasource
 import { SearchUserQueryParamsDto } from '../../../domain/dto/user/searchUserQuery.dto';
 import { UpdateUserDto } from '../../../domain/dto/user/updateUser.dto';
 import { UserEntity } from '../../../domain/entities/user/user.entity';
-import { PaginationDto } from '../../../domain/dto/shared/pagination.dto';
 import { prisma } from '../../../data/database';
 import { AppCustomError } from '../../../domain/errors/AppCustom.error';
 import { UserMapper } from '../../../domain/mappers/user/user.mapper';
@@ -39,7 +38,7 @@ export class UserDatasourceImplementation implements UserDatasource{
                 })
             },
             take: Number(limit),
-            skip: (Number(page) - 1 * Number(limit))
+            skip: ((Number(page) - 1) * Number(limit))
         })
 
         const [total, users] = await Promise.all([userCount, usersFound])
@@ -55,16 +54,6 @@ export class UserDatasourceImplementation implements UserDatasource{
         if(!existUser) throw AppCustomError.notFound(ErrorMessage.userNotFound)
 
         const {userName, name, lastName, email} = dto
-
-        if(userName) {
-            const existingUsername = await prisma.users.findFirst({
-                where:{
-                    NOT: {id: Number(id)},
-                    username:userName
-                }
-            })
-            if(existingUsername) throw AppCustomError.badRequest('Username already exists')
-        }
 
         if(email) {
             const existingUsername = await prisma.users.findFirst({
@@ -96,7 +85,7 @@ export class UserDatasourceImplementation implements UserDatasource{
         if(!existingUser) throw AppCustomError.notFound(ErrorMessage.userNotFound)
         
         await prisma.users.delete({
-             where:{id: Number(id)}
+            where:{id: Number(id)}
         })
 
         return 'Usuario borrado con éxito'
