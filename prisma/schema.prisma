@@ -34,7 +34,7 @@ model armor {
   upgrade_cost_lvl3                          Int
   upgrade_cost_lvl4                          Int
   upgrade_cost_lvl5                          Int
-  rarity                                     Int
+  rarity                                     armor_rarity
   location_id                                Int
   skill_usage                                Int?
   dice_needed                                Int?
@@ -62,8 +62,8 @@ model attacks {
   id_npc                                       Int?
   skill_usage                                  Int
   name                                         String              @db.VarChar(300)
-  weapon_type                                  Int
-  attack_type                                  Int
+  weapon_type                                  attacks_weapon_type
+  attack_type                                  attacks_attack_type
   attack_points                                Int
   favorite                                     Int                 @db.TinyInt
   uses                                         Int
@@ -75,17 +75,6 @@ model attacks {
   @@index([id_npc], map: "id_npc")
   @@index([id_playable_character], map: "id_playable_character")
   @@index([skill_usage], map: "skill_usage")
-}
-
-model city {
-  id                            Int     @id @unique(map: "id") @default(autoincrement())
-  name                          String  @db.VarChar(50)
-  alleigiance                   String  @db.VarChar(255)
-  location_id                   Int
-  tiles_city_location_idTotiles tiles   @relation("city_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "city_ibfk_1")
-  tiles_tiles_city_idTocity     tiles[] @relation("tiles_city_idTocity")
-
-  @@index([location_id], map: "location_id")
 }
 
 model devil_fruit {
@@ -100,18 +89,6 @@ model devil_fruit {
   playable_character    playable_character[]
 
   @@index([skill_bonused], map: "skill_bonused")
-}
-
-model dungeons {
-  id                                Int     @id @unique(map: "id") @default(autoincrement())
-  name                              String  @db.VarChar(100)
-  description                       String  @db.Text
-  difficulty                        Int
-  location_id                       Int?
-  tiles_dungeons_location_idTotiles tiles?  @relation("dungeons_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "dungeons_ibfk_1")
-  tiles_tiles_dungeon_idTodungeons  tiles[] @relation("tiles_dungeon_idTodungeons")
-
-  @@index([location_id], map: "location_id")
 }
 
 model effects {
@@ -318,7 +295,7 @@ model objects {
   id             Int             @id @unique(map: "id") @default(autoincrement())
   name           String          @db.VarChar(100)
   element_id     Int?
-  rarity         Int
+  rarity         objects_rarity
   skill_usage_id Int?
   dice_needed    Int?
   location_id    Int?
@@ -422,6 +399,7 @@ model races {
   handcraft_bonus    Int
   agility_bonus      Int
   charisma_bonus     Int
+  wisdom_bonus       Int
   npc                npc[]
   playable_character playable_character[]
 }
@@ -464,8 +442,21 @@ model spells {
   skill_usage_spells_skill_usageToskill_usage skill_usage?      @relation("spells_skill_usageToskill_usage", fields: [skill_usage], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_3")
 
   @@index([effect], map: "effect")
-  @@index([upgrade_item_id], map: "upgrade_item_id")
   @@index([skill_usage], map: "skill_usage")
+  @@index([upgrade_item_id], map: "upgrade_item_id")
+}
+
+model structures {
+  id                                   Int              @id @unique(map: "id") @default(autoincrement())
+  name                                 String           @db.VarChar(100)
+  description                          String           @db.Text
+  difficulty                           Int
+  location_id                          Int?
+  type                                 structures_type?
+  tiles_structures_location_idTotiles  tiles?           @relation("structures_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "structures_ibfk_1")
+  tiles_tiles_structure_idTostructures tiles[]          @relation("tiles_structure_idTostructures")
+
+  @@index([location_id], map: "location_id")
 }
 
 model talismanes {
@@ -478,21 +469,17 @@ model talismanes {
 }
 
 model tiles {
-  id                                   Int        @id @unique(map: "id") @default(autoincrement())
-  name                                 String     @db.VarChar(10)
-  image                                String     @db.VarChar(100)
-  dungeon_id                           Int?
-  city_id                              Int?
-  armor                                armor[]
-  city_city_location_idTotiles         city[]     @relation("city_location_idTotiles")
-  dungeons_dungeons_location_idTotiles dungeons[] @relation("dungeons_location_idTotiles")
-  objects                              objects[]
-  dungeons_tiles_dungeon_idTodungeons  dungeons?  @relation("tiles_dungeon_idTodungeons", fields: [dungeon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tiles_ibfk_1")
-  city_tiles_city_idTocity             city?      @relation("tiles_city_idTocity", fields: [city_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tiles_ibfk_2")
-  weapon                               weapon[]
+  id                                        Int          @id @unique(map: "id") @default(autoincrement())
+  name                                      String       @db.VarChar(10)
+  image                                     String       @db.VarChar(100)
+  structure_id                              Int
+  armor                                     armor[]
+  objects                                   objects[]
+  structures_structures_location_idTotiles  structures[] @relation("structures_location_idTotiles")
+  structures_tiles_structure_idTostructures structures   @relation("tiles_structure_idTostructures", fields: [structure_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tiles_ibfk_1")
+  weapon                                    weapon[]
 
-  @@index([city_id], map: "city_id")
-  @@index([dungeon_id], map: "dungeon_id")
+  @@index([structure_id], map: "structure_id")
 }
 
 model users {
@@ -500,7 +487,7 @@ model users {
   username           String               @db.VarChar(100)
   name               String?              @db.VarChar(100)
   last_name          String               @db.VarChar(100)
-  email              String               @db.VarChar(100)
+  email              String               @unique @db.VarChar(100)
   password           String               @db.VarChar(100)
   playable_character playable_character[]
 }
@@ -519,12 +506,12 @@ model weapon {
   upgrade_cost_lvl3                           Int
   upgrade_cost_lvl4                           Int
   upgrade_cost_lvl5                           Int
-  rarity                                      Int
+  rarity                                      weapon_rarity
   durability                                  Int
   durability_max                              Int
   chipping                                    Float?             @db.Float
   ammo                                        Int?
-  weapon_type                                 Int
+  weapon_type                                 weapon_weapon_type
   location_id                                 Int?
   skill_usage                                 Int?
   dice_needed                                 Int?
@@ -546,10 +533,67 @@ model weapon {
   @@index([upgrade_item_id], map: "upgrade_item_id")
 }
 
+enum objects_rarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+  MYTHIC
+}
+
+enum attacks_weapon_type {
+  RANGE
+  MELEE
+  MAGIC
+}
+
+enum structures_type {
+  CITY
+  DUNGEON
+  CAVE
+}
+
+enum attacks_attack_type {
+  PLAYER2NPC
+  PLAYER2MONSTER
+  PLAYER2PLAYER
+  NPC2PLAYER
+  NPC2NPC
+  NPC2MONSTER
+  MONSTER2PLAYER
+  MONSTER2NPC
+  MONSTER2MONSTER
+}
+
+enum armor_rarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+  MYTHIC
+}
+
+enum weapon_rarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+  MYTHIC
+}
+
 enum spells_spell_type {
   HEALTH
   DAMAGE
   EFFECT
   BUFF
   DEBUFF
+}
+
+enum weapon_weapon_type {
+  RANGE
+  MELEE
+  MAGIC
 }
