@@ -202,7 +202,7 @@ export default ${mapperClassName};
 
   const filePath = path.join(folder, `${modelLower}.mapper.ts`);
   fs.writeFileSync(filePath, fileContent, "utf8");
-  createdMappers.push({} as any ? "" : filePath); // solo para trackear
+//   createdMappers.push({} as any ? "" : filePath); // solo para trackear
   console.log(`Mapper generado: ${filePath}`);
 }
 
