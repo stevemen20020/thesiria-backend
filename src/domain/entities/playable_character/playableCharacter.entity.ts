@@ -1,6 +1,18 @@
-import { UserEntity } from "../user/user.entity";
-
-export interface PlayableCharacter {
+import { AttacksEntity } from "../attacks/attacks.entity";
+import { InventoryEntity } from "../inventory/inventory.entity";
+import { InventoryArmorEntity } from "../inventory_armor/inventoryArmor.entity";
+import { InventoryMagicEntity } from "../inventory_magic/inventoryMagic.entity";
+import { InventoryWeaponEntity } from "../inventory_weapon/inventoryWeapon.entity";
+import { MissionJournalEntity } from "../mission_journal/missionJournal.entity";
+import { UsersEntity } from "../users/users.entity";
+import { RacesEntity } from "../races/races.entity";
+import { AffinityEntity } from "../affinity/affinity.entity";
+import { InventoryArmorEntity } from "../inventory_armor/inventoryArmor.entity";
+import { InventoryWeaponEntity } from "../inventory_weapon/inventoryWeapon.entity";
+import { HakiTypesEntity } from "../haki_types/hakiTypes.entity";
+import { DevilFruitEntity } from "../devil_fruit/devilFruit.entity";
+import { PlayableCharacterJournalEntity } from "../playable_character_journal/playableCharacterJournal.entity";
+export interface PlayableCharacterEntity {
   id: number;
   user_id: number;
   name: string;
@@ -22,32 +34,30 @@ export interface PlayableCharacter {
   charisma: number;
   wisdom: number;
   affinity_id: number;
-  chronicler_status: number; // 0 o 1, como booleano tinyint
+  chronicler_status: number;
   image_reference?: string;
   armor_id?: number;
   weapon_id?: number;
   haki_level?: number;
   haki_type_id?: number;
   devil_fruit_id?: number;
-  devil_fruit_awakening?: number; // tinyint
+  devil_fruit_awakening?: number;
   money?: number;
   health?: number;
   max_health?: number;
   active_max_health?: number;
-
-  // Relaciones
-//   attacks: Attack[];
-//   inventory: Inventory[];
-//   inventory_armor_inventory_armor_id_userToplayable_character: InventoryArmor[];
-//   inventory_magic: InventoryMagic[];
-//   inventory_weapon_inventory_weapon_id_userToplayable_character: InventoryWeapon[];
-//   mission_journal: MissionJournal[];
-  users: UserEntity;
-//   races: Race;
-//   affinity: Affinity;
-//   inventory_armor_playable_character_armor_idToinventory_armor?: InventoryArmor;
-//   inventory_weapon_playable_character_weapon_idToinventory_weapon?: InventoryWeapon;
-//   haki_types?: HakiType;
-//   devil_fruit?: DevilFruit;
-//   playable_character_journal: PlayableCharacterJournal[];
+  attacks?: AttacksEntity[];
+  inventory?: InventoryEntity[];
+  inventory_armor_inventory_armor_id_userToplayable_character?: InventoryArmorEntity[];
+  inventory_magic?: InventoryMagicEntity[];
+  inventory_weapon_inventory_weapon_id_userToplayable_character?: InventoryWeaponEntity[];
+  mission_journal?: MissionJournalEntity[];
+  users?: UsersEntity;
+  races?: RacesEntity;
+  affinity?: AffinityEntity;
+  inventory_armor_playable_character_armor_idToinventory_armor?: InventoryArmorEntity;
+  inventory_weapon_playable_character_weapon_idToinventory_weapon?: InventoryWeaponEntity;
+  haki_types?: HakiTypesEntity;
+  devil_fruit?: DevilFruitEntity;
+  playable_character_journal?: PlayableCharacterJournalEntity[];
 }

@@ -1,0 +1,30 @@
+import { spells_spell_type } from "../../enums";
+import { InventoryMagicEntity } from "../inventory_magic/inventoryMagic.entity";
+import { ObjectsEntity } from "../objects/objects.entity";
+import { EffectsEntity } from "../effects/effects.entity";
+import { SkillUsageEntity } from "../skill_usage/skillUsage.entity";
+export interface SpellsEntity {
+  id: number;
+  name: string;
+  description: string;
+  id_element: number;
+  max_uses: number;
+  is_group: number;
+  upgrade_item_id: number;
+  upgrade_cost_lvl2: number;
+  upgrade_cost_lvl3: number;
+  upgrade_cost_lvl4: number;
+  upgrade_cost_lvl5: number;
+  hit_points_lvl_1: number;
+  hit_points_lvl_2: number;
+  hit_points_lvl_3: number;
+  hit_points_lvl_4: number;
+  hit_points_lvl_5: number;
+  spell_type: spells_spell_type;
+  skill_usage?: number;
+  effect?: number;
+  inventory_magic?: InventoryMagicEntity[];
+  objects?: ObjectsEntity;
+  effects?: EffectsEntity;
+  skill_usage_spells_skill_usageToskill_usage?: SkillUsageEntity;
+}

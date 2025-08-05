@@ -1,0 +1,31 @@
+import { objects_rarity } from "../../enums";
+import { ArmorEntity } from "../armor/armor.entity";
+import { InventoryEntity } from "../inventory/inventory.entity";
+import { LoottablesEntity } from "../loottables/loottables.entity";
+import { NpcInventoryEntity } from "../npc_inventory/npcInventory.entity";
+import { ElementsEntity } from "../elements/elements.entity";
+import { SkillUsageEntity } from "../skill_usage/skillUsage.entity";
+import { TilesEntity } from "../tiles/tiles.entity";
+import { SpellsEntity } from "../spells/spells.entity";
+import { WeaponEntity } from "../weapon/weapon.entity";
+export interface ObjectsEntity {
+  id: number;
+  name: string;
+  element_id?: number;
+  rarity: objects_rarity;
+  skill_usage_id?: number;
+  dice_needed?: number;
+  location_id?: number;
+  description: string;
+  price_sell: number;
+  price_buy: number;
+  armor?: ArmorEntity[];
+  inventory?: InventoryEntity[];
+  loottables?: LoottablesEntity[];
+  npc_inventory?: NpcInventoryEntity[];
+  elements?: ElementsEntity;
+  skill_usage?: SkillUsageEntity;
+  tiles?: TilesEntity;
+  spells?: SpellsEntity[];
+  weapon?: WeaponEntity[];
+}
