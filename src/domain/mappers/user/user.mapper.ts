@@ -12,7 +12,7 @@ export class UserMapper {
       lastName: user.last_name,
       email: user.email,
 
-      // playableCharacter: user.playable_character ? user.playable_character : undefined
+      playableCharacter: user.playable_character ? user.playable_character : undefined
     };
 
     return userMapped
