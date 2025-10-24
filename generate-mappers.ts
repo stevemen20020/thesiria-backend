@@ -2,10 +2,12 @@
 /**
  * generate-mappers.ts
  *
+ * Versión con límite de profundidad de includes.
+ *
  * Uso:
  *   npx ts-node tools/generate-mappers.ts
  *
- * Ajustes al inicio del archivo para adaptar rutas si las tuyas difieren.
+ * Ajusta rutas al inicio si es necesario.
  */
 
 import * as fs from "fs";
@@ -14,7 +16,11 @@ import * as path from "path";
 const ROOT = process.cwd();
 const PRISMA_SCHEMA = path.join(ROOT, "prisma", "schema.prisma");
 const MAPPERS_BASE = path.join(ROOT, "src", "domain", "mappers");
-const ENTITIES_BASE_RELATIVE = "../entities"; // used to import entities relatively from mapper file
+const ENTITIES_BASE_RELATIVE = "../../entities"; // used to import entities relatively from mapper file
+
+// === CONFIG ===
+const MAX_INCLUDE_DEPTH = 3; // <- cambia esto si quieres otro límite
+// ==============
 
 if (!fs.existsSync(PRISMA_SCHEMA)) {
   console.error("No se encontró prisma/schema.prisma en la raíz del proyecto.");
@@ -44,7 +50,7 @@ while ((m = modelRegex.exec(schema)) !== null) {
   const lines = body
     .split("\n")
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith("//") && !l.startsWith("@@") && !l.startsWith("@@"));
+    .filter((l) => l && !l.startsWith("//") && !l.startsWith("@@") && !l.startsWith("@"));
 
   const fields: FieldInfo[] = lines
     .map((line) => {
@@ -55,7 +61,7 @@ while ((m = modelRegex.exec(schema)) !== null) {
       let ftype = tokens[1];
       const isArray = ftype.endsWith("[]");
       const cleanType = isArray ? ftype.replace(/\[\]$/, "") : ftype;
-      const isOptional = ftype.endsWith("?") || ftype.endsWith("?");
+      const isOptional = cleanType.endsWith("?");
       const typeName = cleanType.replace(/\?$/, "");
       return {
         name: fname,
@@ -86,30 +92,45 @@ const PRISMA_SCALARS = new Set([
   "BigInt",
 ]);
 
-// --- Función que construye el objeto "include" recursivamente para un modelo ---
-// Devuelve una string con la estructura TS literal del include.
-// Evita ciclos usando visitedSet (contiene nombres de modelos ya incluidos en el chain).
-function buildIncludeLiteral(modelName: string, visited = new Set<string>()): string {
-  if (visited.has(modelName)) {
-    return "true"; // romper ciclos: simplemente incluye true
+/**
+ * Construye el literal TS para include recursivo con:
+ * - límite de profundidad MAX_INCLUDE_DEPTH
+ * - protección contra ciclos (visited)
+ *
+ * Devuelve una string con la estructura del include (ej: "{ relA: { include: { relB: true }}}")
+ * Si no hay relaciones devuelve "true"
+ *
+ * Importante: si inner === "true" se emite `relName?: true` (no `{ include: true }`)
+ */
+function buildIncludeLiteral(modelName: string, currentDepth = 0, visited = new Set<string>()): string {
+  // Si ya llegamos al límite, devolvemos la hoja 'true'
+  if (currentDepth >= MAX_INCLUDE_DEPTH) {
+    return "true";
   }
-  visited.add(modelName);
+  // Romper ciclos
+  if (visited.has(modelName)) {
+    return "true";
+  }
 
   const model = models[modelName];
   if (!model) return "true";
 
-  const relationFields = model.fields.filter(
-    (f) => modelNames.includes(f.typeName) // si el tipo coincide con otro model -> relación
-  );
+  // copiamos visited para ramas independientes
+  const nextVisited = new Set(visited);
+  nextVisited.add(modelName);
 
+  const relationFields = model.fields.filter((f) => modelNames.includes(f.typeName));
   if (relationFields.length === 0) return "true";
 
   const parts = relationFields.map((f) => {
-    // Si es relación a otro modelo, incluir recursivamente su include
-    const inner = buildIncludeLiteral(f.typeName, new Set(visited));
-    // si la relación es una array, tiene sentido incluir como include: true (pero
-    // usamos include:{ include: ... } igualmente)
-    return `${f.name}: { include: ${inner} }`;
+    const inner = buildIncludeLiteral(f.typeName, currentDepth + 1, nextVisited);
+    // Si inner es "true", debemos emitir `rel?: true` (Prisma acepta booleano)
+    // Si inner es un objeto literal, emitimos `rel?: { include: <obj> }`
+    if (inner.trim() === "true") {
+      return `${f.name}?: true`;
+    } else {
+      return `${f.name}?: { include: ${inner} }`;
+    }
   });
 
   return `{ ${parts.join(", ")} }`;
@@ -141,25 +162,24 @@ for (const modelName of modelNames) {
   // Para entityToPrisma: sólo campos escalares (ignoramos relaciones)
   const entityToPrismaLines: string[] = [];
   scalarFields.forEach((f) => {
-    // omitimos campos especiales como id autoincrement? los dejamos mapeados igualmente
     const src = camel(f.name);
+    // const src = f.name
     const dest = f.name;
-    // Se consideran nulos: si el tipo tiene ? o es optional -> asignar ?? null cuando sea necesario
-    // pero para simplicidad, asignamos directamente.
-    entityToPrismaLines.push(`      ${dest}: ${src} as any,`);
+    entityToPrismaLines.push(`      ${dest}: entity.${src} as any,`);
   });
 
   // prismaToEntity mapping: mapear campos a entity props (camelCase).
   const prismaToEntityLines: string[] = scalarFields.map((f) => {
     const dest = camel(f.name);
     const src = `model.${f.name}`;
-    // si tipo es Int y el campo id -> lo convertimos a string (ejemplo en tu snippet)
     if (f.name.toLowerCase() === "id" && f.typeName === "Int") {
-      return `      ${dest}: ${src} !== null && ${src} !== undefined ? ${src}.toString() : undefined,`;
+      return `      ${dest}: ${src} !== null && ${src} !== undefined ? ${src}.toString() : '',`;
     }
-    // DateTime -> model.field ? model.field.toISOString() : undefined  (evitamos forzar)
+    if (f.typeName === "String" || f.typeName === "Float" || f.typeName === 'Int') {
+      return `      ${dest}: ${src} !== null && ${src} !== undefined ? ${src}.toString() : '',`;
+    }
     if (f.typeName === "DateTime") {
-      return `      ${dest}: ${src} ? ${src} : undefined,`;
+      return `      ${dest}: ${src} ? ${src} : '',`;
     }
     return `      ${dest}: ${src} !== undefined ? ${src} : undefined,`;
   });
@@ -171,7 +191,7 @@ for (const modelName of modelNames) {
     return `      ${dest}: model.${f.name} ? model.${f.name} : undefined,`;
   });
 
-  const prismaImportModel = modelName; // el type exportado por @prisma/client usa el mismo nombre del model
+  const prismaImportModel = modelName;
   const fileContent = `// Auto-generated by tools/generate-mappers.ts
 import { ${prismaImportModel}, Prisma } from "@prisma/client";
 import { ${entityTypeName} } from "${path.posix.join(
@@ -202,7 +222,7 @@ export default ${mapperClassName};
 
   const filePath = path.join(folder, `${modelLower}.mapper.ts`);
   fs.writeFileSync(filePath, fileContent, "utf8");
-//   createdMappers.push({} as any ? "" : filePath); // solo para trackear
+  createdMappers.push(filePath);
   console.log(`Mapper generado: ${filePath}`);
 }
 

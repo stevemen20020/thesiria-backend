@@ -1,8 +1,8 @@
 export interface TalismanesEntity {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  type: number;
-  cooldown?: number;
-  discovered: number;
+  type: string;
+  cooldown?: string;
+  discovered: string;
 }

@@ -90,7 +90,7 @@ while ((match = modelRegex.exec(schema)) !== null) {
       tsType = type;
       usedEnums.add(type);
     } else if (["Int", "Float", "Decimal"].includes(type)) {
-      tsType = "number";
+      tsType = "string";
     } else if (type === "String") {
       tsType = "string";
     } else if (type === "Boolean") {
@@ -111,7 +111,7 @@ while ((match = modelRegex.exec(schema)) !== null) {
     const optionalMark = isOptional || isRelation ? "?" : "";
     const fieldType = isArray ? `${tsType}[]` : tsType;
 
-    entityFields.push(`  ${name}${optionalMark}: ${fieldType};`);
+    entityFields.push(`  ${toCamelCase(name)}${optionalMark}: ${fieldType};`);
   }
 
   const entityDir = path.join(ENTITY_BASE, modelName);

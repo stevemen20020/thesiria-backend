@@ -1,10 +1,10 @@
 import { PlayableCharacterEntity } from "../playable_character/playableCharacter.entity";
 export interface UsersEntity {
-  id: number;
-  username: string;
+  id: string;
+  userName: string;
   name?: string;
-  last_name: string;
+  lastName: string;
   email: string;
   password: string;
-  playable_character?: PlayableCharacterEntity[];
+  playableCharacter?: PlayableCharacterEntity[];
 }

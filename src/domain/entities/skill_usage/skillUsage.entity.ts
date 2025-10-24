@@ -6,13 +6,13 @@ import { ObjectsEntity } from "../objects/objects.entity";
 import { SpellsEntity } from "../spells/spells.entity";
 import { WeaponEntity } from "../weapon/weapon.entity";
 export interface SkillUsageEntity {
-  id: number;
+  id: string;
   name: string;
-  armor_armor_skill_usageToskill_usage?: ArmorEntity[];
-  attacks_attacks_skill_usageToskill_usage?: AttacksEntity[];
-  devil_fruit?: DevilFruitEntity[];
-  haki_types?: HakiTypesEntity[];
+  armorArmorSkillUsageToskillUsage?: ArmorEntity[];
+  attacksAttacksSkillUsageToskillUsage?: AttacksEntity[];
+  devilFruit?: DevilFruitEntity[];
+  hakiTypes?: HakiTypesEntity[];
   objects?: ObjectsEntity[];
-  spells_spells_skill_usageToskill_usage?: SpellsEntity[];
-  weapon_weapon_skill_usageToskill_usage?: WeaponEntity[];
+  spellsSpellsSkillUsageToskillUsage?: SpellsEntity[];
+  weaponWeaponSkillUsageToskillUsage?: WeaponEntity[];
 }

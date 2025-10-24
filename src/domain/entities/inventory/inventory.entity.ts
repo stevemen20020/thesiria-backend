@@ -1,10 +1,10 @@
 import { ObjectsEntity } from "../objects/objects.entity";
 import { PlayableCharacterEntity } from "../playable_character/playableCharacter.entity";
 export interface InventoryEntity {
-  id: number;
-  id_playable_character?: number;
-  id_object?: number;
-  quantity?: number;
+  id: string;
+  idPlayableCharacter?: string;
+  idObject?: string;
+  quantity?: string;
   objects?: ObjectsEntity;
-  playable_character?: PlayableCharacterEntity;
+  playableCharacter?: PlayableCharacterEntity;
 }

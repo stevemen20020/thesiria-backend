@@ -1,13 +1,13 @@
 export interface MonsterEntity {
-  id: number;
+  id: string;
   name: string;
-  strength: number;
-  dexterity: number;
-  defense: number;
-  aim: number;
-  speed: number;
-  agility: number;
-  image_reference: string;
-  health: number;
-  max_health: number;
+  strength: string;
+  dexterity: string;
+  defense: string;
+  aim: string;
+  speed: string;
+  agility: string;
+  imageReference: string;
+  health: string;
+  maxHealth: string;
 }

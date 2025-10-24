@@ -1,9 +1,9 @@
 import { MissionsEntity } from "../missions/missions.entity";
 export interface MissionFasesEntity {
-  id: number;
-  id_mission: number;
+  id: string;
+  idMission: string;
   description: string;
-  fase: number;
-  active: number;
+  fase: string;
+  active: string;
   missions?: MissionsEntity;
 }

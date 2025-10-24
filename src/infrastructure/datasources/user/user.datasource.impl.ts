@@ -4,8 +4,8 @@ import { UpdateUserDto } from '../../../domain/dto/user/updateUser.dto';
 import { UserEntity } from '../../../domain/entities/user/user.entity';
 import { prisma } from '../../../data/database';
 import { AppCustomError } from '../../../domain/errors/AppCustom.error';
-import { UserMapper } from '../../../domain/mappers/user/user.mapper';
 import { ErrorMessage } from '../../../domain/errors/Messages.error';
+import UsersMapper from '../../../domain/mappers/users/users.mapper';
 
 export class UserDatasourceImplementation implements UserDatasource{
     async getUserById(id: string): Promise<UserEntity> {
@@ -16,7 +16,7 @@ export class UserDatasourceImplementation implements UserDatasource{
         })
 
         if(!existingUser) throw AppCustomError.badRequest('No user found')
-        return UserMapper.prismaToEntity(existingUser)
+        return UsersMapper.prismaToEntity(existingUser)
     }
     async getUsers(queryParams: SearchUserQueryParamsDto): Promise<[UserEntity[], number]> {
         const { userName, page, limit, } = queryParams
@@ -43,7 +43,7 @@ export class UserDatasourceImplementation implements UserDatasource{
 
         const [total, users] = await Promise.all([userCount, usersFound])
 
-        const userEntities = users.map((user) => UserMapper.prismaToEntity(user))
+        const userEntities = users.map((user) => UsersMapper.prismaToEntity(user))
         return [userEntities, total]
     }
     async updateUser(dto: UpdateUserDto, id: string): Promise<UserEntity> {
@@ -75,7 +75,7 @@ export class UserDatasourceImplementation implements UserDatasource{
             }
         })
 
-        return UserMapper.prismaToEntity(UpdatedUser)
+        return UsersMapper.prismaToEntity(UpdatedUser)
     }
     async deleteUser(id: string): Promise<string> {
         const existingUser = await prisma.users.findFirst({
