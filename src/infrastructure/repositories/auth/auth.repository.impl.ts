@@ -1,9 +1,9 @@
-import { UserEntity } from "../../../domain/entities/user/user.entity";
+import { UsersEntity } from "../../../domain/entities";
 import { AuthRepository } from "../../../domain/repositories/auth/auth.repository";
 import { AuthDatasource } from "../../../domain/datasources/auth/auth.datasource";
 import { LoginUserDto } from "../../../domain/dto/auth/loginUser.dto";
 import { CreateUserDto } from "../../../domain/dto/auth/createUser.dto";
-import { UserWithTokenEntity } from "../../../domain/entities/user/userWithToken.entity";
+import { UsersWithTokenEntity } from "../../../domain/entities/users/usersWithTokenEntity";
 
 
 export class AuthRepositoryImplementation implements AuthRepository {
@@ -11,10 +11,10 @@ export class AuthRepositoryImplementation implements AuthRepository {
     constructor(
         private readonly datasource: AuthDatasource
     ){}
-    login(loginUserDto: LoginUserDto): Promise<UserWithTokenEntity> {
+    login(loginUserDto: LoginUserDto): Promise<UsersWithTokenEntity> {
         return this.datasource.login(loginUserDto)
     }
-    register(registerUserDto: CreateUserDto): Promise<UserEntity> {
+    register(registerUserDto: CreateUserDto): Promise<UsersEntity> {
         return this.datasource.register(registerUserDto)
     }
 }

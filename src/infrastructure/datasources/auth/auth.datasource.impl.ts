@@ -1,17 +1,17 @@
 import { prisma } from '../../../data/database';
 import { AppCustomError } from '../../../domain/errors/AppCustom.error';
-import { UserMapper } from '../../../domain/mappers/user/user.mapper';
+import { UsersMapper } from '../../../domain/mappers';
 import { ErrorMessage } from '../../../domain/errors/Messages.error';
 import { AuthDatasource } from '../../../domain/datasources/auth/auth.datasource';
 import { LoginUserDto } from '../../../domain/dto/auth/loginUser.dto';
-import { UserWithTokenEntity } from '../../../domain/entities/user/userWithToken.entity';
+import { UsersWithTokenEntity } from '../../../domain/entities/users/usersWithTokenEntity';
 import { bcryptAdapter } from '../../../config/bycript.adapter';
 import { JwtAdapter } from '../../../config/jwt.adapter';
 import { CreateUserDto } from '../../../domain/dto/auth/createUser.dto';
-import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { UsersEntity } from '../../../domain/entities';
 
 export class AuthDatasourceImplementation implements AuthDatasource{
-    async login(loginUserDto:LoginUserDto): Promise<UserWithTokenEntity> {
+    async login(loginUserDto:LoginUserDto): Promise<UsersWithTokenEntity> {
         const {email, password} = loginUserDto
 
         const existingUser = await prisma.users.findUnique({
@@ -48,7 +48,7 @@ export class AuthDatasourceImplementation implements AuthDatasource{
 
         if (!token) throw AppCustomError.internalServerError(ErrorMessage["jwtNoCreated"]);
 
-        const userEntity = UserMapper.prismaToEntity(existingUser);
+        const userEntity = UsersMapper.prismaToEntity(existingUser);
 
         return {
             user: userEntity,
@@ -56,7 +56,7 @@ export class AuthDatasourceImplementation implements AuthDatasource{
         };
     }
 
-    async register (registerUserDto:CreateUserDto): Promise<UserEntity> {
+    async register (registerUserDto:CreateUserDto): Promise<UsersEntity> {
         const { username, name, last_name, password, email } = registerUserDto
 
         const existing_email = await prisma.users.findUnique({
@@ -70,14 +70,14 @@ export class AuthDatasourceImplementation implements AuthDatasource{
         const user = await prisma.users.create({
             data:{
                 password:passwordHashed,
-                username,
+                user_name:username,
                 name,
                 last_name,
                 email
             }
         })
 
-        const userEntity = UserMapper.prismaToEntity(user)
+        const userEntity = UsersMapper.prismaToEntity(user)
         return userEntity
     }
     

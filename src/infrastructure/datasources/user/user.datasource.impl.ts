@@ -1,14 +1,14 @@
 import { UserDatasource } from '../../../domain/datasources/user/user.datasource';
 import { SearchUserQueryParamsDto } from '../../../domain/dto/user/searchUserQuery.dto';
 import { UpdateUserDto } from '../../../domain/dto/user/updateUser.dto';
-import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { UsersEntity } from '../../../domain/entities';
 import { prisma } from '../../../data/database';
 import { AppCustomError } from '../../../domain/errors/AppCustom.error';
 import { ErrorMessage } from '../../../domain/errors/Messages.error';
 import UsersMapper from '../../../domain/mappers/users/users.mapper';
 
 export class UserDatasourceImplementation implements UserDatasource{
-    async getUserById(id: string): Promise<UserEntity> {
+    async getUserById(id: string): Promise<UsersEntity> {
         const existingUser = await prisma.users.findUnique({
             where:{
                 id: Number(id),
@@ -18,7 +18,7 @@ export class UserDatasourceImplementation implements UserDatasource{
         if(!existingUser) throw AppCustomError.badRequest('No user found')
         return UsersMapper.prismaToEntity(existingUser)
     }
-    async getUsers(queryParams: SearchUserQueryParamsDto): Promise<[UserEntity[], number]> {
+    async getUsers(queryParams: SearchUserQueryParamsDto): Promise<[UsersEntity[], number]> {
         const { userName, page, limit, } = queryParams
 
         const userCount = prisma.users.count({
@@ -46,7 +46,7 @@ export class UserDatasourceImplementation implements UserDatasource{
         const userEntities = users.map((user) => UsersMapper.prismaToEntity(user))
         return [userEntities, total]
     }
-    async updateUser(dto: UpdateUserDto, id: string): Promise<UserEntity> {
+    async updateUser(dto: UpdateUserDto, id: string): Promise<UsersEntity> {
         const existUser = await prisma.users.findFirst({
             where: {id: Number(id)}
         })
@@ -69,7 +69,7 @@ export class UserDatasourceImplementation implements UserDatasource{
             where:{id: Number(id)},
             data:{
                 name: name ?? undefined,
-                username: userName ?? undefined,
+                user_name: userName ?? undefined,
                 last_name: lastName ?? undefined,
                 email: email ?? undefined
             }
