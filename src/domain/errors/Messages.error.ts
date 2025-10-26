@@ -255,7 +255,8 @@ export const ErrorMessage = {
   BoxesNotFound: "The box does not exist",
   NumberNotValid : "Only whole numbers and decimals are allowed.",
 
-
+  //PLAYABLE CHARACTERS
+  PlayableCharacterNotFound: 'The Playable Character you looked for does not exist.',
 
   //Deafult
   error: "Idk what happened",

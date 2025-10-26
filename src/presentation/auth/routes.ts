@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { UserDatasourceImplementation } from "../../infrastructure/datasources/user/user.datasource.impl";
-import { UserRepositoryImplementation } from "../../infrastructure/repositories/user/user.repository.impl";
 import { AuthController } from "./controller";
 import { AuthDatasourceImplementation } from "../../infrastructure/datasources/auth/auth.datasource.impl";
 import { AuthRepositoryImplementation } from "../../infrastructure/repositories/auth/auth.repository.impl";
