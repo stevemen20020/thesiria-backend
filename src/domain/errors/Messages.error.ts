@@ -257,6 +257,7 @@ export const ErrorMessage = {
 
   //PLAYABLE CHARACTERS
   PlayableCharacterNotFound: 'The Playable Character you looked for does not exist.',
+  PlayableCharacterAlreadyExists: "The playable Character you're trying to create already exists.",
 
   //Deafult
   error: "Idk what happened",

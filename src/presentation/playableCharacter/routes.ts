@@ -15,6 +15,7 @@ export class PlayableCharactersRoutes {
         const controller = new AuthController( repository );
 
         router.get('/:id',controller.getPlayableCharacterById);
+        router.post('/', controller.createPlayableCharacter)
 
         return router
     }

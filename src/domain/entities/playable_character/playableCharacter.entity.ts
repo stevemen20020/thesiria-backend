@@ -12,7 +12,7 @@ import { DevilFruitEntity } from "../devil_fruit/devilFruit.entity";
 import { PlayableCharacterJournalEntity } from "../playable_character_journal/playableCharacterJournal.entity";
 
 export interface PlayableCharacterEntity {
-  id: string;
+  id?: string;
   userId: string;
   name: string;
   biography?: string;
