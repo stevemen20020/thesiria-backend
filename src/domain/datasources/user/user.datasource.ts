@@ -1,10 +1,10 @@
 import { SearchUserQueryParamsDto } from "../../dto/user/searchUserQuery.dto";
 import { UpdateUserDto } from "../../dto/user/updateUser.dto";
-import { UserEntity } from "../../entities/user/user.entity";
+import { UsersEntity } from "../../entities/users/users.entity";
 
 export interface UserDatasource {
-    getUserById(id: string) :Promise<UserEntity>;
-    getUsers(queryParams: SearchUserQueryParamsDto): Promise<[UserEntity[], number]>
-    updateUser(dto: UpdateUserDto, id:string): Promise<UserEntity>
+    getUserById(id: string) :Promise<UsersEntity>;
+    getUsers(queryParams: SearchUserQueryParamsDto): Promise<[UsersEntity[], number]>
+    updateUser(dto: UpdateUserDto, id:string): Promise<UsersEntity>
     deleteUser(id:string): Promise<string>
 }
