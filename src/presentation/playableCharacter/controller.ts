@@ -7,7 +7,7 @@ export class AuthController {
 
     getPlayableCharacterById = async (req:Request, res:Response, next:NextFunction) => {
         try {
-            const data = await this.repository.getPlayableCharacterById(req.params.id)
+            const data = await this.repository.getPlayableCharacterById(String(req.params.id))
 
             res.json({
                 status:'success',

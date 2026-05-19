@@ -1,7 +1,8 @@
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+
 import { AppCustomError } from "../../domain/errors/AppCustom.error";
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import { PrismaClientValidationError } from "../../generated/prisma/internal/prismaNamespace";
 export const exceptionMiddleware = async (
     error: unknown,
     req: Request,

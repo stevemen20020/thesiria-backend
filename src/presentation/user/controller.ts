@@ -34,7 +34,7 @@ export class UserController {
             const { id } = req.params
 
             const data = await this.repository.getUserById(
-                id
+                String(id)
             )
 
             res.json({
@@ -55,7 +55,7 @@ export class UserController {
 
             const data = await this.repository.updateUser(
                 updateBody,
-                id
+                String(id)
             )
 
             res.json({
@@ -73,7 +73,7 @@ export class UserController {
             const { id } = req.params
 
             const data = await this.repository.deleteUser(
-                id
+                String(id)
             )
 
             res.json({
