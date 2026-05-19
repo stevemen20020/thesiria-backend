@@ -1,133 +1,142 @@
-import { RacesDatasource } from '../../../domain/datasources/races/races.datasource';
-import { SearchRacesQueryParamsDto } from '../../../domain/dto/races/searchRacesQuery.dto';
-import { UpdateRacesDto } from '../../../domain/dto/races/updateRaces.dto';
-import { RacesesEntity } from '../../../domain/entities';
-import { prisma } from '../../../data/database';
-import { AppCustomError } from '../../../domain/errors/AppCustom.error';
-import RacesesMapper from '../../../domain/mappers/races/raceses.mapper';
+import { SearchRacesQueryParamsDto } from "../../../domain/dto/races/searchRacesQuery.dto";
+import { UpdateRacesDto } from "../../../domain/dto/races/updateRaces.dto";
 
-export class RacesDatasourceImplementation implements RacesDatasource {
+import { prisma } from "../../../data/database";
+import { AppCustomError } from "../../../domain/errors/AppCustom.error";
+import { RacesMapper } from "../../../domain/mappers";
+import { RacesEntity } from "../../../domain/entities";
+import { racesDatasource } from "../../../domain/datasources/races/races.datasource";
+import { CreateRacesDto } from "../../../domain/dto/races/createRaces.dto";
 
-    async getRacesById(id: string): Promise<RacesesEntity> {
+export class RacesDatasourceImplementation implements racesDatasource {
+  async getRacesById(id: string): Promise<RacesEntity> {
+    const existingRaces = await prisma.races.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
 
-        const existingRaces =
-            await prisma.races.findUnique({
-                where:{
-                    id: id,
-                }
-            })
-
-        if(!existingRaces) {
-            throw AppCustomError.badRequest(
-                'No races found'
-            )
-        }
-
-        return RacesesMapper.prismaToEntity(
-            existingRaces
-        )
+    if (!existingRaces) {
+      throw AppCustomError.badRequest("No races found");
     }
 
-    async getRaceses(
-        queryParams: SearchRacesQueryParamsDto
-    ): Promise<[RacesesEntity[], number]> {
+    return RacesMapper.prismaToEntity(existingRaces);
+  }
 
-        const { page, limit } = queryParams
+  async createRaces(dto: CreateRacesDto): Promise<RacesEntity> {
+    const {
+      race,
+      strengthBonus,
+      dexterityBonus,
+      defenseBonus,
+      aimBonus,
+      visionBonus,
+      speedBonus,
+      handcraftBonus,
+      agilityBonus,
+      charismaBonus,
+      wisdomBonus,
+    } = dto;
 
-        const racesCount =
-            prisma.races.count()
+    const affinity = await prisma.races.create({
+      data: {
+        race,
+        strength_bonus: Number(strengthBonus),
+        dexterity_bonus: Number(dexterityBonus),
+        defense_bonus: Number(defenseBonus),
+        aim_bonus: Number(aimBonus),
+        vision_bonus: Number(visionBonus),
+        speed_bonus: Number(speedBonus),
+        handcraft_bonus: Number(handcraftBonus),
+        agility_bonus: Number(agilityBonus),
+        charisma_bonus: Number(charismaBonus),
+        wisdom_bonus: Number(wisdomBonus),
+      },
+    });
 
-        const racesFound =
-            prisma.races.findMany({
-                take: Number(limit),
-                skip: (
-                    (Number(page) - 1) *
-                    Number(limit)
-                )
-            })
+    const affinityEntity = RacesMapper.prismaToEntity(affinity);
+    return affinityEntity;
+  }
 
-        const [total, raceses] =
-            await Promise.all([
-                racesCount,
-                racesFound
-            ])
+  async getRaces(
+    queryParams: SearchRacesQueryParamsDto,
+  ): Promise<[RacesEntity[], number]> {
+    const { page, limit } = queryParams;
 
-        const racesEntities =
-            raceses.map(
-                (races) =>
-                    RacesesMapper.prismaToEntity(
-                        races
-                    )
-            )
+    const racesCount = prisma.races.count();
 
-        return [
-            racesEntities,
-            total
-        ]
+    const racesFound = prisma.races.findMany({
+      take: Number(limit),
+      skip: (Number(page) - 1) * Number(limit),
+    });
+
+    const [total, raceses] = await Promise.all([racesCount, racesFound]);
+
+    const racesEntities = raceses.map((races) =>
+      RacesMapper.prismaToEntity(races),
+    );
+
+    return [racesEntities, total];
+  }
+
+  async updateRaces(dto: UpdateRacesDto, id: string): Promise<RacesEntity> {
+    const existingRaces = await prisma.races.findFirst({
+      where: { id: Number(id) },
+    });
+
+    if (!existingRaces) {
+      throw AppCustomError.notFound("Races not found");
     }
 
-    async updateRaces(
-        dto: UpdateRacesDto,
-        id: string
-    ): Promise<RacesesEntity> {
+    const {
+      race,
+      strengthBonus,
+      dexterityBonus,
+      defenseBonus,
+      aimBonus,
+      visionBonus,
+      speedBonus,
+      handcraftBonus,
+      agilityBonus,
+      charismaBonus,
+      wisdomBonus,
+    } = dto;
 
-        const existingRaces =
-            await prisma.races.findFirst({
-                where:{ id }
-            })
+    let data: any = {};
 
-        if(!existingRaces) {
-            throw AppCustomError.notFound(
-                'Races not found'
-            )
-        }
+    if (race) data.race = race;
+    if (strengthBonus) data.strength_bonus = Number(strengthBonus);
+    if (dexterityBonus) data.dexterity_bonus = Number(dexterityBonus);
+    if (defenseBonus) data.defense_bonus = Number(defenseBonus);
+    if (aimBonus) data.aim_bonus = Number(aimBonus);
+    if (visionBonus) data.vision_bonus = Number(visionBonus);
+    if (speedBonus) data.speed_bonus = Number(speedBonus);
+    if (handcraftBonus) data.handcraft_bonus = Number(handcraftBonus);
+    if (agilityBonus) data.agility_bonus = Number(agilityBonus);
+    if (charismaBonus) data.charisma_bonus = Number(charismaBonus);
+    if (wisdomBonus) data.wisdom_bonus = Number(wisdomBonus);
 
-        const {
-            race, strength_bonus, dexterity_bonus, defense_bonus, aim_bonus, vision_bonus, speed_bonus, handcraft_bonus, agility_bonus, charisma_bonus, wisdom_bonus
-        } = dto
+    const updatedRaces = await prisma.races.update({
+      where: { id: Number(id) },
+      data: data,
+    });
 
-        const updatedRaces =
-            await prisma.races.update({
-                where:{ id },
-                data:{
-                race: race ?? undefined,
-                strength_bonus: strength_bonus ?? undefined,
-                dexterity_bonus: dexterity_bonus ?? undefined,
-                defense_bonus: defense_bonus ?? undefined,
-                aim_bonus: aim_bonus ?? undefined,
-                vision_bonus: vision_bonus ?? undefined,
-                speed_bonus: speed_bonus ?? undefined,
-                handcraft_bonus: handcraft_bonus ?? undefined,
-                agility_bonus: agility_bonus ?? undefined,
-                charisma_bonus: charisma_bonus ?? undefined,
-                wisdom_bonus: wisdom_bonus ?? undefined,
-                }
-            })
+    return RacesMapper.prismaToEntity(updatedRaces);
+  }
 
-        return RacesesMapper.prismaToEntity(
-            updatedRaces
-        )
+  async deleteRaces(id: string): Promise<string> {
+    const existingRaces = await prisma.races.findFirst({
+      where: { id: Number(id) },
+    });
+
+    if (!existingRaces) {
+      throw AppCustomError.notFound("Races not found");
     }
 
-    async deleteRaces(
-        id: string
-    ): Promise<string> {
+    await prisma.races.delete({
+      where: { id: Number(id) },
+    });
 
-        const existingRaces =
-            await prisma.races.findFirst({
-                where:{ id }
-            })
-
-        if(!existingRaces) {
-            throw AppCustomError.notFound(
-                'Races not found'
-            )
-        }
-
-        await prisma.races.delete({
-            where:{ id }
-        })
-
-        return 'Races deleted successfully'
-    }
+    return "Races deleted successfully";
+  }
 }

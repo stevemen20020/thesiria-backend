@@ -1,10 +1,12 @@
+import { CreateRacesDto } from "../../dto/races/createRaces.dto";
 import { SearchRacesQueryParamsDto } from "../../dto/races/searchRacesQuery.dto";
 import { UpdateRacesDto } from "../../dto/races/updateRaces.dto";
-import { racesesEntity } from "../../entities/races/raceses.entity";
+import { RacesEntity } from "../../entities";
 
 export interface racesRepository {
-    getRacesById(id: string) :Promise<racesesEntity>;
-    getRaceses(queryParams: SearchRacesQueryParamsDto): Promise<[racesesEntity[], number]>
-    updateRaces(dto: UpdateRacesDto, id:string): Promise<racesesEntity>
+    getRacesById(id: string) :Promise<RacesEntity>;
+    getRaceses(queryParams: SearchRacesQueryParamsDto): Promise<[RacesEntity[], number]>
+    updateRaces(dto: UpdateRacesDto, id:string): Promise<RacesEntity>
     deleteRaces(id:string): Promise<string>
+    createRaces(dto: CreateRacesDto): Promise<RacesEntity>
 }
