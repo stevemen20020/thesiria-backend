@@ -1,5 +1,6 @@
 import { createUserSchema } from "./createUser.dto";
 import { loginUserSchema } from "./loginUser.dto";
+import { registerUserSchema } from "./registerUser.dto";
 
 
 export class AuthDtoValidator {
@@ -9,5 +10,9 @@ export class AuthDtoValidator {
 
     static validateRegisterUserDto ( props:unknown ) {
         return createUserSchema.parse(props)
+    }
+
+    static validateRegisterDto ( props:unknown ) {
+        return registerUserSchema.parse(props)
     }
 }

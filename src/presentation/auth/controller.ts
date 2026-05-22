@@ -25,7 +25,7 @@ export class AuthController {
 
     register = async (req:Request, res:Response, next:NextFunction) => {
         try {
-            const registerBody = AuthDtoValidator.validateRegisterUserDto(req.body)
+            const registerBody = AuthDtoValidator.validateRegisterDto(req.body)
 
             const data = await this.repository.register(
                 registerBody

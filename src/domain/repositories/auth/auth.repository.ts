@@ -1,10 +1,9 @@
-import { CreateUserDto } from "../../dto/auth/createUser.dto";
 import { LoginUserDto } from "../../dto/auth/loginUser.dto";
-import { UsersEntity } from "../../entities";
+import { RegisterUserDto } from "../../dto/auth/registerUser.dto";
 import { UsersWithTokenEntity } from "../../entities/users/usersWithTokenEntity";
 
 
 export interface AuthRepository {
-    register(dto: CreateUserDto):Promise <UsersEntity>
+    register(dto: RegisterUserDto):Promise <UsersWithTokenEntity>
     login(dto: LoginUserDto): Promise<UsersWithTokenEntity>
 }
