@@ -17,7 +17,6 @@ export class UserRepositoryImplementation implements UserRepository {
         return this.datasource.getUsers(queryParams)
     }
     updateUser(dto: UpdateUserDto, id: string): Promise<UsersEntity> {
-        console.log('Entering the hell zone')
         return this.datasource.updateUser(dto, id)
     }
     deleteUser(id: string): Promise<string> {
