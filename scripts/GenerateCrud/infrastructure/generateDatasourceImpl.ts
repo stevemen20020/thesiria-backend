@@ -1,68 +1,51 @@
-
 import { upperCaseFirst } from "../helpers/upperCaseFirst";
-import { pluralize } from "../helpers/pluralize";
 import { PrismaModel } from "../generate-crud.types";
 import { lowercaseFirst } from "../helpers/lowerCaseFirst";
 import { isScalarType } from "../generate-crud.constants";
 import { toPrismaModelName } from "../helpers/toPrismaModelName";
 
-export const generateDatasourceImpl = (
-  model: PrismaModel
-) => {
+export const generateDatasourceImpl = (model: PrismaModel) => {
+  const upperModel = upperCaseFirst(model.name);
 
-  const upperModel =
-    upperCaseFirst(model.name);
+  const lowerModel = lowercaseFirst(model.name);
 
-  const lowerModel =
-    lowercaseFirst(model.name);
-
-  const pluralModel =
-    pluralize(upperModel);
-
-  const prismaModel =
-    toPrismaModelName(model.name);
+  const prismaModel = toPrismaModelName(model.name);
 
   const editableFields = model.fields
-    .filter((field) =>
-      isScalarType(field.type)
-    )
-    .filter(
-      (field) =>
-        ![
-          "id",
-          "createdAt",
-          "updatedAt",
-        ].includes(field.name)
-    );
+    .filter((field) => isScalarType(field.type))
+    .filter((field) => !["id", "createdAt", "updatedAt"].includes(field.name));
 
-  const dtoDestructuring =
-    editableFields
-      .map((field) => field.name)
-      .join(", ");
+  const dtoDestructuring = editableFields.map((field) => field.name).join(", ");
 
-  const updateData =
-    editableFields
-      .map((field) => {
-        return `                ${field.name}: ${field.name} ?? undefined,`;
-      })
-      .join("\n");
+  const updateData = editableFields
+    .map((field) => {
+      return `        if (${field.name} !== undefined) data.${field.name} = ${field.name}`;
+    })
+    .join("\n");
+
+  const createData = editableFields
+    .map((field) => {
+      return `                ${field.name}: ${field.name},`;
+    })
+    .join("\n");
 
   return `import { ${upperModel}Datasource } from '../../../domain/datasources/${lowerModel}/${lowerModel}.datasource';
 import { Search${upperModel}QueryParamsDto } from '../../../domain/dto/${lowerModel}/search${upperModel}Query.dto';
 import { Update${upperModel}Dto } from '../../../domain/dto/${lowerModel}/update${upperModel}.dto';
-import { ${pluralModel}Entity } from '../../../domain/entities';
+import { Create${upperModel}Dto } from '../../../domain/dto/${lowerModel}/create${upperModel}.dto';
+import { ${upperModel}Entity } from '../../../domain/entities';
 import { prisma } from '../../../data/database';
 import { AppCustomError } from '../../../domain/errors/AppCustom.error';
-import ${pluralModel}Mapper from '../../../domain/mappers/${lowerModel}/${pluralModel.toLowerCase()}.mapper';
+import { ${upperModel}Mapper } from '../../../domain/mappers';
 
 export class ${upperModel}DatasourceImplementation implements ${upperModel}Datasource {
 
-    async get${upperModel}ById(id: string): Promise<${pluralModel}Entity> {
+    async get${upperModel}ById(id: string): Promise<${upperModel}Entity> {
 
         const existing${upperModel} =
             await prisma.${prismaModel}.findUnique({
                 where:{
-                    id: id,
+                    id: Number(id),
                 }
             })
 
@@ -72,14 +55,31 @@ export class ${upperModel}DatasourceImplementation implements ${upperModel}Datas
             )
         }
 
-        return ${pluralModel}Mapper.prismaToEntity(
+        return ${upperModel}Mapper.prismaToEntity(
             existing${upperModel}
         )
     }
 
-    async get${pluralModel}(
+    async create${upperModel}(
+      dto: Create${upperModel}Dto,
+    ): Promise<${upperModel}Entity> {
+      const {
+        ${dtoDestructuring}
+      } = dto
+      
+      const ${model.name} = await prisma.${model.name}.create({
+        data:{
+          ${createData}
+        }
+      })
+  
+      const ${model.name}Entity = ${upperModel}Mapper.prismaToEntity(${model.name})
+      return ${model.name}Entity
+    }
+
+    async get${upperModel}(
         queryParams: Search${upperModel}QueryParamsDto
-    ): Promise<[${pluralModel}Entity[], number]> {
+    ): Promise<[${upperModel}Entity[], number]> {
 
         const { page, limit } = queryParams
 
@@ -95,16 +95,16 @@ export class ${upperModel}DatasourceImplementation implements ${upperModel}Datas
                 )
             })
 
-        const [total, ${pluralModel.toLowerCase()}] =
+        const [total, ${model.name.toLowerCase()}] =
             await Promise.all([
                 ${lowerModel}Count,
                 ${lowerModel}Found
             ])
 
         const ${lowerModel}Entities =
-            ${pluralModel.toLowerCase()}.map(
+            ${model.name.toLowerCase()}.map(
                 (${lowerModel}) =>
-                    ${pluralModel}Mapper.prismaToEntity(
+                    ${upperModel}Mapper.prismaToEntity(
                         ${lowerModel}
                     )
             )
@@ -118,11 +118,11 @@ export class ${upperModel}DatasourceImplementation implements ${upperModel}Datas
     async update${upperModel}(
         dto: Update${upperModel}Dto,
         id: string
-    ): Promise<${pluralModel}Entity> {
+    ): Promise<${upperModel}Entity> {
 
         const existing${upperModel} =
             await prisma.${prismaModel}.findFirst({
-                where:{ id }
+                where:{ id:Number(id) }
             })
 
         if(!existing${upperModel}) {
@@ -135,15 +135,17 @@ export class ${upperModel}DatasourceImplementation implements ${upperModel}Datas
             ${dtoDestructuring}
         } = dto
 
+        let data:any = {}
+
+        ${updateData}
+
         const updated${upperModel} =
             await prisma.${prismaModel}.update({
-                where:{ id },
-                data:{
-${updateData}
-                }
+                where:{ id: Number(id) },
+                data
             })
 
-        return ${pluralModel}Mapper.prismaToEntity(
+        return ${upperModel}Mapper.prismaToEntity(
             updated${upperModel}
         )
     }
@@ -154,7 +156,7 @@ ${updateData}
 
         const existing${upperModel} =
             await prisma.${prismaModel}.findFirst({
-                where:{ id }
+                where:{ id:Number(id) }
             })
 
         if(!existing${upperModel}) {
@@ -164,7 +166,7 @@ ${updateData}
         }
 
         await prisma.${prismaModel}.delete({
-            where:{ id }
+            where:{ id:Number(id) }
         })
 
         return '${upperModel} deleted successfully'

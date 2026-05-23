@@ -1,6 +1,5 @@
 import { upperCaseFirst } from "../helpers/upperCaseFirst";
 import { lowercaseFirst } from "../helpers/lowerCaseFirst";
-import { pluralize } from "../helpers/pluralize";
 import { PrismaModel } from "../generate-crud.types";
 
 export const generateRepositoryImpl = (
@@ -13,14 +12,12 @@ export const generateRepositoryImpl = (
   const lowerModel =
     lowercaseFirst(model.name);
 
-  const pluralModel =
-    pluralize(upperModel);
-
   return `import { ${upperModel}Repository } from "../../../domain/repositories/${lowerModel}/${lowerModel}.repository";
 import { ${upperModel}Datasource } from "../../../domain/datasources/${lowerModel}/${lowerModel}.datasource";
-import { ${pluralModel}Entity } from "../../../domain/entities";
+import { ${upperModel}Entity } from "../../../domain/entities";
 import { Search${upperModel}QueryParamsDto } from "../../../domain/dto/${lowerModel}/search${upperModel}Query.dto";
 import { Update${upperModel}Dto } from "../../../domain/dto/${lowerModel}/update${upperModel}.dto";
+import { Create${upperModel}Dto } from "../../../domain/dto/${lowerModel}/create${upperModel}.dto";
 
 export class ${upperModel}RepositoryImplementation implements ${upperModel}Repository {
 
@@ -30,24 +27,31 @@ export class ${upperModel}RepositoryImplementation implements ${upperModel}Repos
 
     get${upperModel}ById(
         id: string
-    ): Promise<${pluralModel}Entity> {
+    ): Promise<${upperModel}Entity> {
 
         return this.datasource.get${upperModel}ById(id)
     }
 
-    get${pluralModel}(
+    get${upperModel}(
         queryParams: Search${upperModel}QueryParamsDto
-    ): Promise<[${pluralModel}Entity[], number]> {
+    ): Promise<[${upperModel}Entity[], number]> {
 
-        return this.datasource.get${pluralModel}(queryParams)
+        return this.datasource.get${upperModel}(queryParams)
     }
 
     update${upperModel}(
         dto: Update${upperModel}Dto,
         id: string
-    ): Promise<${pluralModel}Entity> {
+    ): Promise<${upperModel}Entity> {
 
         return this.datasource.update${upperModel}(dto, id)
+    }
+
+    create${upperModel}(
+        dto: Create${upperModel}Dto
+    ): Promise<${upperModel}Entity> {
+
+        return this.datasource.create${upperModel}(dto)
     }
 
     delete${upperModel}(

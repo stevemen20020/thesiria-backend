@@ -1,23 +1,21 @@
-import { pluralize } from "../helpers/pluralize";
 import { toCamelFolder } from "../helpers/toCamelFolder";
 import { upperCaseFirst } from "../helpers/upperCaseFirst";
 
 export const generateController = (model: string) => {
-  const plural = upperCaseFirst(pluralize(model));
   const upperCaseModel = upperCaseFirst(model)
 
   return `import { NextFunction, Request, Response } from "express";
-import { ${model}Repository } from "../../domain/repositories/${toCamelFolder(
+import { ${upperCaseModel}Repository } from "../../domain/repositories/${toCamelFolder(
     model
   )}/${toCamelFolder(model)}.repository";
 import { ${model}DtoValidator } from "../../domain/dto/${toCamelFolder(
     model
   )}/validator";
 
-export class ${model}Controller {
-    constructor(public readonly repository: ${model}Repository) {}
+export class ${upperCaseModel}Controller {
+    constructor(public readonly repository: ${upperCaseModel}Repository) {}
 
-    get${plural} = async (req:Request, res:Response, next:NextFunction) => {
+    get${upperCaseModel} = async (req:Request, res:Response, next:NextFunction) => {
         try {
             const {page = 1, limit = 10} = req.query as {
                 page?:string | number;
@@ -26,7 +24,7 @@ export class ${model}Controller {
 
             const searchQueryParams = ${model}DtoValidator.validateSearch${upperCaseModel}ParamsQueryDto(req.query)
 
-            const [data, total] = await this.repository.get${plural}(
+            const [data, total] = await this.repository.get${upperCaseModel}(
                 searchQueryParams
             )
 
@@ -35,6 +33,24 @@ export class ${model}Controller {
                 result:data,
                 total:total,
                 totalPages: Math.ceil(total / +limit),
+                message: ':)'
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    create${upperCaseModel} = async (req:Request, res:Response, next:NextFunction) => {
+        try {
+            const registerBody = ${model}DtoValidator.validateCreateDto(req.body)
+            
+            const data = await this.repository.create${upperCaseModel}(
+                registerBody
+            )
+
+            res.json({
+                status:'success',
+                result:data,
                 message: ':)'
             })
         } catch (error) {
