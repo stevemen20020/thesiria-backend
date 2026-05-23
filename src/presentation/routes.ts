@@ -16,7 +16,7 @@ export class AppRoutes {
 
     router.use("/playable-character", AuthMiddleware.jwtMiddleware(), PlayableCharactersRoutes.routes);
     
-    router.use('/affinity', AuthMiddleware.jwtMiddleware(), affinitiesRoutes.routes);
+    router.use('/affinity', affinitiesRoutes.routes);
     
     router.use('/races', racesesRoutes.routes);
 
