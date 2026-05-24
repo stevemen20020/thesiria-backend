@@ -7,8 +7,6 @@ import { LoginUserDto } from '../../../domain/dto/auth/loginUser.dto';
 import { UsersWithTokenEntity } from '../../../domain/entities/users/usersWithTokenEntity';
 import { bcryptAdapter } from '../../../config/bycript.adapter';
 import { JwtAdapter } from '../../../config/jwt.adapter';
-import { CreateUserDto } from '../../../domain/dto/auth/createUser.dto';
-import { UsersEntity } from '../../../domain/entities';
 import { RegisterUserDto } from '../../../domain/dto/auth/registerUser.dto';
 
 export class AuthDatasourceImplementation implements AuthDatasource{
@@ -18,22 +16,6 @@ export class AuthDatasourceImplementation implements AuthDatasource{
         const existingUser = await prisma.users.findUnique({
             where:{
                 email:email
-            }, include: {
-                playable_character: {
-                    include:{
-                        affinity:{ include:{ elements:true } },
-                        inventory_armor_inventory_armor_id_userToplayable_character:true,
-                        inventory:true,
-                        attacks:true,
-                        inventory_armor_playable_character_armor_idToinventory_armor:true,
-                        inventory_magic:true,
-                        inventory_weapon_inventory_weapon_id_userToplayable_character:true,
-                        inventory_weapon_playable_character_weapon_idToinventory_weapon:true,
-                        haki_types:true,
-                        devil_fruit:true,
-                        playable_character_journal:true
-                    }
-                }
             }
         })
 
@@ -51,9 +33,113 @@ export class AuthDatasourceImplementation implements AuthDatasource{
 
         const userEntity = UsersMapper.prismaToEntity(existingUser);
 
+        const userCharacter = await prisma.playable_character.findFirst({
+            where:{
+                user_id: Number(userEntity.id)
+            }, include: {
+                attacks:{
+                    include:{
+                        skill_usage_attacks_skill_usageToskill_usage:true
+                    }
+                },
+                inventory:{
+                    include:{
+                        objects:{
+                            include:{
+                                elements:true
+                            }
+                        }
+                    }
+                },
+                inventory_armor_inventory_armor_id_userToplayable_character:{
+                    include:{
+                        armor:{
+                            include:{
+                                elements:true,
+                                objects:true,
+                                npc:true
+                            }
+                        }
+                    }
+                },
+                inventory_armor_playable_character_armor_idToinventory_armor:{
+                    include:{
+                        armor:{
+                            include:{
+
+                                elements:true,
+                                objects:true,
+                                npc:true
+                            }
+                        }
+                    }
+                },
+                inventory_magic:{
+                    include:{
+                        spells:{
+                            include:{
+                                objects:true,
+                                skill_usage_spells_skill_usageToskill_usage:true,
+                                effects:true,
+                            }
+                        }
+                    }
+                },
+                inventory_weapon_inventory_weapon_id_userToplayable_character:{
+                    include:{
+                        weapon:{
+                            include:{
+                                elements:true,
+                                objects:true,
+                                npc:true
+                            }
+                        }
+                    }
+                },
+                inventory_weapon_playable_character_weapon_idToinventory_weapon:{
+                    include:{
+                        weapon:{
+                            include:{
+                                elements:true,
+                                objects:true,
+                                npc:true
+                            }
+                        }
+                    }
+                },
+                races:true,
+                affinity:{
+                    include:{
+                        elements:true
+                    }
+                },
+                haki_types:true,
+                devil_fruit:true,
+                playable_character_journal:{
+                    include:{
+                        npc:true
+                    }
+                },
+                mission_journal:{
+                    include:{
+                        missions:{
+                            include:{
+                                mission_fases:true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        if(!userCharacter) throw AppCustomError.internalServerError(ErrorMessage["PlayableCharacterNotFound"]);
+
+        const playableCharacterCreatedEntity = PlayableCharacterMapper.prismaToEntity(userCharacter)
+
         return {
             user: userEntity,
             token: token,
+            playableCharacter: playableCharacterCreatedEntity
         };
     }
 
