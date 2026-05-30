@@ -471,7 +471,8 @@ model talismanes {
 model tiles {
   id                                        Int          @id @unique(map: "id") @default(autoincrement())
   name                                      String       @db.VarChar(10)
-  image                                     String       @db.VarChar(100)
+  image                                     String?      @db.VarChar(100)
+  image_public_id                           String?      @db.VarChar(100)
   structure_id                              Int
   armor                                     armor[]
   objects                                   objects[]

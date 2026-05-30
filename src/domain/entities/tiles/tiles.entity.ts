@@ -6,6 +6,7 @@ export interface TilesEntity {
   id: string;
   name: string;
   image: string;
+  image_public_id?:string;
   structureId: string;
   armor?: ArmorEntity[];
   objects?: ObjectsEntity[];

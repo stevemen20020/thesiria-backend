@@ -1,3 +1,5 @@
+import { structuresRoutes } from "./structures/routes";
+import { tilesRoutes } from "./tiles/routes";
 import { missionsRoutes } from "./missions/routes";
 import { elementsRoutes } from "./elements/routes";
 import { racesesRoutes } from "./races/routes";
@@ -24,6 +26,10 @@ export class AppRoutes {
 
     router.use('/missions', AuthMiddleware.jwtMiddleware(), missionsRoutes.routes);
 
-    return router;
+    router.use('/tiles', AuthMiddleware.jwtMiddleware(), tilesRoutes.routes);
+
+    router.use('/structures', AuthMiddleware.jwtMiddleware(), structuresRoutes.routes);
+
+return router;
   }
 }
