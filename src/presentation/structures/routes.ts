@@ -18,6 +18,7 @@ export class structuresRoutes {
         router.put('/:id', controller.updateStructures);
         router.delete('/:id', controller.deleteStructures);
         router.post('/', controller.createStructures);
+        router.post('/selectStructure/:id', controller.selectStructure)
 
         return router
     }

@@ -1,6 +1,8 @@
 import express, { json, urlencoded } from "express";
 import cors from "cors";
 import { AppRoutes } from "./routes";
+import { SocketServer } from "../realtime/socket";
+import http from "http";
 
 import { exceptionMiddleware } from "./middlewares";
 
@@ -10,10 +12,13 @@ interface Props {
 
 export class Server {
   public readonly app = express();
+  private readonly server;
   private readonly port: number;
 
   constructor({ port }: Props) {
     this.port = port;
+
+    this.server = http.createServer(this.app);
   }
 
   start() {
@@ -43,7 +48,9 @@ export class Server {
     this.app.use(exceptionMiddleware);
 
     /* Start */
-    this.app.listen(this.port);
+    SocketServer.initialize(this.server);
+    
+    this.server.listen(this.port);
 
     console.log("El servidor ha iniciado en el puerto " + this.port);
   }

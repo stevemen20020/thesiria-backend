@@ -111,8 +111,8 @@ export class StructuresDatasourceImplementation implements StructuresDatasource 
 
         if (name !== undefined) data.name = name
         if (description !== undefined) data.description = description
-        if (difficulty !== undefined) data.difficulty = difficulty
-        if (location_id !== undefined) data.location_id = location_id
+        if (difficulty !== undefined) data.difficulty = Number(difficulty)
+        if (location_id !== undefined) data.location_id = Number(location_id)
 
         const updatedStructures =
             await prisma.structures.update({

@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { StructuresRepository } from "../../domain/repositories/structures/structures.repository";
 import { structuresDtoValidator } from "../../domain/dto/structures/validator";
+import { MapEvents } from "../../realtime/events/map.events";
+import { SessionStateStore } from "../../realtime/state/session.state";
 
 export class StructuresController {
     constructor(public readonly repository: StructuresRepository) {}
@@ -100,6 +102,23 @@ export class StructuresController {
                 result:data,
                 message: ':)'
             })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    selectStructure = async (req:Request, res:Response, next:NextFunction) => {
+        try{
+            const { id } = req.params
+            MapEvents.emitMapChanged( String(id) );
+            SessionStateStore.setActiveMapId(String(id));
+
+            res.json({
+                status:'success',
+                result:{},
+                message: ':)'
+            })
+
         } catch (error) {
             next(error)
         }
