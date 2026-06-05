@@ -4,7 +4,9 @@ export const createStructuresSchema = z.object({
     name: z.string(),
     description: z.string(),
     difficulty: z.string(),
-    location_id: z.string().optional(),
+    locationId: z.string().optional(),
+    horizontalTiles: z.number(),
+    verticalTiles: z.number(),
 })
 
 export type CreateStructuresDto = z.infer<typeof createStructuresSchema>

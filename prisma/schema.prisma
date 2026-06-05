@@ -453,6 +453,8 @@ model structures {
   difficulty                           Int
   location_id                          Int?
   type                                 structures_type?
+  horizontal_tiles                     Int?             @db.TinyInt
+  vertical_tiles                       Int?             @db.TinyInt
   tiles_structures_location_idTotiles  tiles?           @relation("structures_location_idTotiles", fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "structures_ibfk_1")
   tiles_tiles_structure_idTostructures tiles[]          @relation("tiles_structure_idTostructures")
 

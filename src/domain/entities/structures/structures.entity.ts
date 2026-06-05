@@ -6,6 +6,8 @@ export interface StructuresEntity {
   description: string;
   difficulty: string;
   locationId?: string;
+  horizontalTiles: string;
+  verticalTiles: string;
   type?: structures_type;
   tilesStructuresLocationIdTotiles?: TilesEntity;
   tilesTilesStructureIdTostructures?: TilesEntity[];

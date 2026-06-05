@@ -41,13 +41,16 @@ export class TilesDatasourceImplementation implements TilesDatasource {
   async getTiles(
     queryParams: SearchTilesQueryParamsDto,
   ): Promise<[TilesEntity[], number]> {
-    const { page, limit } = queryParams;
+    const { page, limit, structureId } = queryParams;
 
     const tilesCount = prisma.tiles.count();
 
     const tilesFound = prisma.tiles.findMany({
       take: Number(limit),
       skip: (Number(page) - 1) * Number(limit),
+      where:{
+        structure_id: structureId
+      }
     });
 
     const [total, tiles] = await Promise.all([tilesCount, tilesFound]);

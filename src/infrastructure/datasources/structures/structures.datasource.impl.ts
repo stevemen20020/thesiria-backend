@@ -33,7 +33,7 @@ export class StructuresDatasourceImplementation implements StructuresDatasource 
       dto: CreateStructuresDto,
     ): Promise<StructuresEntity> {
       const {
-        name, description, difficulty, location_id
+        name, description, difficulty, locationId, horizontalTiles, verticalTiles
       } = dto
       
       const structures = await prisma.structures.create({
@@ -41,7 +41,9 @@ export class StructuresDatasourceImplementation implements StructuresDatasource 
             name: name,
             description: description,
             difficulty: Number(difficulty),
-            location_id: Number(location_id),
+            location_id: Number(locationId),
+            horizontal_tiles: Number(horizontalTiles),
+            vertical_tiles: Number(verticalTiles),
         }
       })
   
@@ -104,7 +106,7 @@ export class StructuresDatasourceImplementation implements StructuresDatasource 
         }
 
         const {
-            name, description, difficulty, location_id
+            name, description, difficulty, locationId, horizontalTiles, verticalTiles
         } = dto
 
         let data:any = {}
@@ -112,7 +114,9 @@ export class StructuresDatasourceImplementation implements StructuresDatasource 
         if (name !== undefined) data.name = name
         if (description !== undefined) data.description = description
         if (difficulty !== undefined) data.difficulty = Number(difficulty)
-        if (location_id !== undefined) data.location_id = Number(location_id)
+        if (locationId !== undefined) data.location_id = Number(locationId)
+        if (horizontalTiles !== undefined) data.horizontal_tiles = Number(horizontalTiles)
+        if (verticalTiles !== undefined) data.vertical_tiles = Number(verticalTiles)
 
         const updatedStructures =
             await prisma.structures.update({
